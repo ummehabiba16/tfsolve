@@ -12,15 +12,25 @@ Every solution in a PDF carries a badge: **verified**, **reviewed**, **not yet v
 
 Created and maintained by **[ummehabiba16](https://github.com/ummehabiba16)**. The code was written with [Claude](https://www.anthropic.com/claude) (Anthropic) through Claude Code; see [Credits](#credits).
 
-## Quick start (inside a clone of this repo)
+## Install (Windows, macOS, Linux)
+
+Needs Python 3.10 or newer. Pandoc comes bundled.
 
 ```bash
-python3 -m venv .venv && .venv/bin/pip install -e '.[scan]'   # bundles Pandoc; [scan] reads scanned PDFs
-.venv/bin/tfsolve doctor                              # checks your LaTeX setup
-.venv/bin/tfsolve -c CSE313 -f current                # PDF lands in out/
+pip install tfsolve
+tfsolve update                    # downloads the question bank (run again to get new papers)
+tfsolve doctor                    # checks your LaTeX setup
+tfsolve -c CSE313 -f current      # PDF lands in out/
 ```
 
-PDFs need a LaTeX install with XeLaTeX (TeX Live, MacTeX/BasicTeX or MiKTeX). `tfsolve doctor` lists missing packages and the `tlmgr` command that installs them.
+- **PDFs need LaTeX with XeLaTeX:**
+  - Windows: [MiKTeX](https://miktex.org), which installs missing packages on first use.
+  - macOS: MacTeX or BasicTeX.
+  - Linux: `texlive-xetex texlive-latex-extra texlive-pictures fonts-lmodern`.
+- **No LaTeX?** Add `--tex`. You get a `.tex` file to upload to [Overleaf](https://www.overleaf.com), where you compile with XeLaTeX.
+- **Contributors work in a clone instead:**
+  1. `git clone`, then `python -m venv .venv`, then `.venv/bin/pip install -e '.[scan]'`.
+  2. Inside the clone, `tfsolve` uses your local `bank/` directly.
 
 | Command | What it does |
 |---|---|

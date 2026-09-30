@@ -12,7 +12,7 @@ from .lint import format_issues, lint
 from .query import QueryError, select
 from .render import BuildError, build_pdf, doctor
 
-COMMANDS = ("build", "list", "todo", "lint", "check", "pages", "doctor")
+COMMANDS = ("build", "list", "todo", "lint", "check", "pages", "update", "doctor")
 
 EPILOG = """\
 commands:
@@ -21,6 +21,7 @@ commands:
   todo             what to add, solve and review next, current teachers first
   lint             check the bank for mistakes (CI runs this on every pull request)
   check            lint + build a PDF and report parts whose layout breaks (run after adding a paper)
+  update           download the latest question bank (needed once after pip install)
   pages FILE.pdf   render a scanned PDF's pages as PNG images (so Claude can read them)
   doctor           check that Pandoc and LaTeX are set up for PDF builds
 
@@ -65,7 +66,8 @@ def _build_parser(prog="tfsolve"):
 def _open_bank(args):
     root = Path(args.bank) if args.bank else (Path(os.environ["TFSOLVE_BANK"]) if os.environ.get("TFSOLVE_BANK") else find_bank())
     if not root or not Path(root).is_dir():
-        sys.exit("tfsolve: no bank found. Run this inside a clone of the tfsolve repo, or pass --bank PATH.")
+        sys.exit("tfsolve: no question bank yet. Run `tfsolve update` to download it "
+                 "(or run inside a clone of the tfsolve repo, or pass --bank PATH).")
     return Bank(root)
 
 
@@ -89,6 +91,10 @@ def cmd_build(argv):
         stats = build_pdf(bank, sel, out, args.by, args.solutions, args.answers_at_end, args.tex, args.engine)
     except BuildError as e:
         sys.exit(f"tfsolve: {e}")
+    if stats.get("pdf") is False:
+        print(f"{out.with_suffix('.tex')}  (no LaTeX here: upload this .tex and the fig/ folder, if any, to overleaf.com "
+              f"and compile with XeLaTeX)")
+        return 0
     s = stats["solutions"]
     missing = f", {s['none']} without a solution" if s.get("none") else ""
     print(f"{out}  ({stats['parts']} parts, {stats['marks']:g} marks, {stats['exams']} exams{missing})")
@@ -292,6 +298,20 @@ def cmd_pages(argv):
     return 0
 
 
+def cmd_update(argv):
+    from .fetch import data_dir, update
+    p = argparse.ArgumentParser(prog="tfsolve update", description="Download the latest question bank from GitHub.")
+    p.add_argument("--repo", help="repository URL (default: the official tfsolve repo, or $TFSOLVE_REPO)")
+    p.add_argument("--branch", default="main")
+    args = p.parse_args(argv)
+    try:
+        path, n = update(args.repo, args.branch)
+    except Exception as e:  # network errors, 404 for a private repo, bad zip
+        sys.exit(f"tfsolve update: {e}\n(A private repo cannot be downloaded this way; clone it instead.)")
+    print(f"downloaded {n} files to {path}")
+    return 0
+
+
 def cmd_doctor(argv):
     argparse.ArgumentParser(prog="tfsolve doctor").parse_args(argv)
     ok = True
@@ -302,12 +322,15 @@ def cmd_doctor(argv):
 
 
 def main(argv=None):
+    for stream in (sys.stdout, sys.stderr):  # Windows consoles/pipes may not be UTF-8: never crash on a symbol
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(errors="replace")
     argv = list(sys.argv[1:] if argv is None else argv)
     cmd = argv[0] if argv and argv[0] in COMMANDS else "build"
     if argv and argv[0] in COMMANDS:
         argv = argv[1:]
     return {"build": cmd_build, "list": cmd_list, "todo": cmd_todo, "lint": cmd_lint, "check": cmd_check,
-            "pages": cmd_pages, "doctor": cmd_doctor}[cmd](argv)
+            "pages": cmd_pages, "update": cmd_update, "doctor": cmd_doctor}[cmd](argv)
 
 
 if __name__ == "__main__":

@@ -252,7 +252,8 @@ def assemble(bank, sel, tmp, by="topic", solutions="best", answers_at_end=False)
 # ------------------------------------------------------------------ compile
 
 def _run(cmd, cwd, env=None, timeout=180):
-    return subprocess.run(cmd, cwd=cwd, env=env, capture_output=True, text=True, errors="replace", timeout=timeout)
+    return subprocess.run(cmd, cwd=cwd, env=env, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                          timeout=timeout)
 
 
 def _latex_error(log_text):
@@ -268,8 +269,10 @@ def build_pdf(bank, sel, out_pdf, by="topic", solutions="best", answers_at_end=F
     pandoc = pandoc_path()
     if not pandoc:
         raise BuildError("Pandoc not found. Install tfsolve with pip (it bundles Pandoc) or install pandoc.")
-    if not shutil.which(engine):
-        raise BuildError(f"{engine} not found. Install TeX Live/MiKTeX, or use --tex and compile on Overleaf.")
+    have_engine = bool(shutil.which(engine))
+    if not have_engine and not keep_tex:
+        raise BuildError(f"{engine} not found. Install TeX Live/MacTeX/MiKTeX (tfsolve doctor explains), "
+                         f"or add --tex to get a .tex file you can compile on overleaf.com.")
     out_pdf = Path(out_pdf)
     with tempfile.TemporaryDirectory(prefix="tfsolve-") as tmp:
         md, stats = assemble(bank, sel, tmp, by, solutions, answers_at_end)
@@ -287,13 +290,16 @@ def build_pdf(bank, sel, out_pdf, by="topic", solutions="best", answers_at_end=F
                 shutil.copyfile(Path(tmp) / name, out_pdf.with_suffix(Path(name).suffix))
             if (Path(tmp) / "fig").is_dir():
                 shutil.copytree(Path(tmp) / "fig", out_pdf.parent / "fig", dirs_exist_ok=True)
+        if not have_engine:
+            stats["pdf"] = False
+            return stats
         # Paranoid file access + no shell escape: contributed content must not read or run anything.
         env = dict(os.environ, openin_any="p", openout_any="p")
         cmd = [engine, "-interaction=nonstopmode", "-halt-on-error", "-file-line-error", "-no-shell-escape",
                "doc.tex"]
         for _ in range(3):
             r = _run(cmd, tmp, env)
-            log = (Path(tmp) / "doc.log").read_text(errors="replace") if (Path(tmp) / "doc.log").exists() else r.stdout
+            log = (Path(tmp) / "doc.log").read_text(encoding="utf-8", errors="replace") if (Path(tmp) / "doc.log").exists() else r.stdout
             if r.returncode != 0:
                 raise BuildError(f"{engine} failed. First error:\n{_latex_error(log)}\n"
                                  f"(Re-run with --tex to keep the .tex file for debugging.)")
@@ -302,7 +308,7 @@ def build_pdf(bank, sel, out_pdf, by="topic", solutions="best", answers_at_end=F
         out_pdf.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(Path(tmp) / "doc.pdf", out_pdf)
         names = {_anchor(p): f"{p.exam.label}/{p.pid} ({p.exam.when} {p.label})" for p in sel.parts}
-        stats["layout"] = layout_problems((Path(tmp) / "doc.tex").read_text(errors="replace"), log, names)
+        stats["layout"] = layout_problems((Path(tmp) / "doc.tex").read_text(encoding="utf-8", errors="replace"), log, names)
     return stats
 
 

@@ -498,4 +498,5 @@ def find_bank(start=None):
         b = d / "bank"
         if b.is_dir() and any(b.glob("*/dept.yaml")):
             return b
-    return None
+    from .fetch import downloaded_bank
+    return downloaded_bank()
