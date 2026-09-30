@@ -1,0 +1,243 @@
+schema: 1
+code: CSE313
+title: Operating Systems
+dept: CSE
+level_term: L3T1        # L3T2 up to the 2022-23 session
+credit: 3.0
+previous_codes: []
+
+# Topic tree. Question parts are tagged with these ids (first tag = where the part is filed).
+# Asking for a parent (-t memory) also returns its children. Aliases are alternative
+# names for -t; they must be unique within the course.
+topics:
+  # ---- Section A (slide references are to RRR's 2026 decks)
+  - id: intro
+    name: Introduction and OS structure
+    aliases: [introduction, os-structure]
+    deck: Introduction-week1-RRR-2026
+    children:
+      - id: boot-steps
+        name: Steps of booting a computer
+        aliases: [booting, boot, bios]
+        slides: "7-10"
+      - id: kernel-vs-user-mode
+        name: Kernel mode vs user mode; kernel space vs user space
+        aliases: [kernel-mode, user-mode, kernel-space, user-space, dual-mode]
+        slides: "12-16"
+      - id: syscall-steps
+        name: Steps in making a system call
+        aliases: [syscall, system-call, system-calls]
+        slides: "17-20"
+      - id: fork-process-tree
+        name: fork() and process trees
+        aliases: [fork, process-tree]
+        slides: "24-26"
+      - id: microkernel-vs-monolithic
+        name: Monolithic kernel vs microkernel
+        aliases: [microkernel, monolithic, kernel-architecture]
+        slides: "27-33"
+      - id: multiuser-os
+        name: Multi-user OS
+        aliases: [multi-user]
+        slides: "35"
+      - id: multiprocessor-os
+        name: Multi-processor OS
+        aliases: [multi-processor, multiprocessor]
+        slides: "36"
+
+  - id: process-thread
+    name: Processes and threads
+    aliases: [processes, threads, process, thread]
+    deck: ProcessAndThread-week2-RRR
+    children:
+      - id: process-state-diagram
+        name: Process life cycle and state diagram
+        aliases: [process-states, process-lifecycle, state-diagram]
+        slides: "11-14"
+      - id: pcs-vs-tcs
+        name: Process vs thread context switching; per-process vs per-thread items
+        aliases: [context-switch, context-switching, per-thread-items]
+        slides: "17, 23, 25, 41"
+      - id: ult-vs-klt
+        name: User-level vs kernel-level threads
+        aliases: [ult, klt, user-level-threads, kernel-level-threads]
+        slides: "31-38"
+      - id: klt-pros-cons
+        name: "Kernel-level threads: advantages and disadvantages"
+        slides: "36-38"
+      - id: hybrid-threads
+        name: Hybrid thread implementation
+        aliases: [hybrid, hybrid-threading]
+        slides: "39-40"
+
+  - id: scheduling
+    name: CPU scheduling
+    aliases: [cpu-scheduling, scheduler]
+    deck: Scheduling-week-3-RRR
+    children:
+      - id: cpu-vs-io-bound
+        name: CPU-bound vs I/O-bound processes
+        aliases: [cpu-bound, io-bound, compute-bound]
+        slides: "5-7"
+      - id: batch-goals
+        name: Goals and metrics of batch scheduling
+        aliases: [scheduling-goals, batch]
+        slides: "13-14"
+      - id: convoy-effect
+        name: Convoy effect (FCFS)
+        aliases: [convoy, fcfs]
+        slides: "19-27"
+      - id: optimal-batch-order
+        name: Optimal job order for average turnaround
+        aliases: [batch-order]
+        slides: "28-31"
+      - id: sjf-vs-srtn
+        name: Non-preemptive SJF vs preemptive SJF (SRTN)
+        aliases: [sjf, srtn, preemptive-sjf]
+        slides: "28-34"
+      - id: gantt-avg-turnaround
+        name: Gantt chart and average turnaround (SJF, SRTN, RR, priority)
+        aliases: [gantt, gantt-chart, turnaround, round-robin, rr, priority-scheduling]
+        slides: "29-45"
+      - id: lottery-scheduling
+        name: Lottery scheduling
+        aliases: [lottery]
+        slides: "46-47"
+
+  - id: ipc
+    name: Interprocess communication and synchronization
+    aliases: [synchronization, interprocess-communication, mutual-exclusion]
+    deck: IPC-week-4-5-RRR
+    children:
+      - id: mutex-requirements
+        name: Four requirements for a mutual-exclusion solution
+        aliases: [critical-region, critical-section, mutex]
+        slides: "11-18"
+      - id: peterson-priority-inversion
+        name: Peterson's solution and priority inversion
+        aliases: [peterson, priority-inversion]
+        slides: "19-23"
+      - id: producer-consumer-race
+        name: "Producer-consumer with sleep/wakeup: race condition"
+        aliases: [race-condition, sleep-wakeup, lost-wakeup]
+        slides: "24-28"
+      - id: producer-consumer-semaphores
+        name: Producer-consumer with semaphores
+        aliases: [producer-consumer, semaphore, semaphores, bounded-buffer]
+        slides: "29-39"
+      - id: dining-philosophers-definition
+        name: "Dining philosophers: problem definition"
+        aliases: [dining-philosophers, dining]
+        slides: "50"
+      - id: dining-philosophers-solution
+        name: "Dining philosophers: semaphore solution and modifications"
+        slides: "51-56"
+      - id: dining-philosophers-asymmetric
+        name: "Dining philosophers: asymmetric (even/odd) protocol"
+        slides: "52-54"
+
+  - id: deadlock
+    name: Deadlocks
+    aliases: [deadlocks]
+    deck: Deadlocks-week6-7-RRR
+    children:
+      - id: deadlock-four-conditions
+        name: Four conditions for resource deadlock
+        aliases: [coffman, deadlock-conditions]
+        slides: "8-9"
+      - id: deadlock-non-cycle-processes
+        name: Deadlocked processes outside the cycle
+        slides: "7, 10-13"
+      - id: deadlock-detection-graph
+        name: Deadlock detection on a resource graph
+        aliases: [resource-graph, deadlock-detection, rag]
+        slides: "16-19"
+      - id: safe-vs-unsafe
+        name: Safe vs unsafe state (and vs deadlock)
+        aliases: [safe-state, unsafe-state]
+        slides: "25-27"
+      - id: bankers-safety-check
+        name: "Banker's algorithm: safe-state check"
+        aliases: [banker, bankers, bankers-algorithm, safety-algorithm]
+        slides: "28-31"
+      - id: prevention-hold-and-wait
+        name: "Prevention: attacking hold-and-wait"
+        aliases: [hold-and-wait]
+        slides: "32-34"
+      - id: prevention-circular-wait
+        name: "Prevention: attacking circular wait"
+        aliases: [circular-wait, deadlock-prevention]
+        slides: "36"
+      - id: livelock-vs-starvation
+        name: Livelock vs starvation
+        aliases: [livelock, starvation]
+        slides: "40-41"
+
+  # ---- Section B (chapters of Operating Systems: Three Easy Pieces)
+  - id: memory
+    name: Memory management
+    aliases: [memory-management, virtual-memory, vm]
+    children:
+      - id: memory-api
+        name: Memory API (malloc/free)
+        aliases: [malloc, free, heap]
+      - id: segmentation
+        name: "Address translation: base-and-bounds and segmentation"
+        aliases: [base-bounds, dynamic-relocation, address-translation, relocation]
+      - id: free-space
+        name: Free-space management (buddy allocation)
+        aliases: [buddy, buddy-allocation, fragmentation, free-list]
+      - id: paging
+        name: Paging
+        aliases: [pagetable, page-table, page-tables]
+        children:
+          - id: pte
+            name: Page-table entries (present, dirty and reference bits)
+            aliases: [pte-bits, page-table-entry, dirty-bit, present-bit, reference-bit]
+          - id: tlb
+            name: TLBs (faster translation)
+            aliases: [asid, effective-access-time, eat]
+          - id: multilevel-page-table
+            name: "Smaller tables: multi-level page tables"
+            aliases: [multi-level-page-table, two-level-page-table, page-directory, inverted-page-table, smaller-tables]
+      - id: page-replacement
+        name: Page replacement policies
+        aliases: [replacement, clock, lru, fifo, optimal, opt, belady, beladys-anomaly, second-chance]
+      - id: thrashing
+        name: Page faults and thrashing
+        aliases: [page-fault, working-set]
+
+  - id: io-storage
+    name: I/O devices and storage
+    aliases: [io-and-storage, persistence]
+    children:
+      - id: io-devices
+        name: I/O devices, interrupts, DMA and drivers
+        aliases: [io, polling, interrupts, interrupt, dma, device-driver, drivers, iommu]
+      - id: raid
+        name: Hard disks and RAID
+        aliases: [raid0, raid1, raid4, raid5, raid-0, raid-1, raid-4, raid-5, disk, disks, hdd]
+
+  - id: filesystems
+    name: File systems
+    aliases: [file-system, file-systems, fs]
+    children:
+      - id: files-directories
+        name: Files and directories (links, file descriptors)
+        aliases: [hardlink, hard-link, hardlinks, symlink, symbolic-link, dup, file-descriptor, open-file-table]
+      - id: vsfs
+        name: File system implementation (VSFS, inodes)
+        aliases: [inode, inodes, fs-implementation, max-file-size]
+      - id: ffs
+        name: Locality and the Fast File System (FFS)
+        aliases: [fast-file-system, block-group, cylinder-group]
+      - id: journaling
+        name: "Crash consistency: fsck and journaling"
+        aliases: [journal, fsck, crash-consistency, data-journaling, metadata-journaling]
+      - id: lfs
+        name: Log-structured file systems (LFS)
+        aliases: [log-structured, imap, checkpoint-region, segment-size, roll-forward]
+
+  - id: distributed
+    name: Distributed systems (RPC)
+    aliases: [rpc, remote-procedure-call]

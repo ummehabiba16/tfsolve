@@ -1,0 +1,20 @@
+schema: 1
+course: CSE313
+kind: term-final
+exam_date: 2025-01-18
+session: 2022-23
+level_term: L3T2
+students_dept: CSE
+full_marks: 210
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 3
+    rule: Answer any THREE.
+  B:
+    questions: [5, 6, 7, 8]
+source: {file: CSE_313_merged.pdf, pages: 8-12}
+transcription:
+  by: []
+  checked_by: []

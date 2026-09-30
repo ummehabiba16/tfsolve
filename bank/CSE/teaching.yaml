@@ -1,0 +1,11 @@
+# Who taught each course, by session: the faculty sheet.
+#   {A: [..], B: [..]}   when you know which section each teacher set
+#   [..]                 when you only know who taught (the PDF then says "taught by")
+# Papers take their faculty from here through their `session`, so one line per session
+# tags every question in that paper.
+CSE313:
+  "2024-25": {A: [RRR], B: [KRV]}   # teaching now (see dept.yaml current_session)
+  "2023-24": {A: [RRR], B: [KRV]}
+  "2022-23": {A: [RRR], B: [KRV]}
+  "2021-22": {A: [RRR], B: [KRV]}
+  "2019-20": {A: [RRR]}

@@ -1,0 +1,101 @@
+% tfsolve PDF template for Pandoc. Filled from the assembled document's metadata.
+\documentclass[10pt,a4paper]{article}
+\usepackage[a4paper,margin=18mm,headheight=14pt]{geometry}
+\usepackage{iftex}
+\usepackage{amsmath,amssymb}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{lmodern}
+  \usepackage{textcomp}
+\else
+  \usepackage{unicode-math}
+\fi
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{booktabs,array,tabularx}
+\usepackage{adjustbox}
+\usepackage{fvextra}
+\usepackage{tikz}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{xurl}
+\usepackage[hidelinks,bookmarksnumbered]{hyperref}
+\usepackage{bookmark}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{%
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}\else\usebox{\pandoc@box}\fi}
+\makeatother
+\fvset{fontsize=\small,breaklines=true,frame=single,framesep=2mm,rulecolor=\color{black!25}}
+
+\definecolor{tfq}{HTML}{3B5B8C}
+\definecolor{tfqback}{HTML}{F5F8FC}
+\definecolor{tfverified}{HTML}{2E7D32}
+\definecolor{tfreviewed}{HTML}{1565C0}
+\definecolor{tfunverified}{HTML}{A65F00}
+\definecolor{tfdisputed}{HTML}{C62828}
+
+% Question box: title line carries exam, number, marks, section and setter.
+\newtcolorbox{tfq}[1]{enhanced,breakable,colback=tfqback,colframe=tfq,colbacktitle=tfq,coltitle=white,
+  fonttitle=\small,title={#1},boxrule=0.5pt,arc=1.2mm,left=5pt,right=5pt,top=3pt,bottom=3pt,
+  before skip=10pt,after skip=3pt,before upper={\setlength{\parskip}{4pt plus 1pt}}}
+% Solution box: #1 is the status colour (tfverified, tfreviewed, tfunverified, tfdisputed).
+\newtcolorbox{tfsol}[2]{enhanced,breakable,colback=white,colframe=#1,colbacktitle=#1!10,coltitle=#1!75!black,
+  fonttitle=\small\bfseries,title={#2},boxrule=0.5pt,arc=1.2mm,left=5pt,right=5pt,top=3pt,bottom=3pt,
+  before skip=3pt,after skip=10pt,before upper={\setlength{\parskip}{4pt plus 1pt}}}
+% Shared setup (stem) printed above a sub-part.
+\newtcolorbox{tfstem}{blanker,borderline west={1.5pt}{0pt}{tfq!45},left=7pt,before skip=2pt,after skip=4pt,
+  before upper={\setlength{\parskip}{4pt plus 1pt}}}
+\newcommand{\tfmeta}[1]{\par{\footnotesize\color{black!60}#1\par}}
+\newlength{\tfganttunit}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{black!55}$tf-header$}
+\fancyhead[R]{\small\color{black!55}tfsolve}
+\fancyfoot[C]{\small\color{black!55}\thepage\ / \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.3pt}
+\hypersetup{pdftitle={$title$},pdfsubject={$tf-filters$}}
+
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+{\LARGE\bfseries $title$\par}
+\vspace{3pt}
+{\large $subtitle$\par}
+\end{center}
+\vspace{6pt}
+\begin{tcolorbox}[colback=black!3,colframe=black!15,boxrule=0.4pt,arc=1mm,left=6pt,right=6pt]
+\small
+\begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+Selection & $tf-filters$ \\
+Contents & $tf-stats$ \\
+Solutions & $tf-solutions$ \\
+Generated & $tf-generated$ \\
+\end{tabularx}
+\end{tcolorbox}
+{\footnotesize
+\begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+\textcolor{tfverified}{\textbf{Verified}} & checked by two people, or against a teacher's solution \\
+\textcolor{tfreviewed}{\textbf{Reviewed}} & checked by one person other than the author \\
+\textcolor{tfunverified}{\textbf{Not yet verified}} & nobody has checked it yet; every AI solution starts here \\
+\textcolor{tfdisputed}{\textbf{Disputed}} & someone reported an error; read with care \\
+\end{tabularx}\par}
+\medskip
+{\small\tableofcontents}
+\clearpage
+$body$
+\end{document}

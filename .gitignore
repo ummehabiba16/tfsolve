@@ -1,0 +1,19 @@
+# Private planning notes (kept only on this computer)
+PROJECT_PLAN.md
+
+# Local tools and build output
+.venv/
+out/
+__pycache__/
+*.egg-info/
+.DS_Store
+
+# LaTeX leftovers (tfsolve builds in a temp folder; these come from manual runs)
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+tfsolve-questions/

@@ -1,0 +1,25 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tfsolve"
+version = "0.1.0.dev0"
+description = "BUET term-final question bank: filter past questions by course, topic, faculty and year, and compile them into a LaTeX PDF."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+dependencies = [
+    "pyyaml>=6",
+    "pypandoc_binary>=1.13",
+]
+
+[project.optional-dependencies]
+scan = ["pymupdf>=1.24"]          # tfsolve pages: read scanned PDFs
+dev = ["pymupdf>=1.24", "pytest>=8"]
+
+[project.scripts]
+tfsolve = "tfsolve.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tfsolve"]

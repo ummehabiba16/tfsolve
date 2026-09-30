@@ -1,0 +1,21 @@
+schema: 1
+course: CSE313
+kind: term-final
+exam_date: 2025-09-04
+session: 2023-24
+level_term: L3T1
+students_dept: CSE
+full_marks: 210
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 2
+    rule: Q1 is compulsory; answer any TWO of Q2-Q4.
+  B:
+    questions: [5, 6, 7, 8]
+source: {file: CSE_313_merged.pdf, pages: 1-7}
+notes: [Term is printed as 'L-3/T-I' on the paper.]
+transcription:
+  by: []
+  checked_by: []
