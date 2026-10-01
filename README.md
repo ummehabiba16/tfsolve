@@ -41,6 +41,7 @@ tfsolve -c CSE313 -f current      # PDF lands in out/
 | `tfsolve check [-c COURSE]` | Lint, build the PDF, and name every part whose layout breaks (text off the page, missing symbols). Must end with `CHECK OK`. |
 | `tfsolve pages scan.pdf` | Turn a scanned paper into page images (used when transcribing). |
 | `tfsolve doctor` | Check that Pandoc and LaTeX are ready. |
+| `tfsolve web [-o site]` | Build the website: plain HTML you can open from `site/index.html`, filter by topic, teacher and exam, and print. No LaTeX needed. |
 
 Build options: `--solutions best|all|none|human|ai`, `--by topic|year|faculty|none`, `--answers-at-end`, `-o file.pdf`, `--tex` (keeps the `.tex` too, e.g. for Overleaf).
 

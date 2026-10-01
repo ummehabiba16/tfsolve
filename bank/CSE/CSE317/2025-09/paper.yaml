@@ -1,0 +1,23 @@
+schema: 1
+course: CSE317
+kind: term-final
+exam_date: 2025-09-14
+session: 2023-24
+level_term: L3T1
+students_dept: CSE
+full_marks: 210
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 2
+    rule: There are FOUR questions in this section. Answer THREE questions including Question No. 1. Question No. 1 is compulsory.
+  B:
+    questions: [5, 6, 7, 8]
+    answer_any: 2
+    rule: You must answer question 5 and any TWO other questions.
+source: {file: CSE 317 merged.pdf, pages: 1-5}
+notes: ["Term is printed as 'L-3/T-I' on the paper.", "Only Section A (MMI) is transcribed so far, from the list in TF_Analysis_MMI.tex; Section B (Q5-Q8) is not."]
+transcription:
+  by: []
+  checked_by: []

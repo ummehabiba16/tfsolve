@@ -12,7 +12,7 @@ from .lint import format_issues, lint
 from .query import QueryError, select
 from .render import BuildError, build_pdf, doctor
 
-COMMANDS = ("build", "list", "todo", "lint", "check", "pages", "update", "doctor")
+COMMANDS = ("build", "list", "todo", "lint", "check", "pages", "update", "doctor", "web")
 
 EPILOG = """\
 commands:
@@ -24,6 +24,7 @@ commands:
   update           download the latest question bank (needed once after pip install)
   pages FILE.pdf   render a scanned PDF's pages as PNG images (so Claude can read them)
   doctor           check that Pandoc and LaTeX are set up for PDF builds
+  web              build the website into site/ (open site/index.html in a browser)
 
 examples:
   tfsolve -c CSE313 -t pagetable -f KRV          page-table questions set by KRV
@@ -321,6 +322,21 @@ def cmd_doctor(argv):
     return 0 if ok else 1
 
 
+def cmd_web(argv):
+    from .web import build_site
+    p = argparse.ArgumentParser(prog="tfsolve web", description="Build the static website (HTML, no server needed).")
+    _bank_arg(p)
+    p.add_argument("-o", "--output", default="site", help="output folder (default: site)")
+    args = p.parse_args(argv)
+    bank = _open_bank(args)
+    try:
+        n = build_site(bank, args.output)
+    except BuildError as e:
+        sys.exit(f"tfsolve web: {e}")
+    print(f"{Path(args.output) / 'index.html'}  ({n} pages)")
+    return 0
+
+
 def main(argv=None):
     for stream in (sys.stdout, sys.stderr):  # Windows consoles/pipes may not be UTF-8: never crash on a symbol
         if hasattr(stream, "reconfigure"):
@@ -330,7 +346,7 @@ def main(argv=None):
     if argv and argv[0] in COMMANDS:
         argv = argv[1:]
     return {"build": cmd_build, "list": cmd_list, "todo": cmd_todo, "lint": cmd_lint, "check": cmd_check,
-            "pages": cmd_pages, "update": cmd_update, "doctor": cmd_doctor}[cmd](argv)
+            "pages": cmd_pages, "update": cmd_update, "doctor": cmd_doctor, "web": cmd_web}[cmd](argv)
 
 
 if __name__ == "__main__":

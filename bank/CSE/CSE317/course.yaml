@@ -1,0 +1,135 @@
+schema: 1
+code: CSE317
+title: Artificial Intelligence
+dept: CSE
+level_term: L3T1        # printed L-3/T-I from the 2023-24 session; L3T2 before that
+credit: 3.0
+previous_codes: [CSE401]   # L-4/T-1 course code up to the 2017-18 session
+
+# Topic tree. Question parts are tagged with these ids (first tag = where the part is filed).
+# Asking for a parent (-t search) also returns its children. Aliases are alternative
+# names for -t; they must be unique within the course.
+topics:
+  # ---- Section A in recent papers (MMI): Russell & Norvig, AIMA chapters 1-6
+  - id: foundations
+    name: Foundations and philosophy of AI
+    aliases: [introduction, intro, philosophy]
+    children:
+      - id: ai-approaches
+        name: Definitions of AI and the four approaches
+        aliases: [four-approaches, definitions-of-ai, laws-of-thought, can-machines-think]
+      - id: turing-test
+        name: The Turing test
+        aliases: [turing, total-turing-test]
+      - id: rationality-evolution
+        name: Rationality, intelligence and evolution
+        aliases: [rationality, intelligence, evolution-rationality]
+
+  - id: agents
+    name: Intelligent agents
+    aliases: [agent, intelligent-agents]
+    children:
+      - id: peas-environments
+        name: PEAS descriptions and task-environment properties
+        aliases: [peas, task-environment, environment-types]
+      - id: agent-types
+        name: "Agent types: simple reflex, model-based, goal-based, utility-based, learning"
+        aliases: [reflex-agent, model-based-agent, goal-based-agent, utility-based-agent, learning-agent, autonomy]
+      - id: agent-programs
+        name: Agent programs (pseudocode)
+        aliases: [agent-program, problem-solving-agent]
+
+  - id: search
+    name: Problem formulation and uninformed search
+    aliases: [uninformed-search, problem-solving]
+    children:
+      - id: problem-formulation
+        name: Goal and problem formulation, state spaces, abstraction
+        aliases: [formulation, state-space, goal-formulation, abstraction, contingency-problem, missionaries-cannibals]
+      - id: uninformed-strategies
+        name: "Uninformed strategies: BFS, DFS, UCS, depth-limited, IDS, bidirectional"
+        aliases: [bfs, dfs, ucs, uniform-cost, ids, iterative-deepening, depth-limited, bidirectional]
+      - id: search-comparison
+        name: Completeness, optimality, time and space complexity of search strategies
+        aliases: [search-criteria, completeness, optimality]
+
+  - id: informed
+    name: Informed (heuristic) search
+    aliases: [informed-search, heuristic-search]
+    children:
+      - id: astar
+        name: A* search and its optimality (admissible / consistent heuristics)
+        aliases: [a-star, admissible, consistent, monotonic]
+      - id: greedy-best-first
+        name: Greedy best-first search
+        aliases: [best-first, greedy-best]
+      - id: heuristics
+        name: Designing heuristics (relaxed problems, learning from experience)
+        aliases: [heuristic, relaxed-problem, heuristic-function]
+      - id: memory-bounded
+        name: Memory-bounded search (IDA*, RBFS)
+        aliases: [ida-star, idastar, rbfs]
+
+  - id: local-search
+    name: Local search and optimization
+    aliases: [local, optimization]
+    children:
+      - id: hill-climbing
+        name: Hill climbing and the pitfalls of greedy search
+        aliases: [hill-climbing-search, greedy-search, greedy-pitfalls, local-maxima, random-restart]
+      - id: simulated-annealing
+        name: Simulated annealing
+        aliases: [annealing, sa, cooling-schedule]
+      - id: genetic-algorithm
+        name: Genetic and evolutionary algorithms (incl. TSP)
+        aliases: [ga, genetic, evolutionary, evolutionary-algorithm, tsp]
+      - id: local-beam
+        name: Local beam search
+        aliases: [beam-search, beam]
+
+  - id: csp
+    name: Constraint satisfaction problems
+    aliases: [constraint-satisfaction, csps]
+    children:
+      - id: csp-formulation
+        name: CSP formulation and components
+        aliases: [csp-definition, csp-components]
+      - id: csp-heuristics
+        name: Variable and value ordering (MRV, degree, LCV)
+        aliases: [mrv, lcv, most-constrained, least-constraining]
+      - id: arc-consistency
+        name: Arc consistency, AC-3 and k-consistency
+        aliases: [ac-3, ac3, k-consistency, constraint-propagation]
+      - id: csp-backtracking
+        name: Backtracking search and forward checking
+        aliases: [backtracking, forward-checking, chronological-backtracking]
+      - id: min-conflicts
+        name: Local search for CSPs (min-conflicts)
+        aliases: [min-conflict]
+
+  - id: games
+    name: Adversarial search and games
+    aliases: [adversarial, adversarial-search, game-playing]
+    children:
+      - id: minimax
+        name: Minimax and game formulation
+        aliases: [mini-max, game-tree, game-formulation]
+      - id: alpha-beta
+        name: Alpha-beta pruning
+        aliases: [alphabeta, pruning]
+      - id: nonzero-sum
+        name: Non-zero-sum and multi-player games
+        aliases: [non-zero-sum, nonzero-sum-games]
+
+  # ---- The other half of the course (coarse for now; refine when those papers are added)
+  - id: logic-planning
+    name: Logic, knowledge representation and planning
+    aliases: [logic, propositional-logic, first-order-logic, fol, resolution, planning]
+
+  - id: uncertainty
+    name: Probability, Bayesian networks, HMMs and MDPs
+    aliases: [probability, bayesian-network, bayes-net, hmm, mdp]
+
+  - id: learning
+    name: Machine learning and NLP
+    aliases: [machine-learning, ml, decision-tree, nlp]

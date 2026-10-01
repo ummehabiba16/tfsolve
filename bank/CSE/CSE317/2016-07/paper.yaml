@@ -1,0 +1,23 @@
+schema: 1
+course: CSE317
+kind: term-final
+exam_date: 2016-07-16
+session: 2014-15
+level_term: L4T1
+students_dept: CSE
+full_marks: 210
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+  B:
+    questions: [5, 6, 7, 8]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+source: {file: CSE 317 merged.pdf, pages: 42-44}
+notes: ["Printed as CSE 401 (Artificial Intelligence), the course's old code.", "Only the parts listed in TF_Analysis_MMI.tex are transcribed: all of Section A plus Q5(a), Q6(b), Q7(c) and Q8(b). The other Section B parts (logic, learning, probability) are not."]
+transcription:
+  by: []
+  checked_by: []

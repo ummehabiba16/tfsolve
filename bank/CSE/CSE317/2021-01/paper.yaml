@@ -1,0 +1,23 @@
+schema: 1
+course: CSE317
+kind: term-final
+exam_date: 2021-01-24
+session: 2019-20
+level_term: L3T2
+students_dept: CSE
+full_marks: 180
+duration: 2h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+  B:
+    questions: [5, 6, 7, 8]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+source: {file: CSE 317 merged.pdf, pages: 24-26}
+notes: ["Printed as 'B. Sc. Engineering Examinations (January 2020 Semester)', 'L-3/T-II'; Section B's sheet says 'January 2020 Term'. Filed under session 2019-20 (an assumption).", "Full Marks: 180, Section Marks: 90, Time: 2 Hours (Sections A + B).", "Only Section A (MMI) is transcribed so far; Section B (Q5-Q8) is not."]
+transcription:
+  by: []
+  checked_by: []

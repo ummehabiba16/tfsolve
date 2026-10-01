@@ -54,3 +54,13 @@ def test_tex_output_without_latex(tmp_path, monkeypatch):
     assert main(["--bank", str(BANK), "-c", "CSE313", "-t", "raid", "--tex", "-o", str(out)]) == 0
     tex = out.with_suffix(".tex").read_text(encoding="utf-8")
     assert "\\begin{tfq}" in tex and "RAID" in tex
+
+
+def test_website(tmp_path):
+    out = tmp_path / "site"
+    assert main(["web", "--bank", str(BANK), "-o", str(out)]) == 0
+    home = (out / "index.html").read_text(encoding="utf-8")
+    page = (out / "CSE313" / "index.html").read_text(encoding="utf-8")
+    assert 'href="CSE313/index.html"' in home
+    assert 'class="q"' in page and 'class="gantt"' in page and 'class="math inline"' in page
+    assert "TFSPLIT" not in page and (out / "style.css").exists() and (out / "app.js").exists()

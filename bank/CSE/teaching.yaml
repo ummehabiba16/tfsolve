@@ -9,3 +9,14 @@ CSE313:
   "2022-23": {A: [RRR], B: [KRV]}
   "2021-22": {A: [RRR], B: [KRV]}
   "2019-20": {A: [RRR]}
+CSE317:
+  # MMI's questions (agents, search, local search, CSP, games); from TF_Analysis_MMI.tex.
+  "2024-25": [MMI]               # teaching now (see dept.yaml current_session)
+  "2023-24": {A: [MMI]}
+  "2022-23": {A: [MMI]}
+  "2021-22": {A: [MMI]}
+  "2020-21": {A: [MMI]}
+  "2019-20": {A: [MMI]}          # also the January 2020 term paper (sat 2021-01)
+  "2017-18": {B: [MMI]}          # both CSE401 (sat 2018-09) and CSE317 (sat 2019-04)
+  "2014-15": [MMI]               # CSE401; MMI's parts are in both sections
+  "2011-12": [MMI]               # CSE401; MMI's parts are in both sections

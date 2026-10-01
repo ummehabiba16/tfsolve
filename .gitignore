@@ -17,3 +17,11 @@ __pycache__/
 *.fdb_latexmk
 *.synctex.gz
 tfsolve-questions/
+
+# Website build output (tfsolve web)
+site/
+
+# Source scans and private notes (kept only on this computer)
+CSE 315 merged.pdf
+CSE 317 merged.pdf
+TF_Analysis_MMI.tex
