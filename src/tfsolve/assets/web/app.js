@@ -1,7 +1,23 @@
 // tfsolve website: math rendering and the filters on a course page.
 // Filters are kept in the URL (#topic=deadlock&faculty=KRV) so a filtered view can be shared.
 
+// Light/dark: follows the device until the toggle is used; the choice is remembered per browser.
+function currentTheme() {
+  var set = document.documentElement.dataset.theme;
+  if (set) return set;
+  return window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
 document.addEventListener("DOMContentLoaded", function () {
+  var toggle = document.getElementById("theme-toggle");
+  if (toggle) {
+    toggle.addEventListener("click", function () {
+      var next = currentTheme() === "dark" ? "light" : "dark";
+      document.documentElement.dataset.theme = next;
+      try { localStorage.setItem("tfsolve-theme", next); } catch (e) {}
+    });
+  }
+
   // Pandoc marks math as <span class="math inline|display">x^2</span>.
   if (window.katex) {
     document.querySelectorAll(".math").forEach(function (el) {

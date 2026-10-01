@@ -9,6 +9,9 @@ CSE313:
   "2022-23": {A: [RRR], B: [KRV]}
   "2021-22": {A: [RRR], B: [KRV]}
   "2019-20": {A: [RRR]}
+CSE315:
+  "2023-24": {A: [MHE], B: [EHP]}
+  "2022-23": {A: [MHE], B: [EHP]}
 CSE317:
   # MMI's questions (agents, search, local search, CSP, games); from TF_Analysis_MMI.tex.
   "2024-25": [MMI]               # teaching now (see dept.yaml current_session)

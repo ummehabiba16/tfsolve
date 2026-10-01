@@ -132,8 +132,15 @@ local function gantt(cb)
   return out
 end
 
+-- Pandoc can colour this block (```c, ```python, ...): the language is one it knows.
+local function highlightable(cb)
+  if #cb.classes == 0 or cb.classes:includes('text') then return false end
+  return pandoc.write(pandoc.Pandoc({ cb }), 'latex'):find('\\begin{Shaded}', 1, true) ~= nil
+end
+
 local function code_block(cb)
   if cb.classes:includes('gantt') then return gantt(cb) end
+  if highlightable(cb) then return nil end  -- Pandoc writes Shaded/Highlighting (macros in the template)
   return raw('\\begin{Verbatim}\n' .. cb.text .. '\n\\end{Verbatim}')
 end
 

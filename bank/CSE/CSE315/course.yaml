@@ -1,0 +1,182 @@
+schema: 1
+code: CSE315
+title: Microprocessors, Microcontrollers, and Embedded Systems
+dept: CSE
+level_term: L3T1        # L3T2 up to the 2016-17 session
+credit: 3.0
+previous_codes: []
+
+# Topic tree. Question parts are tagged with these ids (first tag = where the part is filed).
+# Asking for a parent (-t paging) also returns its children. Aliases are alternative
+# names for -t; they must be unique within the course.
+topics:
+  # ---- Section A (MHE): Intel 8086 / 80286 / 80386; decks in MHE_Resources/,
+  #      textbook: Rafiquzzaman, Microprocessors and Microcomputer-Based System Design
+  - id: mp-basics
+    name: Microprocessor basics and design calculations
+    aliases: [microprocessor-basics, buses, address-bus, data-bus, control-bus]
+    deck: Intro
+    children:
+      - id: mp-design-calc
+        name: "Hypothetical microprocessor: accessible memory, paragraph, virtual memory and queue sizes"
+        aliases: [hypothetical-microprocessor, design-calculation, virtual-memory-size, paragraph-size]
+
+  - id: i8086
+    name: 8086 architecture
+    aliases: ["8086", intel-8086]
+    deck: 8086-Architecture, 8086-Memory_Organization
+    children:
+      - id: biu-eu-prefetch
+        name: BIU and EU, instruction queue, pre-fetching and pipelining
+        aliases: [biu, eu, prefetch, pre-fetch, prefetch-queue, pipelining, instruction-queue]
+      - id: registers-flags
+        name: Registers, flag register and conditional jumps
+        aliases: [flags, flag-register, conditional-jump, jg]
+      - id: segmentation-8086
+        name: "Real-mode segmentation: segment:offset, physical address, overlap"
+        aliases: [segment-offset, physical-address, real-mode, segment-overlap]
+      - id: memory-banks
+        name: Memory banks (8086 even/odd banks, 80386 four banks)
+        aliases: [banks, bhe, even-odd-banks]
+      - id: pins-8086
+        name: 8086 pins and multiplexed address/data bus
+        aliases: [pins, pin-specification, demultiplexing, ale, hardware-specification]
+        deck: 8086 Hardware Specifications
+
+  - id: instruction-encoding
+    name: Machine code and addressing modes
+    aliases: [machine-code, mod-rm, mov-encoding, instruction-format, addressing-modes]
+    deck: IF
+    slides: "3-23"
+
+  - id: interrupts-8086
+    name: 8086 interrupts
+    aliases: [interrupt-8086, interrupt-vector-table, ivt, nmi, intr, iret]
+    deck: INTR
+    slides: "3-21"
+
+  - id: i80286
+    name: 80286 protected mode
+    aliases: ["80286", protected-mode]
+    deck: "80286"
+    children:
+      - id: descriptors
+        name: Selectors, descriptors, GDT and LDT
+        aliases: [selector, descriptor, gdt, ldt, gdtr, ldtr, access-rights]
+      - id: shadow-registers
+        name: Shadow (descriptor cache) registers
+        aliases: [descriptor-cache, segment-cache, shadow-register]
+      - id: privilege-protection
+        name: Privilege levels and I/O protection (IOPL)
+        aliases: [iopl, privilege, privilege-level, dpl, cpl, rpl]
+      - id: compatibility-286
+        name: Real vs protected mode and compatibility with 8086
+        aliases: [object-code-compatible, source-code-compatible]
+
+  - id: i80386
+    name: 80386
+    aliases: ["80386", intel-80386]
+    deck: 80386-updated
+    children:
+      - id: paging-386
+        name: Paging, page directory and page tables (CR3), linear to physical address
+        aliases: [paging, page-directory, page-table, cr3, linear-address, multilevel-paging, tlb]
+        slides: "21-25"
+
+  # ---- Section B (EHP): ATmega32; decks in EHP_Slide/
+  - id: mcu-intro
+    name: Microcontrollers and processor architectures
+    aliases: [microcontroller, introduction, intro]
+    deck: Intro to micro, ATMega32_Core
+    children:
+      - id: mp-vs-mcu
+        name: Microprocessor vs microcontroller
+        aliases: [microprocessor-vs-microcontroller]
+      - id: von-neumann-harvard
+        name: Von Neumann vs Harvard architecture
+        aliases: [harvard, von-neumann]
+      - id: risc-cisc
+        name: RISC vs CISC
+        aliases: [risc, cisc]
+        slides: "6"
+
+  - id: avr-memory
+    name: ATmega32 memory and EEPROM
+    aliases: [atmega32-memory, flash, sram]
+    deck: ATMega32_Core
+    children:
+      - id: eeprom
+        name: EEPROM read and write
+        aliases: [eecr, eear, eedr, eemwe, eewe]
+        slides: "24-42"
+
+  - id: avr-io
+    name: ATmega32 basic I/O
+    aliases: [basic-io, io-ports, ports, ddr]
+    deck: ATMega32 Basic IO
+    children:
+      - id: push-buttons
+        name: Push buttons, pull-up and pull-down resistors
+        aliases: [push-button, pull-up, pull-down, active-low, active-high]
+        slides: "28-37"
+
+  - id: avr-interrupts
+    name: ATmega32 interrupts
+    aliases: [atmega-interrupts, isr]
+    deck: ATmega32 Interrupt
+    children:
+      - id: interrupt-execution
+        name: Interrupt execution sequence in ATmega32
+        aliases: [interrupt-sequence, nested-interrupts, volatile]
+        slides: "3-14, 24-27"
+      - id: external-interrupts
+        name: External interrupts (INT0, INT1, INT2)
+        aliases: [int0, int1, int2, gicr, mcucr]
+        slides: "16-23"
+
+  - id: avr-timers
+    name: ATmega32 timers
+    aliases: [timer, timers, timer1]
+    deck: Timer_Part_1, Timer_Part_2
+    children:
+      - id: timer-normal
+        name: Normal mode, overflows, delays and measuring elapsed time
+        aliases: [normal-mode, overflow, tov1, delay, delay-ms, elapsed-time]
+      - id: timer-ctc
+        name: CTC mode
+        aliases: [ctc]
+      - id: timer-pwm
+        name: Fast PWM and phase-correct PWM, duty cycle and waveforms
+        aliases: [pwm, fast-pwm, phase-correct-pwm, duty-cycle, waveform, oc1a, oc1b]
+
+  - id: avr-adc
+    name: ATmega32 ADC
+    aliases: [adc, analog-to-digital]
+    deck: 6. AVR ADC
+    children:
+      - id: adc-basics
+        name: Sampling, quantization, resolution and error
+        aliases: [quantization, resolution, adc-error]
+        slides: "6-15"
+      - id: adc-registers
+        name: ADMUX, ADCSRA, ADCH/ADCL, differential input, gain and ADC interrupt
+        aliases: [admux, adcsra, adch, adcl, adlar, differential-adc, adc-interrupt]
+        slides: "16-36"
+
+  - id: serial
+    name: Serial communication
+    aliases: [serial-communication]
+    deck: Serial Communication
+    children:
+      - id: serial-basics
+        name: Serial vs parallel, synchronous vs asynchronous, benefits
+        aliases: [serial-vs-parallel, synchronous, asynchronous]
+        slides: "2-8"
+      - id: usart
+        name: "USART: framing, baud rate (UBRR), registers, 9-bit data, FE/DOR/PE"
+        aliases: [uart, baud-rate, ubrr, ucsra, ucsrb, ucsrc, frame-error, data-overrun, parity]
+        slides: "17-77"
+      - id: spi
+        name: SPI
+        aliases: [spcr, spsr, spdr, master-slave]
+        slides: "78-115"

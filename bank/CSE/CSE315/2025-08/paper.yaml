@@ -1,0 +1,23 @@
+schema: 1
+course: CSE315
+kind: term-final
+exam_date: 2025-08-30
+session: 2023-24
+level_term: L3T1
+students_dept: CSE
+full_marks: 210
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4, 5, 6, 7, 8]
+    answer_any: 5
+    rule: There are EIGHT questions in this section. Question No. 1 is mandatory. Answer any FIVE from the remaining 7 questions (i.e. 2 to 8).
+  B:
+    questions: [9, 10, 11, 12]
+    answer_any: 2
+    rule: There are FOUR questions in this section. You must answer the Question No. 9. Answer any TWO questions out of the questions between 10 and 12.
+source: {file: CSE 315 merged.pdf, pages: 1-13}
+notes: ["Term is printed as 'L-3/T-1' on the paper.", "Page 8 (descriptor formats and the 8086 MOD/RM table) is reproduced in the Section A parts that need it. Pages 9-13 (ATMega32 pin diagram, Timer1/ADC/interrupt/EEPROM/SPI register tables) are the attached datasheet for Section B and are not transcribed."]
+transcription:
+  by: []
+  checked_by: []

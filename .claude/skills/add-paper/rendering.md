@@ -15,7 +15,7 @@ Question and solution files must look right in **two** places: on GitHub (its Ma
 | Tables | pipe tables with a header row: `\| Process \| A \| B \|` then `\|:--\|:-:\|:-:\|`. A table with no natural header gets one (`\| Parameter \| Value \|`) | The PDF converts only pipe tables; HTML tables are dropped |
 | Merged cells (multicolumn) | not possible; repeat or restructure the header (`Frame 1 \| Frame 2 ...`) and add an italic caption line below | Pipe tables have no colspan |
 | Wide tables (7+ columns) | fine; the PDF shrinks them to fit. Keep cells short (`5 read, 6 write`) | Long cells make the shrunken text tiny |
-| Code / pseudocode / shell commands | fenced block with a language: ```` ```c ````, ```` ```text ```` | Keeps spacing; long lines wrap in the PDF |
+| Code / pseudocode / shell commands | fenced block with a language: ```` ```c ````, ```` ```text ```` | Keeps spacing; long lines wrap in the PDF; a real language (`c`, `python`, `bash`, ...) gets syntax colours on the site and in the PDF, `text` stays plain |
 | Two code blocks side by side | one after the other, each under a bold label (`**Code block 1**`) | Tables cannot hold code |
 | Diagrams (RPC flow, disk layout, trees) | a ```` ```text ```` block with an ASCII drawing, or a table; never a huge `\underbrace` formula | Formulas cannot wrap |
 | Gantt charts | ```` ```gantt ```` block: optional `# caption`, then one `P1 0 30` per line | Drawn as TikZ in the PDF, readable as text on GitHub |

@@ -40,6 +40,10 @@
   \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}\else\usebox{\pandoc@box}\fi}
 \makeatother
 \fvset{fontsize=\small,breaklines=true,frame=single,framesep=2mm,rulecolor=\color{black!25}}
+$if(highlighting-macros)$
+% Syntax highlighting for ```c and other known languages (colours from Pandoc's style).
+$highlighting-macros$
+$endif$
 
 \definecolor{tfq}{HTML}{3B5B8C}
 \definecolor{tfqback}{HTML}{F5F8FC}

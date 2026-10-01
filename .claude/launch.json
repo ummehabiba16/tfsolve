@@ -6,6 +6,12 @@
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "8765", "-d", "site"],
       "port": 8765
+    },
+    {
+      "name": "site-alt",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8766", "-d", "site"],
+      "port": 8766
     }
   ]
 }
