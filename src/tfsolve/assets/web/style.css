@@ -148,6 +148,8 @@ h2 { color: var(--title); font-size: 1.25rem; margin: 2rem 0 0.75rem; }
 .crumbs a { text-decoration: none; }
 .crumbs span { margin: 0 0.3rem; }
 footer { color: var(--muted); font-size: 0.85rem; padding-top: 2rem; padding-bottom: 2rem; }
+footer .stats { margin: 0.4rem 0 0; }
+footer #stats { margin-right: 0.5rem; font-weight: 600; }
 
 /* home */
 .hero { background: var(--hero); color: #fff; border-radius: 10px; padding: 1.5rem; margin-top: 0.5rem; }

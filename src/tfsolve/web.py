@@ -120,7 +120,9 @@ def _page(title, body, root, crumbs=()):
 {body}
 </main>
 <footer class="wrap">BUET term-final questions and solutions, kept on
-<a href="{REPO}">GitHub</a>. Spotted a mistake? Use the “Edit” link on any question.</footer>
+<a href="{REPO}">GitHub</a>. Spotted a mistake? Use the “Edit” link on any question.
+<p class="stats"><span id="stats" hidden></span>
+We count page views and Print / Save PDF clicks only: no cookies, no personal data.</p></footer>
 <script defer src="{KATEX}/katex.min.js"></script>
 <script defer src="{root}app.js"></script>
 </body>

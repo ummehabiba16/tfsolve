@@ -26,6 +26,35 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Anonymous counting with GoatCounter: page views and Print / Save PDF clicks, nothing else.
+  // Nothing is sent, and no numbers are fetched, if the browser says Do Not Track / Global Privacy Control.
+  var GC = "https://tfsolve.goatcounter.com";
+  var noCount = navigator.doNotTrack === "1" || window.doNotTrack === "1" || navigator.globalPrivacyControl === true;
+  if (!noCount) {
+    var gc = document.createElement("script");
+    gc.async = true;
+    gc.src = "https://gc.zgo.at/count.js";
+    gc.setAttribute("data-goatcounter", GC + "/count");
+    document.head.appendChild(gc);
+
+    var stats = document.getElementById("stats");
+    var load = function (path) {
+      return fetch(GC + "/counter/" + path + ".json").then(function (r) { return r.json(); })
+        .then(function (d) { return d.count || "0"; });
+    };
+    if (stats && window.fetch) {
+      Promise.all([load("TOTAL"), load("print-pdf")]).then(function (n) {
+        stats.textContent = n[0] + " page views \u00b7 " + n[1] + " PDF prints";
+        stats.hidden = false;
+      }).catch(function () {});
+    }
+  }
+  function countEvent(name, title) {
+    try {
+      if (window.goatcounter && goatcounter.count) goatcounter.count({ path: name, title: title, event: true });
+    } catch (e) {}
+  }
+
   var text = document.getElementById("f-text");
   if (!text) return; // not a course page
 
@@ -111,7 +140,10 @@ document.addEventListener("DOMContentLoaded", function () {
     apply();
   });
 
-  document.getElementById("f-print").addEventListener("click", function () { window.print(); });
+  document.getElementById("f-print").addEventListener("click", function () {
+    if (!noCount) countEvent("print-pdf", "Print / Save PDF");
+    window.print();
+  });
 
   loadHash();
   apply();
