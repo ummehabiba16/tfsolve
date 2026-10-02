@@ -20,7 +20,7 @@ from importlib import resources
 from pathlib import Path
 
 from .bank import as_list
-from .render import PANDOC_FROM, BuildError, pandoc_path
+from .render import PANDOC_FROM, BuildError, _Figures, pandoc_path
 
 REPO = "https://github.com/ummehabiba16/tfsolve"
 KATEX = "https://cdn.jsdelivr.net/npm/katex@0.16.11/dist"
@@ -192,7 +192,7 @@ def _help():
     The <b>Contents</b> list above the questions follows your choice and shows how many questions each topic or exam has.
   </li>
   <li><b>Teacher</b>: only the questions a teacher set (shown by initials, e.g. ABC).</li>
-  <li><b>Year</b> or <b>Exam</b>: one exam year, or one paper.</li>
+  <li><b>Exam</b>: one paper.</li>
   <li><b>Topic</b> and <b>Search</b> narrow it further. Clicking a topic chip on a question does the same.</li>
   <li><b>Print / Save PDF</b> prints what is on screen, contents included, with every solution opened.
   Tick <i>Questions only when printing</i> to leave the solutions out.</li>
@@ -250,7 +250,8 @@ def _home(bank):
     return _page("tfsolve: BUET term-final questions", intro + "\n".join(rows), "")
 
 
-def _course(bank, course, repo_root):
+def _course(bank, course, repo_root, out_dir):
+    figs = _Figures(out_dir)  # copies images into <out_dir>/fig and rewrites links (page sits in out_dir)
     exams = sorted(course.exams, key=lambda e: e.label, reverse=True)
 
     # Markdown for every question body, shared setup and solution, converted in one go.
@@ -260,10 +261,10 @@ def _course(bank, course, repo_root):
             stems = bank.stems_for(part)
             sols = bank.solutions_for(part)
             items.append((part, stems, sols))
-            chunks += [s.body for s in stems] + [part.body]
+            chunks += [figs.fix(s.body, s.path.parent) for s in stems] + [figs.fix(part.body, part.path.parent)]
             for s in sols:
                 summary = f"**Answer.** {s.meta['summary']}\n\n" if s.meta.get("summary") else ""
-                chunks.append(summary + s.body)
+                chunks.append(summary + figs.fix(s.body, s.path.parent))
     converted = iter(to_html(chunks))
 
     used_topics, faculty, groups = set(), set(), []
@@ -328,7 +329,6 @@ def _course(bank, course, repo_root):
                          for t in course.topics.values() if t.id in used_topics)
     fac_opts = "".join(opt(f, f) for f in sorted(faculty))
     exam_opts = "".join(opt(e.label, e.title) for e in exams if e.parts)
-    year_opts = "".join(opt(str(y), str(y)) for y in sorted({e.year for e in exams if e.parts}, reverse=True))
     # Topic tree (only topics in use, in course.yaml order) for the "By topic" arrangement.
     tree = [{"id": t.id, "name": t.name, "parent": t.parent} for t in course.topics.values() if t.id in used_topics]
     tree_json = json.dumps(tree).replace("</", "<\\/")
@@ -345,7 +345,6 @@ def _course(bank, course, repo_root):
     <p class="arrange-now" id="arrange-now">Grouped topic by topic</p>
   </div>
   <label>Teacher<select id="f-faculty"><option value="">All teachers</option>{fac_opts}</select></label>
-  <label>Year<select id="f-year"><option value="">All years</option>{year_opts}</select></label>
   <label>Exam<select id="f-exam"><option value="">All exams</option>{exam_opts}</select></label>
   <label>Topic<select id="f-topic"><option value="">All topics</option>{topic_opts}</select></label>
   <label>Search<input type="search" id="f-text" placeholder="e.g. deadlock, Gantt"></label>
@@ -386,6 +385,6 @@ def build_site(bank, out_dir="site"):
     n = 3
     for course in bank.courses.values():
         (out / course.code).mkdir(exist_ok=True)
-        (out / course.code / "index.html").write_text(_course(bank, course, repo_root), encoding="utf-8")
+        (out / course.code / "index.html").write_text(_course(bank, course, repo_root, out / course.code), encoding="utf-8")
         n += 1
     return n

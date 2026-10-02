@@ -67,7 +67,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var topic = document.getElementById("f-topic");
   var faculty = document.getElementById("f-faculty");
-  var year = document.getElementById("f-year");
   var exam = document.getElementById("f-exam");
   var solved = document.getElementById("f-solved");
   var openAll = document.getElementById("f-open");
@@ -182,7 +181,6 @@ document.addEventListener("DOMContentLoaded", function () {
       var ok =
         (!topic.value || has(q.dataset.topics, topic.value)) &&
         (!who.length || who.some(function (w) { return has(q.dataset.faculty, w); })) &&
-        (!year.value || q.dataset.exam.slice(0, 4) === year.value) &&
         (!exam.value || q.dataset.exam === exam.value) &&
         (!solved.checked || q.dataset.solved === "yes") &&
         (!words || q.textContent.toLowerCase().indexOf(words) !== -1);
@@ -208,7 +206,6 @@ document.addEventListener("DOMContentLoaded", function () {
     var p = new URLSearchParams();
     if (arrangement !== "topic") p.set("arrange", arrangement);
     if (faculty.value) p.set("faculty", faculty.value);
-    if (year.value) p.set("year", year.value);
     if (exam.value) p.set("exam", exam.value);
     if (topic.value) p.set("topic", topic.value);
     if (solved.checked) p.set("solved", "1");
@@ -220,7 +217,6 @@ document.addEventListener("DOMContentLoaded", function () {
     var p = new URLSearchParams(location.hash.slice(1));
     arrangement = p.get("arrange") === "year" ? "year" : "topic";
     faculty.value = p.get("faculty") || "";
-    year.value = p.get("year") || "";
     exam.value = p.get("exam") || "";
     topic.value = p.get("topic") || "";
     solved.checked = p.get("solved") === "1";
@@ -233,7 +229,7 @@ document.addEventListener("DOMContentLoaded", function () {
       apply();
     });
   });
-  [topic, faculty, year, exam, solved].forEach(function (el) { el.addEventListener("change", apply); });
+  [topic, faculty, exam, solved].forEach(function (el) { el.addEventListener("change", apply); });
   text.addEventListener("input", apply);
 
   openAll.addEventListener("change", function () {
@@ -250,7 +246,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   document.getElementById("f-clear").addEventListener("click", function () {
-    topic.value = faculty.value = year.value = exam.value = text.value = "";
+    topic.value = faculty.value = exam.value = text.value = "";
     solved.checked = false;
     apply();
   });
