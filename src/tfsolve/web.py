@@ -10,6 +10,8 @@ No server is needed: open site/index.html, or host the folder on GitHub Pages.
 """
 from __future__ import annotations
 
+import functools
+import hashlib
 import html
 import json
 import re
@@ -98,6 +100,12 @@ def to_html(chunks):
 
 # ------------------------------------------------------------------- pages
 
+@functools.lru_cache(maxsize=None)
+def _v(name):
+    data = (resources.files("tfsolve") / "assets" / "web" / name).read_bytes()
+    return hashlib.sha1(data).hexdigest()[:8]
+
+
 def _page(title, body, root, crumbs=()):
     trail = "".join(f' <span>›</span> <a href="{href}">{esc(name)}</a>' if href else f" <span>›</span> {esc(name)}"
                     for name, href in crumbs)
@@ -108,7 +116,7 @@ def _page(title, body, root, crumbs=()):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)}</title>
 <link rel="stylesheet" href="{KATEX}/katex.min.css">
-<link rel="stylesheet" href="{root}style.css">
+<link rel="stylesheet" href="{root}style.css?v={_v("style.css")}">
 <script>{THEME_BOOT}</script>
 </head>
 <body>
@@ -125,7 +133,7 @@ def _page(title, body, root, crumbs=()):
 <footer class="wrap">BUET term-final questions and solutions, kept on
 <a href="{REPO}">GitHub</a>. Spotted a mistake? Use the “Edit” link on any question.</footer>
 <script defer src="{KATEX}/katex.min.js"></script>
-<script defer src="{root}app.js"></script>
+<script defer src="{root}app.js?v={_v("app.js")}"></script>
 </body>
 </html>
 """
@@ -329,11 +337,12 @@ def _course(bank, course, repo_root):
 <div class="layout">
 <aside class="filters">
   <div class="arrange" role="group" aria-label="Arrange questions">
-    <span class="arrange-label">Arrange</span>
-    <div class="seg">
+    <span class="arrange-label">Arrange questions</span>
+    <div class="switch">
       <button type="button" data-arrange="topic" aria-pressed="true">By topic</button>
       <button type="button" data-arrange="year" aria-pressed="false">By year</button>
     </div>
+    <p class="arrange-now" id="arrange-now">Grouped topic by topic</p>
   </div>
   <label>Teacher<select id="f-faculty"><option value="">All teachers</option>{fac_opts}</select></label>
   <label>Year<select id="f-year"><option value="">All years</option>{year_opts}</select></label>

@@ -244,11 +244,18 @@ code span.al, code span.er, code span.wa { color: var(--tok-err); font-weight: 6
 /* arrangement switch (highlighted: the first choice on a course page) */
 .arrange { background: var(--blue-soft); border: 1px solid var(--blue); border-radius: 8px; padding: 0.6rem; margin-bottom: 1rem; }
 .arrange-label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--title); margin-bottom: 0.4rem; }
-.seg { display: flex; border: 1px solid var(--blue); border-radius: 6px; overflow: hidden; }
-.seg button { flex: 1; border: 0; border-radius: 0; background: var(--card); color: var(--blue); font-weight: 600; padding: 0.45rem 0.3rem; }
-.seg button + button { border-left: 1px solid var(--blue); }
-.seg button[aria-pressed="true"] { background: var(--blue); color: var(--on-blue); }
-.seg button:hover { background: var(--navy-2); color: #fff; }
+.switch { display: flex; gap: 4px; padding: 3px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; }
+.switch button {
+  flex: 1; border: 1px solid transparent; border-radius: 6px; padding: 0.45rem 0.3rem;
+  background: transparent; color: var(--muted); font-weight: 500; transition: background 0.15s, color 0.15s;
+}
+.switch button:not([aria-pressed="true"]):hover { background: var(--card); color: var(--title); border-color: var(--line); }
+.switch button[aria-pressed="true"] {
+  background: var(--blue); border-color: var(--blue); color: var(--on-blue); font-weight: 700;
+  box-shadow: 0 1px 4px var(--shadow); cursor: default;
+}
+.switch button[aria-pressed="true"]::before { content: "\2713\00a0"; }
+.arrange-now { font-size: 0.8rem; color: var(--muted); margin: 0.4rem 0 0; }
 
 /* contents list above the questions */
 .contents { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1rem; }

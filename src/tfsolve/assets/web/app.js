@@ -195,6 +195,8 @@ document.addEventListener("DOMContentLoaded", function () {
     byYear.hidden = arrangement !== "year";
     byTopic.hidden = arrangement !== "topic";
     arrangeButtons.forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.arrange === arrangement)); });
+    document.getElementById("arrange-now").textContent =
+      arrangement === "topic" ? "Grouped topic by topic" : "Grouped exam by exam, newest first";
     buildContents();
     document.getElementById("f-count").textContent =
       shown + " of " + byYear.querySelectorAll(".q").length + " questions";
