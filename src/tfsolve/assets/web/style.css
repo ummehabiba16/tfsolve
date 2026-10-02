@@ -307,8 +307,14 @@ code span.al, code span.er, code span.wa { color: var(--tok-err); font-weight: 6
   .contents { border: 0; padding: 0; break-after: page; }
   .contents .n { color: #5b6577; }
   .layout { display: block; }
-  .q { break-inside: avoid; border: 1px solid #999; }
+  .q { border: 1px solid #999; }
+  .qhead { break-after: avoid; }
   .body pre { white-space: pre-wrap; }
+  /* solutions are always printed in full: a plain heading line, no arrow */
+  .solution { break-inside: auto; }
+  .print-questions-only .solution, .print-questions-only .nosol { display: none; }
+  .solution summary { list-style: none; color: var(--title); }
+  .solution summary::-webkit-details-marker { display: none; }
 }
 
 /* about page */

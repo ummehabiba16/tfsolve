@@ -194,8 +194,8 @@ def _help():
   <li><b>Teacher</b>: only the questions a teacher set (shown by initials, e.g. ABC).</li>
   <li><b>Year</b> or <b>Exam</b>: one exam year, or one paper.</li>
   <li><b>Topic</b> and <b>Search</b> narrow it further. Clicking a topic chip on a question does the same.</li>
-  <li><b>Print / Save PDF</b> prints exactly what is on screen, contents included. Tick <i>Show all solutions</i> first to
-  include the answers.</li>
+  <li><b>Print / Save PDF</b> prints what is on screen, contents included, with every solution opened.
+  Tick <i>Questions only when printing</i> to leave the solutions out.</li>
 </ol>
 <p>Your filters are kept in the address bar, so you can bookmark or share a filtered view.</p>
 <h2>Solution badges</h2>
@@ -299,7 +299,7 @@ def _course(bank, course, repo_root):
   <div class="body">{next(converted)}{sources}</div>
 </details>""")
             if not sols:
-                sol_html.append('<p class="note">No solution yet.</p>')
+                sol_html.append('<p class="note nosol">No solution yet.</p>')
             add = _github(part.path.parent / "solutions" / part.pid, repo_root, new=True)
 
             primary = tids[0] if tids else ""
@@ -351,6 +351,7 @@ def _course(bank, course, repo_root):
   <label>Search<input type="search" id="f-text" placeholder="e.g. deadlock, Gantt"></label>
   <label class="check"><input type="checkbox" id="f-solved"> Only questions with solutions</label>
   <label class="check"><input type="checkbox" id="f-open"> Show all solutions</label>
+  <label class="check"><input type="checkbox" id="f-qonly"> Questions only when printing</label>
   <div class="buttons">
     <button type="button" id="f-clear" class="ghost">Clear filters</button>
     <button type="button" id="f-print">Print / Save PDF</button>

@@ -255,9 +255,34 @@ document.addEventListener("DOMContentLoaded", function () {
     apply();
   });
 
+  // Printing includes the solutions unless "Questions only when printing" is ticked. Closed <details> print as
+  // just their heading, so open every one for the print job (also for Ctrl/Cmd+P) and close them afterwards.
+  var reopen = null;
+  var qonly = document.getElementById("f-qonly");
+  function openForPrint() {
+    if (reopen) return;
+    reopen = [];
+    document.documentElement.classList.toggle("print-questions-only", qonly.checked);
+    if (qonly.checked) return;
+    document.querySelectorAll(".solution").forEach(function (d) {
+      if (!d.open) { d.open = true; reopen.push(d); }
+    });
+  }
+  function restoreAfterPrint() {
+    if (!reopen) return;
+    reopen.forEach(function (d) { d.open = false; });
+    reopen = null;
+    document.documentElement.classList.remove("print-questions-only");
+  }
+  window.addEventListener("beforeprint", openForPrint);
+  window.addEventListener("afterprint", restoreAfterPrint);
+
   document.getElementById("f-print").addEventListener("click", function () {
     if (!noCount) countEvent("print-pdf", "Print / Save PDF");
+    openForPrint();
     window.print();
+    // Some browsers don't fire afterprint reliably; print() blocks until the dialog closes in most, so restore here too.
+    setTimeout(restoreAfterPrint, 500);
   });
 
   loadHash();

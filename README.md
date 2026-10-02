@@ -137,13 +137,16 @@ Mark a solution `status: reviewed` (and add yourself to `reviewed_by`) only afte
 
 ## Credits
 
-- **[ummehabiba16](https://github.com/ummehabiba16)**: project owner. Idea, requirements and design decisions; the CSE313 question data (paper transcriptions, topic tags, faculty mapping) and the first set of solutions.
+- **[ummehabiba16](https://github.com/ummehabiba16)**: project owner:
+  - idea, requirements and design decisions;
+  - collecting the question papers and the faculty lists, and deciding the topic structure of each course;
+  - the early solution sets.
 - **Claude (Anthropic), via Claude Code**, working under the owner's direction:
-  - wrote the `tfsolve` code (`src/tfsolve/`, `tools/`) and the Claude Code skills;
-  - converted the original CSE313 material into this bank format;
-  - reviewed the imported solutions; the corrections are listed in each solution file's `changes:`.
+  - wrote the `tfsolve` code (`src/tfsolve/`, `tools/`), the website and the Claude Code skills;
+  - transcribed question papers from their PDFs into the bank (paper details, one file per question, topic tags), and converted earlier material into this format;
+  - wrote AI solutions.
 - **AI-written solutions** are marked `author: ai`. They stay *not yet verified* until a person checks them.
-- Contributors of papers, solutions and reviews are credited in the files they wrote (`author`, `reviewed_by`, `transcription.by`) and in the Git history.
+- **Contributors** of papers, solutions and reviews are credited in the files they wrote (`author`, `reviewed_by`, `transcription.by`) and in the Git history.
 
 ## Licence and notice
 
