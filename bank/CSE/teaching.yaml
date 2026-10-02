@@ -3,6 +3,15 @@
 #   [..]                 when you only know who taught (the PDF then says "taught by")
 # Papers take their faculty from here through their `session`, so one line per session
 # tags every question in that paper.
+CSE309:
+  # Section A = MMA (MMA_Slide/), Section B = KMS (KMS_Slide/). The January 2021 Term paper is session 2019-20.
+  "2023-24": {A: [MMA], B: [KMS]}
+  "2022-23": {A: [MMA], B: [KMS]}
+  "2021-22": {A: [MMA], B: [KMS]}
+  "2020-21": {A: [KMS], B: [SSA]}
+  "2019-20": {A: [MMA], B: [KMS]}
+  "2018-19": {A: [MMA], B: [KMS]}
+  "2017-18": {A: [MMA], B: [UNKNOWN]}  # B assigned by matching its topics to KMS_Slide/
 CSE313:
   "2024-25": {A: [RRR], B: [KRV]}   # teaching now (see dept.yaml current_session)
   "2023-24": {A: [RRR], B: [KRV]}

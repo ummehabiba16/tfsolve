@@ -1,0 +1,285 @@
+schema: 1
+code: CSE309
+title: Compilers
+dept: CSE
+level_term: L3T1
+credit: 3.0
+previous_codes: []
+
+# Topic tree. Question parts are tagged with these ids (first tag = where the part is filed).
+# Asking for a parent (-t lexical) also returns its children. Aliases are alternative
+# names for -t; they must be unique within the course.
+# Textbook: Aho, Lam, Sethi, Ullman, Compilers: Principles, Techniques & Tools, 2e ("Dragon book").
+topics:
+  # ---- Section A (MMA). Slide references are to MMA's 2025 decks in MMA_Slide/.
+  - id: intro
+    name: Introduction, language processors and compiler structure
+    aliases: [introduction]
+    deck: cse309slides01introduction
+    children:
+      - id: language-processors
+        name: Compilers, interpreters and hybrid (bytecode) translators
+        aliases: [compiler-vs-interpreter, interpreter, bytecode, hybrid-compiler, java-bytecode]
+        slides: "4-13"
+      - id: preprocessor
+        name: The C preprocessor (includes, conditional compilation, macros, line control)
+        aliases: [c-preprocessor, line-control, line-directive, macros, conditional-compilation]
+        slides: "14-25"
+      - id: linker-loader
+        name: Assembler, relocatable machine code, linker and loader
+        aliases: [linker, loader, relocatable, relocatable-code, assembler, shared-library]
+        slides: "27-39"
+      - id: compiler-phases
+        name: Phases of a compiler, front/back end, passes, symbol table, construction tools
+        aliases: [phases, compiler-structure, front-end, back-end, passes, symbol-table, analysis-synthesis]
+        slides: "40-98"
+
+  - id: lexical
+    name: Lexical analysis
+    aliases: [lexical-analysis, lexer, scanner]
+    deck: cse309slides02lexicalanalysis
+    children:
+      - id: lexer-role
+        name: Role of the lexical analyzer; why lexing is separated from parsing
+        aliases: [lexer-vs-parser, lexical-vs-syntax, separation-of-lexing]
+        slides: "2-16"
+      - id: tokens
+        name: Tokens, patterns, lexemes, token classes and token attributes
+        aliases: [token, lexeme, lexemes, pattern, token-attributes, token-design]
+        slides: "17-28"
+      - id: lexical-errors
+        name: Lexical errors and panic-mode recovery in the scanner
+        aliases: [lex-errors, lexical-panic-mode]
+        slides: "29-36"
+      - id: input-buffering
+        name: Input buffering, buffer pairs, sentinels and lookahead
+        aliases: [buffer-pairs, buffer-pair, sentinels, sentinel, lookahead, lexemebegin, forward-pointer]
+        slides: "37-49"
+      - id: token-recognition
+        name: Regular definitions, transition diagrams, reserved words vs identifiers
+        aliases: [regular-definitions, regular-expressions, regex, transition-diagrams, reserved-words, keywords]
+        slides: "50-110"
+      - id: lex-tool
+        name: The Lex / Flex scanner generator and its conflict resolution
+        aliases: [lex, flex, lex-program, lex-conflict-resolution, longest-match]
+        slides: "111-148"
+
+  - id: grammars
+    name: Context-free grammars and writing a grammar
+    aliases: [cfg, grammar, context-free-grammar]
+    deck: cse309slides04syntaxanalysis
+    children:
+      - id: parser-role
+        name: Role of the parser, universal parsing methods, syntax error handling and recovery
+        aliases: [syntax-errors, error-recovery, panic-mode, universal-parsing, parsing-methods]
+        slides: "2-24"
+      - id: derivations
+        name: Derivations, parse trees and ambiguity
+        aliases: [derivation, parse-tree, parse-trees, ambiguity, leftmost-derivation, rightmost-derivation]
+      - id: left-recursion
+        name: Elimination of left recursion (immediate and indirect)
+        aliases: [eliminate-left-recursion, left-recursive]
+        slides: "27-60; basic-concepts deck 50-56"
+      - id: left-factoring
+        name: Left factoring
+        aliases: [left-factor]
+        slides: "61-69"
+
+  - id: top-down
+    name: Top-down parsing
+    aliases: [top-down-parsing, ll-parsing]
+    deck: cse309slides04syntaxanalysis
+    children:
+      - id: recursive-descent
+        name: Recursive-descent and procedure-based predictive parsers; backtracking; epsilon-productions
+        aliases: [recursive-descent-parser, procedure-based-parser, backtracking, predictive-parser-procedures]
+        slides: "70-75; basic-concepts deck 2-49"
+      - id: first-follow
+        name: FIRST and FOLLOW sets
+        aliases: [first, follow, first-and-follow]
+        slides: "76-102"
+      - id: ll1
+        name: LL(1) and LL(k) grammars and the predictive parsing table
+        aliases: [ll1-grammar, ll-k, llk, ll0, predictive-parsing-table, parsing-table]
+        slides: "103-123"
+      - id: table-driven-ll
+        name: Nonrecursive (table-driven) predictive parsing and leftmost derivations
+        aliases: [nonrecursive-predictive, table-driven, predictive-parsing-algorithm]
+        slides: "124-151"
+
+  - id: bottom-up
+    name: Bottom-up (LR) parsing
+    aliases: [bottom-up-parsing, lr-parsing]
+    deck: cse309slides04syntaxanalysis
+    children:
+      - id: shift-reduce
+        name: Reductions, handles, handle pruning, shift-reduce parsing and its conflicts
+        aliases: [handle, handles, handle-pruning, shift-reduce-parsing, shift-reduce-conflict]
+        slides: "152-226"
+      - id: slr
+        name: LR(0) items, the LR(0) automaton, the LR parsing algorithm and SLR tables
+        aliases: [lr0, lr0-items, lr-parsing-algorithm, slr1, slr-table]
+        slides: "227-387"
+      - id: viable-prefixes
+        name: Viable prefixes and valid items
+        aliases: [viable-prefix, valid-items]
+        slides: "388-403"
+      - id: clr
+        name: Canonical LR(1) items and CLR parsing tables
+        aliases: [lr1, lr1-items, canonical-lr, clr1]
+        slides: "404-489"
+      - id: lalr
+        name: LALR parsing tables (merging LR(1) states) and their conflicts
+        aliases: [lalr1, lalr-merge]
+        slides: "490-564"
+      - id: yacc
+        name: Parser generators (Yacc / Bison) and semantic actions
+        aliases: [bison, parser-generator, yacc-actions]
+        slides: "565-592"
+
+  # ---- Section B (KMS). Slide references are to KMS's decks in KMS_Slide/ (slide numbers).
+  - id: sdt
+    name: Syntax-directed definitions and translation schemes
+    aliases: [syntax-directed-translation, syntax-directed-definition]
+    deck: Chapter 5 (Syntax-Directed Translation)
+    children:
+      - id: sdd-attributes
+        name: SDDs, synthesized and inherited attributes, annotated parse trees
+        aliases: [sdd, synthesized, inherited, attributes, annotated-parse-tree]
+        slides: "6-22"
+      - id: dependency-graph
+        name: Evaluation order, dependency graphs, S-attributed and L-attributed SDDs
+        aliases: [evaluation-order, s-attributed, l-attributed]
+        slides: "23-40"
+      - id: syntax-tree-construction
+        name: SDDs for constructing syntax trees (ASTs)
+        aliases: [ast, syntax-tree, abstract-syntax-tree]
+        slides: "41-47"
+      - id: sdt-schemes
+        name: SDT schemes, postfix SDTs, parser-stack implementation, actions inside productions
+        aliases: [sdt, postfix-sdt, translation-scheme, sdt-left-recursion]
+        slides: "48-69"
+      - id: l-attributed-impl
+        name: Implementing L-attributed SDDs (recursive descent, on-the-fly code, LL and LR parsing)
+        aliases: [l-attributed-sdd, on-the-fly-code]
+        slides: "70-80"
+
+  - id: ir
+    name: Intermediate-code generation
+    aliases: [intermediate-code, intermediate-code-generation]
+    deck: Chapter 6 (Intermediate-Code Generation)
+    children:
+      - id: ir-forms
+        name: Why IR, choice of IR, syntax trees, DAGs and the value-number method
+        aliases: [intermediate-representation, dag-construction, value-number, llvm]
+        slides: "1-19"
+      - id: three-address-code
+        name: Three-address code, quadruples, triples, indirect triples, SSA form
+        aliases: [tac, quadruples, triples, indirect-triples, ssa, phi-function]
+        slides: "20-36"
+      - id: types-declarations
+        name: Type expressions, type equivalence, declarations, storage layout, widths and offsets
+        aliases: [type-expressions, types, declarations, storage-layout, offsets, widths]
+        slides: "37-51"
+      - id: expr-array-translation
+        name: Translation of expressions and array references
+        aliases: [array-references, array-translation, expression-translation]
+        slides: "52-71"
+      - id: control-flow
+        name: Boolean expressions, short-circuit code, flow-of-control statements, fall-through code
+        aliases: [short-circuit, boolean-expressions, flow-of-control, fall-through, jumping-code, redundant-gotos]
+        slides: "72-103"
+      - id: backpatching
+        name: Backpatching for boolean expressions and flow-of-control statements
+        aliases: [backpatch, truelist, falselist]
+        slides: "104-114"
+      - id: switch-break
+        name: Break, continue, goto and switch statements
+        aliases: [switch, switch-statement, break-continue]
+        slides: "115-120"
+
+  - id: runtime
+    name: Run-time environments
+    aliases: [run-time, runtime-environments]
+    deck: Chapter 7 (Runtime-Environments)
+    children:
+      - id: storage-organization
+        name: Storage organization; static vs dynamic storage allocation
+        aliases: [storage, static-allocation]
+        slides: "5-8"
+      - id: activation-records
+        name: Stack allocation, activation trees, control stack, activation records, calling and return sequences
+        aliases: [activation-tree, activation-record, control-stack, calling-sequence, return-sequence, stack-allocation]
+        slides: "9-29"
+      - id: scope-access
+        name: Scope and access to nonlocal data (static vs dynamic scope, access links)
+        aliases: [static-scope, dynamic-scope, access-links, nonlocal-data, scoping]
+        # Not in KMS's deck; Dragon book 2e sec. 1.6, 7.3.
+      - id: heap-management
+        name: Heap management, locality, fragmentation, first/best/next fit, manual deallocation
+        aliases: [heap, memory-manager, locality, fragmentation, first-fit, best-fit, next-fit, manual-deallocation]
+        slides: "30-44"
+      - id: garbage-collection
+        name: Garbage collection (root set, reference counting, mark-and-sweep, mark-and-compact, copying, generational)
+        aliases: [gc, root-set, reference-counting, mark-and-sweep, mark-and-compact, copying-collector, cheney, generational-gc]
+        slides: "45-93"
+
+  - id: codegen
+    name: Code generation
+    aliases: [code-generation]
+    deck: Chapter 8 (Code Generation)
+    children:
+      - id: codegen-issues
+        name: Code-generation issues, the simple target machine, addressing modes, instruction costs
+        aliases: [target-machine, instruction-selection, addressing-modes, instruction-cost]
+        slides: "3-26"
+      - id: basic-blocks
+        name: Basic blocks, leaders, flow graphs and loops
+        aliases: [flow-graph, leaders, loops]
+        slides: "27-36"
+      - id: liveness-next-use
+        name: Liveness and next-use information
+        aliases: [liveness, next-use, live-variables]
+        slides: "37-39"
+      - id: dag-optimization
+        name: DAG representation and local optimization of basic blocks
+        aliases: [dag, local-cse, basic-block-optimization]
+        slides: "40-50"
+      - id: simple-codegen
+        name: A simple code generator, register and address descriptors, getReg
+        aliases: [register-descriptor, address-descriptor, getreg, machine-code]
+        slides: "51-61"
+      - id: register-allocation
+        name: Global register allocation (live intervals, linear scan, spilling, interference graph, Chaitin)
+        aliases: [linear-scan, interference-graph, rig, chaitin, graph-coloring, spill, spilling]
+        slides: "Global Register Allocation.pdf 1-166; Chapter 8 slide 62"
+      - id: peephole
+        name: Peephole optimization and optimizations done by real compilers (gcc)
+        aliases: [peephole-optimization, gcc-optimization]
+        slides: "63-69"
+
+  - id: optimization
+    name: Machine-independent optimization
+    aliases: [code-optimization, machine-independent-optimization, semantic-preserving-transformations]
+    deck: Chapter 9 (Machine-Independent Optimizations)
+    children:
+      - id: cse
+        name: Common-subexpression elimination
+        aliases: [common-subexpression, global-cse]
+        slides: "10-20"
+      - id: copy-propagation
+        name: Copy propagation
+        aliases: [copy-prop]
+        slides: "21-23"
+      - id: dead-code-elimination
+        name: Dead-code elimination
+        aliases: [dead-code]
+        slides: "24-26"
+      - id: code-motion
+        name: Code motion (loop-invariant computations)
+        aliases: [loop-invariant, loop-invariant-code-motion]
+        slides: "27"
+      - id: induction-variables
+        name: Induction variables and reduction in strength
+        aliases: [induction-variable, strength-reduction]
+        slides: "28-35"

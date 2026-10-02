@@ -1,0 +1,23 @@
+schema: 1
+course: CSE309
+kind: term-final
+exam_date: 2025-08-24
+session: 2023-24
+level_term: L3T1
+students_dept: CSE
+full_marks: 210
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 2
+    rule: Q1 is compulsory; answer any TWO of Q2-Q4.
+  B:
+    questions: [5, 6, 7, 8]
+    answer_any: 2
+    rule: Q5 is compulsory; answer any TWO of Q6-Q8.
+source: {file: CSE 309 merged.pdf, pages: 1-7}
+notes: ["Term is printed as 'L-3/T-1' on the paper; subject printed as 'CSE 309 (Compilers)'.", "Section A (Q1-Q4, pages 1-4) was set by MMA and Section B (Q5-Q8, pages 4-7) by KMS."]
+transcription:
+  by: []
+  checked_by: []

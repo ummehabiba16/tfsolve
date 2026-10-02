@@ -1,0 +1,23 @@
+schema: 1
+course: CSE309
+kind: term-final
+exam_date: 2019-10-24
+session: 2018-19
+level_term: L3T1
+students_dept: CSE
+full_marks: 210
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+  B:
+    questions: [5, 6, 7, 8]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+source: {file: CSE 309 merged.pdf, pages: 31-35}
+notes: ["Subject printed as 'CSE 309 (Compilers)'.", "Section A (Q1-Q4, pages 31-32) was set by MMA and Section B (Q5-Q8, pages 32-35) by KMS. Section B header: All the symbols have their usual meanings unless explicitly mentioned."]
+transcription:
+  by: []
+  checked_by: []
