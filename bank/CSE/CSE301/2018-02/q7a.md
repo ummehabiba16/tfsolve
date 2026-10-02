@@ -1,0 +1,7 @@
+---
+marks: 10
+topics: [stationary-distribution, mc-modeling]
+kind: numerical
+source: {page: 38}
+---
+A professor continually gives exams to her students. She can give three possible types of exams, and her class is graded as either having done well or badly. Let $p_i$ denote the probability that the class does well on a type $i$ exam, and suppose that $p_1=0.3$, $p_2=0.6$, and $p_3=0.9$. If the class does well on an exam, then the next exam is equally likely to be any of the three types. If the class does badly, then the next exam is always type 1. What proportion of exams are type $i$, $i=1,2,3$?

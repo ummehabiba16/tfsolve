@@ -1,0 +1,296 @@
+schema: 1
+code: CSE301
+title: Mathematics for Computing and Data Science
+dept: CSE
+level_term: L3T1        # L3T2 up to the 2022-23 session
+credit: 3.0
+previous_codes: []
+# The title was "Mathematical Analysis for Computer Science" on papers up to the 2022-23 session.
+
+# Topic tree. Question parts are tagged with these ids (first tag = where the part is filed).
+# Asking for a parent (-t markov-chains) also returns its children. Aliases are alternative
+# names for -t; they must be unique within the course.
+# Section A (probability, stochastic processes, queueing, inference): decks in CSE301/.
+#   Text: Sheldon Ross, Introduction to Probability Models (Markov chains chapter in CSE301/).
+# Section B (discrete mathematics): Graham, Knuth, Patashnik, Concrete Mathematics. No decks yet.
+topics:
+  # ================= Section A =================
+  - id: probability-basics
+    name: Basic probability and counting
+    aliases: [probability, basic-probability]
+    children:
+      - id: naive-probability
+        name: Naive definition, counting, inclusion-exclusion and story proofs
+        aliases: [naive-definition, counting-probability, hypergeometric, cards, story-proof, ballot-problem, matching-problem, hat-matching]
+      - id: conditional-probability
+        name: Conditional probability, total probability and Bayes' rule
+        aliases: [bayes, bayes-rule, total-probability, conditional]
+
+  - id: random-variables
+    name: Random variables, distributions and moments
+    aliases: [rv, distributions]
+    children:
+      - id: discrete-distributions
+        name: Binomial, Poisson, negative binomial and the Poisson approximation
+        aliases: [binomial, poisson, negative-binomial, poisson-approximation, geometric]
+      - id: continuous-distributions
+        name: Uniform, normal and exponential distributions; memoryless property
+        aliases: [uniform, normal, exponential, memoryless, memoryless-property, gaussian]
+      - id: expectation-variance
+        name: Expectation, variance, covariance and indicator variables
+        aliases: [expectation, variance, covariance, linearity-of-expectation, indicator]
+      - id: conditional-expectation
+        name: Conditional expectation, total expectation and first-step analysis
+        aliases: [total-expectation, law-of-total-expectation, first-step-analysis, prisoner, runs, compound-poisson]
+      - id: mgf
+        name: Moment generating functions
+        aliases: [moment-generating-function, mgf-sum, moments]
+      - id: transformations
+        name: Distributions of functions and sums of random variables
+        aliases: [function-of-rv, sum-of-random-variables, change-of-variable]
+      - id: limit-theorems
+        name: Markov inequality and the central limit theorem
+        aliases: [clt, central-limit-theorem, markov-inequality, chebyshev, normal-approximation]
+
+  - id: markov-chains
+    name: Markov chains (discrete time)
+    aliases: [markov, dtmc]
+    deck: Markov_Chain
+    children:
+      - id: mc-modeling
+        name: Modelling with a Markov chain and transition matrices
+        aliases: [transition-matrix, state-diagram, formulate-markov-chain]
+        slides: "3-6"
+      - id: chapman-kolmogorov
+        name: n-step transition probabilities and Chapman-Kolmogorov equations
+        aliases: [n-step, chapman-kolmogorov-equations]
+        slides: "7-10"
+      - id: mc-classification
+        name: Accessibility, communication, irreducibility and periodicity
+        aliases: [irreducible, communicating-classes, periodicity, recurrent-transient]
+        slides: "11-18, 23-24"
+      - id: stationary-distribution
+        name: Limiting probabilities and long-run proportions
+        aliases: [limiting-probabilities, long-run, steady-state-dtmc, stationary]
+        slides: "19-22"
+      - id: hitting-times
+        name: Return times and hitting probabilities (random walk on a circle)
+        aliases: [return-time, first-passage, random-walk-on-circle, visit-all-states]
+      - id: gamblers-ruin
+        name: Gambler's ruin
+        aliases: [gambler, gambler-ruin]
+        slides: "30-36"
+      - id: hardy-weinberg
+        name: Hardy-Weinberg law and genetics models
+        aliases: [genes, gene-pairs, genetics, dominant-recessive]
+        slides: "25-29"
+      - id: self-organizing-list
+        name: Move-to-front lists (expected position of a request)
+        aliases: [move-to-front, list-ordering, self-organizing]
+
+  - id: poisson-process
+    name: Poisson process and exponential random variables
+    aliases: [poisson-processes]
+    children:
+      - id: counting-process
+        name: Counting processes and the definition of a Poisson process
+        aliases: [poisson-process-definition, arrivals-in-interval]
+      - id: interarrival-times
+        name: Inter-arrival times are i.i.d. exponential
+        aliases: [interarrival, inter-arrival]
+      - id: competing-exponentials
+        name: Competing exponentials, minimum and order of failures
+        aliases: [minimum-of-exponentials, lifetime-test, exponential-race]
+      - id: thinning-splitting
+        name: Thinning and splitting a Poisson variable or process
+        aliases: [thinning, splitting]
+
+  - id: ctmc
+    name: Continuous-time Markov chains and birth-death processes
+    aliases: [continuous-time-markov-chain]
+    children:
+      - id: birth-death
+        name: Birth-death processes, immigration and finite-source (machine repair) models
+        aliases: [birth-and-death, immigration, machine-repair]
+      - id: kolmogorov
+        name: Kolmogorov forward and backward equations
+        aliases: [kolmogorov-equations, forward-backward, transition-rate-matrix]
+
+  - id: queueing
+    name: Queueing theory
+    aliases: [queues, queuing]
+    deck: CSE301_Queueing_Theory
+    children:
+      - id: queue-basics
+        name: Little's law, cost identity, balance equations and PASTA
+        aliases: [littles-law, pasta, balance-equations]
+        slides: "3-11"
+      - id: mm1
+        name: M/M/1 queue
+        aliases: ["m/m/1", mm1-queue]
+        slides: "12-21"
+      - id: mm1-finite
+        name: M/M/1 with finite capacity
+        aliases: [finite-capacity, "m/m/1/n"]
+        slides: "22-25"
+      - id: queue-ctmc-models
+        name: Queues with a custom state space (shoe shine, orbit, blocking, multi-server)
+        aliases: [custom-queue, shoe-shine, state-space, queue-modeling, retrial-queue]
+        slides: "26-31"
+      - id: tandem-networks
+        name: Tandem queues and open (Jackson) networks
+        aliases: [tandem, jackson-network, queue-network, network-of-queues]
+        slides: "32-39"
+
+  - id: statistical-inference
+    name: Statistical inference
+    aliases: [inference, statistics]
+    children:
+      - id: point-estimation
+        name: Point estimation, bias, standard error, MSE and consistency
+        aliases: [estimators, bias, mse, consistency]
+        deck: "Point Estimation and Confidence Intervals"
+        slides: "2-15"
+      - id: confidence-intervals
+        name: Confidence sets and intervals
+        aliases: [confidence-interval, ci]
+        deck: "Point Estimation and Confidence Intervals"
+        slides: "16-23"
+      - id: mle
+        name: Maximum likelihood estimation
+        aliases: [maximum-likelihood, likelihood]
+        deck: CSE301_Maximum_Likelihood_Estimators__MLE_
+        slides: "2-26"
+      - id: bayesian
+        name: Bayesian inference, MAP estimation and conjugate priors
+        aliases: [bayesian-inference, map, posterior, conjugate-prior]
+        deck: Bayesian_Inference
+        slides: "2-26"
+      - id: hypothesis-testing
+        name: Hypothesis testing
+        aliases: [hypothesis-test, p-value, wald-test]
+        deck: CSE301_Hypothesis_Test
+        slides: "2-22"
+        children:
+          - id: chi-square-test
+            name: Pearson's chi-squared test
+            aliases: [chi-squared, chi-square, goodness-of-fit]
+            slides: "23-27"
+          - id: multiple-testing
+            name: Multiple testing (Bonferroni, Benjamini-Hochberg)
+            aliases: [bonferroni, benjamini-hochberg, false-discovery-rate]
+            slides: "32-38"
+
+  # ================= Section B (Concrete Mathematics) =================
+  - id: recurrent-problems
+    name: Recurrent problems
+    aliases: [recurrences-intro]
+    children:
+      - id: tower-of-hanoi
+        name: Tower of Hanoi and its variants (multi-peg, double, constrained)
+        aliases: [hanoi, multi-peg-hanoi, double-hanoi]
+      - id: plane-regions
+        name: Maximum regions cut by lines, circles, planes, ellipses and triangles
+        aliases: [regions, lines-in-plane, circles-regions, zig-zag, fences]
+      - id: josephus
+        name: The Josephus problem and variants
+        aliases: [josephus-problem]
+      - id: recurrence-modeling
+        name: Forming a recurrence for an algorithm or counting problem (quicksort, inversions)
+        aliases: [quicksort, form-recurrence, recurrence-formulation]
+
+  - id: recurrence-solving
+    name: Solving recurrences (repertoire method, characteristic roots, substitution)
+    aliases: [repertoire-method, linear-recurrence, characteristic-equation, solve-recurrence]
+
+  - id: sums
+    name: Sums and finite calculus
+    aliases: [summation]
+    children:
+      - id: summation-methods
+        name: Manipulating sums, perturbation method, double sums and closed forms
+        aliases: [perturbation, double-sums, closed-form-sums, sum-manipulation]
+      - id: summation-factor
+        name: Summation factor for recurrences
+        aliases: [summation-factors]
+      - id: finite-calculus
+        name: Falling powers, difference operator and summation by parts
+        aliases: [summation-by-parts, falling-powers, difference-operator]
+      - id: harmonic-numbers
+        name: Harmonic numbers, maximum overhang and rubber-band problems
+        aliases: [harmonic, overhang, maximum-overhang, ant-and-worm]
+
+  - id: floor-ceiling
+    name: Floors, ceilings and spectra
+    aliases: [floors-and-ceilings, spectrum, beatty]
+
+  - id: binomial-coefficients
+    name: Binomial coefficients and combinatorial identities
+    aliases: [binomial-coefficients-topic, combinatorics]
+    children:
+      - id: binomial-identities
+        name: Binomial identities and combinatorial arguments
+        aliases: [pascal, vandermonde, combinatorial-argument, binomial-sums]
+      - id: multinomial
+        name: Multinomial coefficients and expansions
+        aliases: [multinomial-coefficient, multinomial-theorem]
+      - id: counting-inclusion-exclusion
+        name: Inclusion-exclusion, distributions and bounded integer solutions
+        aliases: [inclusion-exclusion, integer-solutions, distributions-into-boxes]
+      - id: inversion-derangements
+        name: Inversion formula, derangements, hat-check and rook placements
+        aliases: [inversion-formula, derangements, hatcheck, rook-polynomial, rooks]
+
+  - id: special-numbers
+    name: Special numbers
+    aliases: [special-sequences]
+    children:
+      - id: stirling-numbers
+        name: Stirling numbers of the first and second kind
+        aliases: [stirling, stirling-first-kind, stirling-second-kind]
+      - id: eulerian-numbers
+        name: Eulerian numbers and Euler numbers
+        aliases: [eulerian, euler-numbers]
+      - id: fibonacci
+        name: Fibonacci numbers (fast computation, identities)
+        aliases: [fibonacci-numbers, matrix-power]
+      - id: catalan-trees
+        name: Catalan numbers and counting binary trees
+        aliases: [catalan, binary-trees]
+
+  - id: number-theory
+    name: Number theory
+    aliases: [numbertheory]
+    children:
+      - id: primes
+        name: Primes and composite numbers
+        aliases: [prime, infinitely-many-primes]
+      - id: divisibility-gcd
+        name: Divisibility, gcd and Euclid's algorithm
+        aliases: [gcd, euclid, divisibility, diophantine]
+      - id: modular-arithmetic
+        name: Congruences, Fermat, Wilson, residue classes and the Chinese remainder theorem
+        aliases: [congruence, mod, fermat, crt, chinese-remainder-theorem, residue-classes]
+      - id: totient-rsa
+        name: Euler's totient function, Euler's theorem and RSA
+        aliases: [totient, euler-phi, euler-theorem, rsa]
+      - id: legendre
+        name: Prime multiplicity of factorials (Legendre)
+        aliases: [legendre-function, factorial-multiplicity]
+      - id: stern-brocot
+        name: Stern-Brocot tree and mediant fractions
+        aliases: [stern-brocot-tree, farey, mediant]
+
+  - id: generating-functions
+    name: Generating functions
+    aliases: [gf, generating-function]
+    children:
+      - id: gf-sequences
+        name: Generating function of a sequence and its manipulation
+        aliases: [gf-basics, gf-manipulation]
+      - id: gf-counting
+        name: Counting with generating functions (tilings, change, partitions, signals)
+        aliases: [partitions, tilings, domino, coin-change, gf-combinatorial]
+      - id: gf-recurrences
+        name: Solving recurrences with generating functions
+        aliases: [gf-solve-recurrence, fibonacci-gf]

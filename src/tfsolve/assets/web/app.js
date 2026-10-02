@@ -281,6 +281,12 @@ document.addEventListener("DOMContentLoaded", function () {
     setTimeout(restoreAfterPrint, 500);
   });
 
+  // Links to outside material (e.g. the tables attached to a paper) open in a new tab.
+  document.querySelectorAll(".q .body a[href^='http'], .q .stem a[href^='http']").forEach(function (a) {
+    a.target = "_blank";
+    a.rel = "noopener";
+  });
+
   loadHash();
   apply();
 });

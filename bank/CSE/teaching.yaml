@@ -30,3 +30,15 @@ CSE317:
   "2017-18": {B: [MMI]}          # both CSE401 (sat 2018-09) and CSE317 (sat 2019-04)
   "2014-15": [MMI]               # CSE401; MMI's parts are in both sections
   "2011-12": [MMI]               # CSE401; MMI's parts are in both sections
+CSE301:
+  # Setters not identified yet: every session is [UNKNOWN] until the faculty sheet is known.
+  "2023-24": [UNKNOWN]
+  "2022-23": [UNKNOWN]
+  "2021-22": [UNKNOWN]
+  "2020-21": [UNKNOWN]
+  "2019-20": [UNKNOWN]
+  "2018-19": [UNKNOWN]
+  "2017-18": [UNKNOWN]
+  "2016-17": [UNKNOWN]
+  "2015-16": [UNKNOWN]
+  "2014-15": [UNKNOWN]

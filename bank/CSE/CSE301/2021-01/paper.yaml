@@ -1,0 +1,23 @@
+schema: 1
+course: CSE301
+kind: term-final
+exam_date: 2021-01-10
+session: 2018-19
+level_term: L3T2
+students_dept: CSE
+full_marks: 180
+duration: 2h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE. (Section marks 90.)
+  B:
+    questions: [5, 6, 7, 8]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE. (Section marks 90.)
+source: {file: CSE 301 merged.pdf, pages: 30-32}
+notes: ["The paper is the 'January 2020 Term' examination (Full Marks 180, Section Marks 90, Time 2 Hours for Sections A + B). The Section A header prints 'L-3/T-1', the Section B header prints 'L-3/T-2 ... Examinations 2018-2019'; the session 2018-19 is taken from the Section B header and should be checked.", "The Quran verse and the Einstein quotation printed at the bottom of the pages are not transcribed."]
+transcription:
+  by: []
+  checked_by: []

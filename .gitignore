@@ -25,6 +25,7 @@ site/
 CSE 315 merged.pdf
 CSE 317 merged.pdf
 CSE 309 merged.pdf
+CSE 301 merged.pdf
 TF_Analysis_MMI.tex
 
 # local course resources
@@ -32,3 +33,5 @@ MHE_Resources/
 EHP_Slide/
 MMA_Slide/
 KMS_Slide/
+CSE301/*
+!CSE301/tables/

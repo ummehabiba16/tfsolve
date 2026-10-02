@@ -1,0 +1,23 @@
+schema: 1
+course: CSE301
+kind: term-final
+exam_date: 2017-08-05
+session: 2015-16
+level_term: L3T2
+students_dept: CSE
+full_marks: 210
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+  B:
+    questions: [5, 6, 7, 8]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE questions.
+source: {file: CSE 301 merged.pdf, pages: 40-42}
+notes: ["The title printed is 'Mathematical Analysis for Computer Science'. The scan carries a 'prokoushol.com' watermark and a vertical scan line."]
+transcription:
+  by: []
+  checked_by: []

@@ -1,0 +1,22 @@
+schema: 1
+course: CSE301
+kind: term-final
+exam_date: 2025-09-09
+session: 2023-24
+level_term: L3T1
+students_dept: CSE
+full_marks: 210
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 2
+    rule: There are FOUR questions in this section. The First question is MANDATORY. Answer any TWO questions out of the rest.
+  B:
+    questions: [5, 6, 7, 8]
+    rule: There are FOUR questions in this section. Question 5 is MANDATORY.
+source: {file: CSE 301 merged.pdf, pages: 1-9}
+notes: ["Term is printed as 'L-3/T-I' on the paper; the title printed is 'Mathematics for Computing and Data Science'.", "The paper does not say how many Section B questions to answer besides the mandatory Question 5.", "Pages 5-9 (chi-square table and standard normal tables, each normal table twice) are attached to the paper. They are kept as images in CSE301/tables/ and linked from the questions that need them."]
+transcription:
+  by: []
+  checked_by: []

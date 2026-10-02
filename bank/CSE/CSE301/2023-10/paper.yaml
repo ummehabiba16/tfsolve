@@ -1,0 +1,23 @@
+schema: 1
+course: CSE301
+kind: term-final
+exam_date: 2023-10-29
+session: 2021-22
+level_term: L3T2
+students_dept: CSE
+full_marks: 210
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+  B:
+    questions: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+    answer_any: 9
+    rule: There are TWELVE questions in this section. Answer any THREE from 5-8, any THREE form 9-12, and any THREE from 13-16. You may use any formula from the supplementary materials without proving them.
+source: {file: CSE 301 merged.pdf, pages: 14-17}
+notes: ["The rule is printed as 'any THREE form 9-12'. The supplementary materials sheet mentioned in the Section B rule is not part of this scan (an earlier paper, 2023-04, carries a supplementary sheet).", "The title printed is 'Mathematical Analysis for Computer Science'."]
+transcription:
+  by: []
+  checked_by: []
