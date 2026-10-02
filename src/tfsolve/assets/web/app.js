@@ -67,20 +67,111 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var topic = document.getElementById("f-topic");
   var faculty = document.getElementById("f-faculty");
+  var year = document.getElementById("f-year");
   var exam = document.getElementById("f-exam");
   var solved = document.getElementById("f-solved");
   var openAll = document.getElementById("f-open");
-  var questions = document.querySelectorAll(".q");
-  var exams = document.querySelectorAll(".exam");
+  var byYear = document.getElementById("by-year");
+  var byTopic = document.getElementById("by-topic");
+  var toc = document.getElementById("toc");
+  var arrangeButtons = document.querySelectorAll("[data-arrange]");
+  var arrangement = "topic";
 
   function has(list, word) {
     return (" " + list + " ").indexOf(" " + word + " ") !== -1;
   }
 
+  // "By topic": a second copy of every question card, grouped under its first topic.
+  // The page itself is laid out by exam, which is also what you get without JavaScript.
+  var tree = JSON.parse(document.getElementById("topic-tree").textContent);
+  var info = {};
+  tree.forEach(function (t) { info[t.id] = t; });
+  function rootOf(id) {
+    while (info[id] && info[id].parent) id = info[id].parent;
+    return id;
+  }
+  (function buildTopicView() {
+    var cards = byYear.querySelectorAll(".q");
+    var buckets = {};
+    cards.forEach(function (q) {
+      var p = info[q.dataset.primary] ? q.dataset.primary : "";
+      (buckets[p] = buckets[p] || []).push(q);
+    });
+    function heading(tag, id, name) {
+      var h = document.createElement(tag);
+      h.id = "t-" + (id || "untagged");
+      h.textContent = name;
+      return h;
+    }
+    function addCards(box, list) {
+      list.forEach(function (q) {
+        var c = q.cloneNode(true);
+        c.querySelectorAll("[id]").forEach(function (el) { el.removeAttribute("id"); });
+        c.id = "t-" + q.id;
+        box.appendChild(c);
+      });
+    }
+    tree.filter(function (t) { return !t.parent; }).concat([{ id: "", name: "Untagged" }]).forEach(function (root) {
+      var section = document.createElement("section");
+      section.className = "group";
+      section.appendChild(heading("h2", root.id, root.name));
+      if (buckets[root.id]) addCards(section, buckets[root.id]);
+      tree.forEach(function (t) {
+        if (!t.parent || rootOf(t.id) !== root.id || !buckets[t.id]) return;
+        var sub = document.createElement("div");
+        sub.className = "sub";
+        sub.appendChild(heading("h3", t.id, t.name));
+        addCards(sub, buckets[t.id]);
+        section.appendChild(sub);
+      });
+      if (section.querySelector(".q")) byTopic.appendChild(section);
+    });
+  })();
+  var questions = document.querySelectorAll(".q");
+
   function teachers() {
-    if (!faculty.value) return [];
-    if (faculty.value === "current") return faculty.selectedOptions[0].dataset.list.split(" ");
-    return [faculty.value];
+    return faculty.value ? [faculty.value] : [];
+  }
+
+  function link(target, label, n) {
+    var li = document.createElement("li");
+    var a = document.createElement("a");
+    a.href = "#" + target.id;
+    a.textContent = label;
+    a.addEventListener("click", function (e) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: "smooth" });
+    });
+    var count = document.createElement("span");
+    count.className = "n";
+    count.textContent = n;
+    li.appendChild(a);
+    li.appendChild(count);
+    return li;
+  }
+
+  // Contents: the groups of the current arrangement that still have visible questions.
+  function buildContents() {
+    toc.innerHTML = "";
+    var view = arrangement === "topic" ? byTopic : byYear;
+    document.getElementById("contents-title").textContent =
+      arrangement === "topic" ? "Contents: topic by topic" : "Contents: exam by exam";
+    view.querySelectorAll(".group").forEach(function (g) {
+      var n = g.querySelectorAll(".q:not([hidden])").length;
+      if (!n) return;
+      var h = g.querySelector("h2");
+      var li = link(h, h.textContent, n);
+      var subs = g.querySelectorAll(".sub");
+      if (subs.length) {
+        var ol = document.createElement("ol");
+        subs.forEach(function (sub) {
+          var k = sub.querySelectorAll(".q:not([hidden])").length;
+          if (k) ol.appendChild(link(sub.querySelector("h3"), sub.querySelector("h3").textContent, k));
+        });
+        li.appendChild(ol);
+      }
+      toc.appendChild(li);
+    });
   }
 
   function apply() {
@@ -91,26 +182,33 @@ document.addEventListener("DOMContentLoaded", function () {
       var ok =
         (!topic.value || has(q.dataset.topics, topic.value)) &&
         (!who.length || who.some(function (w) { return has(q.dataset.faculty, w); })) &&
+        (!year.value || q.dataset.exam.slice(0, 4) === year.value) &&
         (!exam.value || q.dataset.exam === exam.value) &&
         (!solved.checked || q.dataset.solved === "yes") &&
         (!words || q.textContent.toLowerCase().indexOf(words) !== -1);
       q.hidden = !ok;
-      if (ok) shown++;
+      if (ok && byYear.contains(q)) shown++;
     });
-    exams.forEach(function (e) {
-      e.hidden = !e.querySelector(".q:not([hidden])");
+    document.querySelectorAll(".group, .sub").forEach(function (g) {
+      g.hidden = !g.querySelector(".q:not([hidden])");
     });
+    byYear.hidden = arrangement !== "year";
+    byTopic.hidden = arrangement !== "topic";
+    arrangeButtons.forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.arrange === arrangement)); });
+    buildContents();
     document.getElementById("f-count").textContent =
-      shown + " of " + questions.length + " questions";
+      shown + " of " + byYear.querySelectorAll(".q").length + " questions";
     document.getElementById("f-empty").hidden = shown > 0;
     saveHash();
   }
 
   function saveHash() {
     var p = new URLSearchParams();
-    if (topic.value) p.set("topic", topic.value);
+    if (arrangement !== "topic") p.set("arrange", arrangement);
     if (faculty.value) p.set("faculty", faculty.value);
+    if (year.value) p.set("year", year.value);
     if (exam.value) p.set("exam", exam.value);
+    if (topic.value) p.set("topic", topic.value);
     if (solved.checked) p.set("solved", "1");
     if (text.value) p.set("q", text.value);
     history.replaceState(null, "", p.toString() ? "#" + p.toString() : location.pathname);
@@ -118,14 +216,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function loadHash() {
     var p = new URLSearchParams(location.hash.slice(1));
-    topic.value = p.get("topic") || "";
+    arrangement = p.get("arrange") === "year" ? "year" : "topic";
     faculty.value = p.get("faculty") || "";
+    year.value = p.get("year") || "";
     exam.value = p.get("exam") || "";
+    topic.value = p.get("topic") || "";
     solved.checked = p.get("solved") === "1";
     text.value = p.get("q") || "";
   }
 
-  [topic, faculty, exam, solved].forEach(function (el) { el.addEventListener("change", apply); });
+  arrangeButtons.forEach(function (b) {
+    b.addEventListener("click", function () {
+      arrangement = b.dataset.arrange;
+      apply();
+    });
+  });
+  [topic, faculty, year, exam, solved].forEach(function (el) { el.addEventListener("change", apply); });
   text.addEventListener("input", apply);
 
   openAll.addEventListener("change", function () {
@@ -142,7 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   document.getElementById("f-clear").addEventListener("click", function () {
-    topic.value = faculty.value = exam.value = text.value = "";
+    topic.value = faculty.value = year.value = exam.value = text.value = "";
     solved.checked = false;
     apply();
   });

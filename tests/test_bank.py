@@ -7,7 +7,7 @@ import pytest
 from tfsolve.bank import Bank, is_under, norm_session
 from tfsolve.cli import main
 from tfsolve.lint import lint
-from tfsolve.query import QueryError, select
+from tfsolve.query import QueryError, available_years, select
 
 BANK = Path(__file__).resolve().parents[1] / "bank"
 
@@ -37,9 +37,13 @@ def test_topic_alias_and_faculty(bank):
     assert sel.parts and all("KRV" in bank.setters(p)[0] for p in sel.parts)
 
 
-def test_current_faculty(bank):
-    sel = select(bank, "CSE313", faculty=["current"])
-    assert sel.current and set(sel.faculty) == set(bank.current_faculty(sel.course))
+def test_all_faculty_and_years(bank):
+    every = select(bank, "CSE313")  # no -f: all faculty
+    assert len(every.parts) == sum(len(e.parts) for e in every.course.exams)
+    assert select(bank, "CSE313", years=["2025"]).parts
+    assert "2025" in available_years(every.course)
+    with pytest.raises(QueryError, match="unknown faculty"):
+        select(bank, "CSE313", faculty=["current"])
 
 
 def test_unknown_topic_suggests(bank):
@@ -67,3 +71,14 @@ def test_website(tmp_path):
     assert 'href="about.html"' in home and 'href="../about.html"' in page
     assert 'id="stat-views"' in about and 'id="stat-prints"' in about and 'id="stats"' not in page
     assert "TFSPLIT" not in page and (out / "style.css").exists() and (out / "app.js").exists()
+    assert 'data-arrange="topic"' in page and 'data-arrange="year"' in page and 'id="topic-tree"' in page
+    assert 'id="f-year"' in page and 'data-primary=' in page and (out / "help.html").exists()
+
+
+def test_topicwise_yearwise_flags(tmp_path, monkeypatch):
+    monkeypatch.setattr(shutil, "which", lambda name, *a, **k: None)
+    for flag, contents in [("-topicwise", "topic by topic"), ("--yearwise", "exam by exam")]:
+        out = tmp_path / f"{flag.strip('-')}.pdf"
+        assert main(["--bank", str(BANK), "-c", "CSE313", flag, "-f", "KRV", "-y", "2025", "--tex", "-o", str(out)]) == 0
+        tex = " ".join(out.with_suffix(".tex").read_text(encoding="utf-8").split())  # Pandoc wraps lines
+        assert contents in tex and "\\addcontentsline{toc}" in tex

@@ -1,6 +1,6 @@
 """Load a question bank directory into memory.
 
-    bank/<DEPT>/dept.yaml                      name, current_session
+    bank/<DEPT>/dept.yaml                      code and name
     bank/<DEPT>/faculty.yaml                   initials registry
     bank/<DEPT>/teaching.yaml                  course -> session -> {section: [initials]} (the faculty sheet)
     bank/<DEPT>/<COURSE>/course.yaml           title + topic tree
@@ -283,9 +283,6 @@ class Dept:
     faculty: dict[str, dict]
     teaching: dict[str, dict[str, dict[str, list[str]]]]  # course -> session -> section|'*' -> initials
 
-    @property
-    def current_session(self):
-        return norm_session(self.meta.get("current_session", "")) or None
 
 
 # ---------------------------------------------------------------------------- bank
@@ -340,15 +337,6 @@ class Bank:
             return entry[sec], "set"
         taught = self.taught_by(part.exam)
         return (taught, "taught") if taught else ([], None)
-
-    def current_faculty(self, course):
-        dept = self.depts.get(course.dept)
-        if not dept or not dept.current_session:
-            return []
-        out = []
-        for names in self.teaching_entry(course, dept.current_session).values():
-            out += [n for n in names if n not in out]
-        return out
 
     def solutions_for(self, part):
         return sorted(self.solutions.get(part.uid, []), key=lambda s: s.rank)

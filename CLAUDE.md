@@ -13,8 +13,9 @@ A Git-backed bank of BUET term-final questions and solutions, plus a CLI that co
 ```bash
 .venv/bin/tfsolve check -c CSE313        # lint + PDF build; must end with CHECK OK
 .venv/bin/tfsolve pages scan.pdf         # scanned PDF -> PNG pages you can read
-.venv/bin/tfsolve todo -c CSE313         # what to add/solve/review, current teachers first
-.venv/bin/tfsolve -c CSE313 -f current   # build a PDF
+.venv/bin/tfsolve todo -c CSE313         # what to add/solve/review (-f ABC: one teacher)
+.venv/bin/tfsolve list years -c CSE313   # exam years in the bank
+.venv/bin/tfsolve -c CSE313 -topicwise   # build a PDF (or -yearwise; add -f ABC / -y 2025 to narrow)
 ```
 
 If `.venv` is missing: `python3 -m venv .venv && .venv/bin/pip install -e '.[scan]'`.

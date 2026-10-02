@@ -2,6 +2,7 @@
 
     site/index.html             home: every course in the bank
     site/about.html             what the project is, plus page-view and PDF-print counts
+    site/help.html              how to use the site and the tfsolve command
     site/<COURSE>/index.html    one course: all questions, filtered in the browser
     site/style.css, site/app.js
 
@@ -10,6 +11,7 @@ No server is needed: open site/index.html, or host the folder on GitHub Pages.
 from __future__ import annotations
 
 import html
+import json
 import re
 import subprocess
 from importlib import resources
@@ -113,7 +115,7 @@ def _page(title, body, root, crumbs=()):
 <header class="top">
   <div class="wrap">
     <a class="brand" href="{root}index.html">tfsolve</a>
-    <nav><a href="{root}index.html">Courses</a><a href="{root}about.html">About</a><a href="{REPO}">GitHub</a>{THEME_BUTTON}</nav>
+    <nav><a href="{root}index.html">Courses</a><a href="{root}help.html">Help</a><a href="{root}about.html">About</a><a href="{REPO}">GitHub</a>{THEME_BUTTON}</nav>
   </div>
 </header>
 <div class="wrap crumbs"><a href="{root}index.html">Home</a>{trail}</div>
@@ -143,7 +145,8 @@ course, topic, teacher and exam. Every solution carries a badge: <b>verified</b>
 <ul>
   <li><b>On this site:</b> pick a course, set the filters, then press <i>Print / Save PDF</i>.</li>
   <li><b>On your computer:</b> <code>pip install tfsolve</code>, then for example
-  <code>tfsolve -c CSE313 -f current</code> builds a PDF of everything this term's teachers set.
+  <code>tfsolve -c CSE313 -topicwise</code> or <code>-yearwise</code> builds a PDF of the whole course, and
+  <code>-f ABC</code> keeps only faculty ABC's questions. See <a href="help.html">Help</a>.
   See the <a href="{REPO}#readme">README</a> for all options.</li>
 </ul>
 <h2>Contributing</h2>
@@ -163,6 +166,54 @@ solutions: CC BY-NC-SA 4.0. The original question papers belong to BUET and are 
 send Do Not Track are not counted.</p>
 </div>"""
     return _page("About · tfsolve", body, "", [("About", None)])
+
+
+def _help():
+    body = f"""<section class="hero">
+  <h1>Help</h1>
+  <p>How to find questions, arrange them and print a PDF.</p>
+</section>
+<div class="about">
+<h2>On a course page</h2>
+<ol>
+  <li><b>Arrange</b> (top of the left panel):
+    <ul>
+      <li><b>By topic</b>: every topic in turn, all its past questions together.</li>
+      <li><b>By year</b>: exam by exam, newest first.</li>
+    </ul>
+    The <b>Contents</b> list above the questions follows your choice and shows how many questions each topic or exam has.
+  </li>
+  <li><b>Teacher</b>: only the questions a teacher set (shown by initials, e.g. ABC).</li>
+  <li><b>Year</b> or <b>Exam</b>: one exam year, or one paper.</li>
+  <li><b>Topic</b> and <b>Search</b> narrow it further. Clicking a topic chip on a question does the same.</li>
+  <li><b>Print / Save PDF</b> prints exactly what is on screen, contents included. Tick <i>Show all solutions</i> first to
+  include the answers.</li>
+</ol>
+<p>Your filters are kept in the address bar, so you can bookmark or share a filtered view.</p>
+<h2>Solution badges</h2>
+<ul>
+  <li><b>Verified</b>: checked by two people, or against a teacher's solution.</li>
+  <li><b>Reviewed</b>: checked by one person other than the author.</li>
+  <li><b>Not yet verified</b>: nobody has checked it yet; every AI solution starts here.</li>
+  <li><b>Disputed</b>: someone reported an error.</li>
+</ul>
+<h2>On your computer</h2>
+<p><code>pip install tfsolve</code>, then <code>tfsolve update</code> once to download the questions. Then (ABC = a
+teacher's initials):</p>
+<ul>
+  <li><code>tfsolve -c CSE313 -topicwise</code>: the whole course as a PDF, topic by topic, with a table of contents
+  that lists every question under its topic.</li>
+  <li><code>tfsolve -c CSE313 -yearwise</code>: the same, exam by exam.</li>
+  <li><code>-f ABC</code>: only ABC's questions. <code>tfsolve list faculty -c CSE313</code> shows the initials.</li>
+  <li><code>-y 2025</code>, <code>-y 2021..2025</code> or <code>-y 2025-09</code>: chosen years.
+  <code>tfsolve list years -c CSE313</code> shows which exist.</li>
+  <li><code>tfsolve help</code> explains everything else.</li>
+</ul>
+<p>PDFs need LaTeX (MiKTeX on Windows, MacTeX on macOS, TeX Live on Linux). Without it, add <code>--tex</code> and
+compile the file on <a href="https://www.overleaf.com">Overleaf</a>. Details are in the
+<a href="{REPO}#readme">README</a>.</p>
+</div>"""
+    return _page("Help · tfsolve", body, "", [("Help", None)])
 
 
 def _github(path, repo_root, new=False):
@@ -192,7 +243,6 @@ def _home(bank):
 
 
 def _course(bank, course, repo_root):
-    current = bank.current_faculty(course)
     exams = sorted(course.exams, key=lambda e: e.label, reverse=True)
 
     # Markdown for every question body, shared setup and solution, converted in one go.
@@ -244,9 +294,11 @@ def _course(bank, course, repo_root):
                 sol_html.append('<p class="note">No solution yet.</p>')
             add = _github(part.path.parent / "solutions" / part.pid, repo_root, new=True)
 
+            primary = tids[0] if tids else ""
             cards.append(f"""<article class="q" id="{esc(exam.label)}-{esc(part.pid)}" data-exam="{esc(exam.label)}"
-  data-topics="{esc(' '.join(sorted(tags)))}" data-faculty="{esc(' '.join(who))}" data-solved="{'yes' if sols else 'no'}">
-  <div class="qhead"><span class="qlabel">{esc(part.label)}</span>
+  data-topics="{esc(' '.join(sorted(tags)))}" data-primary="{esc(primary)}" data-faculty="{esc(' '.join(who))}"
+  data-solved="{'yes' if sols else 'no'}">
+  <div class="qhead"><span class="qexam">{esc(exam.title)}</span><span class="qlabel">{esc(part.label)}</span>
     <span class="facts">{' · '.join(esc(f) for f in facts if f)}</span></div>
   <div class="chips">{chips}</div>
   {setup}<div class="body">{body_html}</div>{note}
@@ -256,7 +308,7 @@ def _course(bank, course, repo_root):
 </article>""")
         if cards:
             rules = " ".join(f"Section {s.name}: {s.rule}" for s in exam.sections.values() if s.rule)
-            groups.append(f"""<section class="exam" data-exam="{esc(exam.label)}">
+            groups.append(f"""<section class="exam group" id="y-{esc(exam.label)}" data-exam="{esc(exam.label)}">
   <h2>{esc(exam.title)}</h2>{f'<p class="note">{esc(rules)}</p>' if rules else ''}
   {''.join(cards)}
 </section>""")
@@ -266,17 +318,28 @@ def _course(bank, course, repo_root):
 
     topic_opts = "".join(opt(t.id, " " * len(course.ancestors(t.id)) + t.name)
                          for t in course.topics.values() if t.id in used_topics)
-    fac_opts = (opt("current", f"Teaching now ({', '.join(current)})", f' data-list="{esc(" ".join(current))}"')
-                if current else "") + "".join(opt(f, f) for f in sorted(faculty))
+    fac_opts = "".join(opt(f, f) for f in sorted(faculty))
     exam_opts = "".join(opt(e.label, e.title) for e in exams if e.parts)
+    year_opts = "".join(opt(str(y), str(y)) for y in sorted({e.year for e in exams if e.parts}, reverse=True))
+    # Topic tree (only topics in use, in course.yaml order) for the "By topic" arrangement.
+    tree = [{"id": t.id, "name": t.name, "parent": t.parent} for t in course.topics.values() if t.id in used_topics]
+    tree_json = json.dumps(tree).replace("</", "<\\/")
 
     body = f"""<h1>{esc(course.display_code)}: {esc(course.title)}</h1>
 <div class="layout">
 <aside class="filters">
-  <label>Search<input type="search" id="f-text" placeholder="e.g. deadlock, Gantt"></label>
-  <label>Topic<select id="f-topic"><option value="">All topics</option>{topic_opts}</select></label>
+  <div class="arrange" role="group" aria-label="Arrange questions">
+    <span class="arrange-label">Arrange</span>
+    <div class="seg">
+      <button type="button" data-arrange="topic" aria-pressed="true">By topic</button>
+      <button type="button" data-arrange="year" aria-pressed="false">By year</button>
+    </div>
+  </div>
   <label>Teacher<select id="f-faculty"><option value="">All teachers</option>{fac_opts}</select></label>
+  <label>Year<select id="f-year"><option value="">All years</option>{year_opts}</select></label>
   <label>Exam<select id="f-exam"><option value="">All exams</option>{exam_opts}</select></label>
+  <label>Topic<select id="f-topic"><option value="">All topics</option>{topic_opts}</select></label>
+  <label>Search<input type="search" id="f-text" placeholder="e.g. deadlock, Gantt"></label>
   <label class="check"><input type="checkbox" id="f-solved"> Only questions with solutions</label>
   <label class="check"><input type="checkbox" id="f-open"> Show all solutions</label>
   <div class="buttons">
@@ -284,12 +347,18 @@ def _course(bank, course, repo_root):
     <button type="button" id="f-print">Print / Save PDF</button>
   </div>
   <p class="count" id="f-count"></p>
+  <p class="muted"><a href="../help.html">How to use this page</a></p>
 </aside>
 <div class="questions">
+<nav class="contents" id="contents" aria-label="Contents"><h2 id="contents-title">Contents</h2><ol id="toc"></ol></nav>
+<div id="by-year" data-view="year">
 {''.join(groups)}
+</div>
+<div id="by-topic" data-view="topic" hidden></div>
 <p class="empty" id="f-empty" hidden>No questions match these filters.</p>
 </div>
-</div>"""
+</div>
+<script type="application/json" id="topic-tree">{tree_json}</script>"""
     return _page(f"{course.display_code} {course.title} · tfsolve", body, "../", [(course.display_code, None)])
 
 
@@ -303,7 +372,8 @@ def build_site(bank, out_dir="site"):
                                 encoding="utf-8")
     (out / "index.html").write_text(_home(bank), encoding="utf-8")
     (out / "about.html").write_text(_about(), encoding="utf-8")
-    n = 2
+    (out / "help.html").write_text(_help(), encoding="utf-8")
+    n = 3
     for course in bank.courses.values():
         (out / course.code).mkdir(exist_ok=True)
         (out / course.code / "index.html").write_text(_course(bank, course, repo_root), encoding="utf-8")

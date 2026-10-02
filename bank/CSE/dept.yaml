@@ -1,5 +1,2 @@
 code: CSE
 name: Computer Science and Engineering
-# The session being taught right now. `-f current` and `tfsolve todo` use it to put
-# this term's teachers first. Update it at the start of every term.
-current_session: "2024-25"

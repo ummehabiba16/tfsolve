@@ -1,6 +1,6 @@
 ---
 name: solve
-description: Write AI solutions for tfsolve question parts that have none, current teachers' questions first. Use for "/solve CSE313", "/solve bank/CSE/CSE313/2025-09" or "/solve bank/CSE/CSE313/2025-09/q5a.md".
+description: Write AI solutions for tfsolve question parts that have none, newest exams first (optionally only chosen teachers). Use for "/solve CSE313", "/solve bank/CSE/CSE313/2025-09" or "/solve bank/CSE/CSE313/2025-09/q5a.md".
 ---
 
 # Solve question parts
@@ -10,7 +10,7 @@ Writes `solutions/<part>/ai.md` next to the question. Follow the formatting rule
 ## Which parts
 
 - Given a single part file: solve that part.
-- Given an exam folder or a course: run `.venv/bin/tfsolve todo -c <COURSE> -n 200`. Solve the listed parts without a solution **in that order**; lines marked `*` are set by this term's teachers and come first. Skip parts that already have an `ai.md` unless the user asks for a redo.
+- Given an exam folder or a course: run `.venv/bin/tfsolve todo -c <COURSE> -n 200`. Solve the listed parts without a solution **in that order** (newest exams first). If the user names teachers ("only ABC's parts"), add `-f ABC` to the `todo` command. Skip parts that already have an `ai.md` unless the user asks for a redo.
 - Work one exam at a time and report between exams (usage limits).
 
 ## For each part

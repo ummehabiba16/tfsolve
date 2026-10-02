@@ -116,7 +116,7 @@ class _Figures:
         return _IMG.sub(repl, text)
 
 
-def _question_md(bank, part, figs, printed_stems):
+def _question_md(bank, part, figs, printed_stems, toc=None):
     exam, course = part.exam, part.exam.course
     who, how = bank.setters(part)
     head = [f"**{exam.when}**" + (f" ({exam.session})" if exam.session else ""), f"**{part.label}**"]
@@ -128,7 +128,11 @@ def _question_md(bank, part, figs, printed_stems):
         head.append(("set by " if how == "set" else "taught by ") + ", ".join(who))
     if part.meta.get("mandatory"):
         head.append("compulsory")
-    out = [f":::::: {{.tfq #{_anchor(part)}}}", "::: tfhead", " · ".join(head), ":::"]
+    attrs = f"#{_anchor(part)}"
+    if toc:  # one table-of-contents line per question, under its topic or exam heading
+        level, text = toc
+        attrs += f' toc-level="{level}" toc-text="{text.replace(chr(34), chr(39))}"'
+    out = [f":::::: {{.tfq {attrs}}}", "::: tfhead", " · ".join(head), ":::"]
     names = [course.topics[t].name for t in part.topics if t in course.topics]
     if names:
         out += ["::: tfmeta", "Topics: " + " · ".join(names), ":::"]
@@ -200,6 +204,21 @@ def _bank_version(root):
         return "local files"
 
 
+def _toc_entry(part, by, sub):
+    marks = f" · {_num(part.marks)} marks" if part.marks is not None else ""
+    if by == "topic":
+        return ("subsubsection" if sub else "subsection", f"{part.exam.when} · {part.label}{marks}")
+    if by == "year":
+        course = part.exam.course
+        names = [course.topics[t].name for t in part.topics if t in course.topics][:2]
+        return ("subsection", f"{part.label}{marks}" + (f" · {'; '.join(names)}" if names else ""))
+    return ("subsection", f"{part.exam.when} · {part.label}{marks}")
+
+
+CONTENTS = {"topic": "Contents: topic by topic", "year": "Contents: exam by exam (year-wise)",
+            "faculty": "Contents: by faculty", "none": "Contents"}
+
+
 def assemble(bank, sel, tmp, by="topic", solutions="best", answers_at_end=False):
     """Return (markdown, stats) for the selection."""
     figs = _Figures(tmp)
@@ -215,7 +234,7 @@ def assemble(bank, sel, tmp, by="topic", solutions="best", answers_at_end=False)
             for p in parts:
                 marks += p.marks if isinstance(p.marks, (int, float)) else 0
                 exams.add(p.exam)
-                body.append(_question_md(bank, p, figs, printed))
+                body.append(_question_md(bank, p, figs, printed, _toc_entry(p, by, sub)))
                 picked = _pick(bank, p, solutions)
                 if not picked and solutions != "none":
                     counts["none"] += 1
@@ -240,6 +259,7 @@ def assemble(bank, sel, tmp, by="topic", solutions="best", answers_at_end=False)
         "subtitle": "Past term-final questions" + (" with solutions" if solutions != "none" else ""),
         "tf-header": f"{course.display_code} · {sel.describe()}",
         "tf-filters": sel.describe(),
+        "tf-contents": CONTENTS.get(by, "Contents"),
         "tf-stats": f"{len(sel.parts)} question parts · {_num(marks)} marks · {len(exams)} exams"
                     + (f" ({span})" if span else ""),
         "tf-solutions": ", ".join(sol_bits) if solutions != "none" else "not included",

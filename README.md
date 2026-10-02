@@ -2,11 +2,24 @@
 
 A community question bank for **BUET term finals**. Filter past questions by **course × topic × faculty × year** and get a LaTeX PDF with solutions:
 
+**1. A whole course, arranged:**
+
 ```bash
-tfsolve -c CSE313 -t pagetable -f KRV     # page-table questions set by KRV
-tfsolve -c CSE313 -f current              # everything set by this term's teachers
-tfsolve todo -c CSE313                    # what to add, solve and review next
+tfsolve -c CSE313 -topicwise     # one chapter per topic; the contents list every question under its topic
+tfsolve -c CSE313 -yearwise      # one chapter per exam; the contents list every question under its exam
 ```
+
+**2. One teacher (`-f`), 3. chosen years (`-y`):**
+
+```bash
+tfsolve -c CSE313 -topicwise -f ABC          # only the questions ABC set
+tfsolve list years -c CSE313                 # which exam years are available
+tfsolve -c CSE313 -yearwise -y 2021..2025    # exams from 2021 to 2025
+```
+
+`tfsolve help` prints a short guide. The [website](https://ummehabiba16.github.io/tfsolve) has the same choices: an **Arrange: by topic / by year** switch, then teacher and year filters, plus a Help page.
+
+`ABC` stands for a teacher's initials; `tfsolve list faculty -c CSE313` shows the real ones.
 
 Every solution in a PDF carries a badge: **verified**, **reviewed**, **not yet verified** (every AI solution starts here) or **disputed**.
 
@@ -20,7 +33,7 @@ Needs Python 3.10 or newer. Pandoc comes bundled.
 pip install tfsolve
 tfsolve update                    # downloads the question bank (run again to get new papers)
 tfsolve doctor                    # checks your LaTeX setup
-tfsolve -c CSE313 -f current      # PDF lands in out/
+tfsolve -c CSE313 -topicwise      # PDF lands in out/
 ```
 
 - **PDFs need LaTeX with XeLaTeX:**
@@ -34,16 +47,27 @@ tfsolve -c CSE313 -f current      # PDF lands in out/
 
 | Command | What it does |
 |---|---|
-| `tfsolve -c COURSE [-t TOPIC] [-f FACULTY] [-y YEAR] [--session 2019-20]` | Build a PDF. Repeat a flag for OR (`-t tlb -t paging`); different flags combine with AND. |
-| `tfsolve list courses\|topics\|exams\|faculty -c COURSE` | See what is in the bank. `list topics -f KRV` counts one teacher's topics. |
-| `tfsolve todo [-c COURSE]` | Missing papers, unsolved parts and unreviewed solutions, current teachers first. |
+| `tfsolve -c COURSE -topicwise` / `-yearwise` | Build a PDF of the whole course, arranged topic by topic or exam by exam, with a matching table of contents. Topicwise is the default. |
+| `... -f ABC`, `... -y 2025`, `-t TOPIC`, `--session 2023-24` | Narrow it down. Without `-f`, all faculty are included. Repeat a flag for OR (`-f ABC -f XYZ`); different flags combine with AND. |
+| `tfsolve help` | A short guide to all of the above. |
+| `tfsolve list years -c COURSE` | The exam years, exam folders and sessions in the bank, with the value to pass to `-y` or `--session`. |
+| `tfsolve list courses\|topics\|exams\|faculty -c COURSE` | See what is in the bank. `list topics -f ABC` counts one teacher's topics. |
+| `tfsolve todo [-c COURSE] [-f ABC]` | Missing papers, unsolved parts and unreviewed solutions, newest exams first. `-f` limits it to chosen teachers. |
 | `tfsolve lint` | Check the bank for mistakes. CI runs this on every pull request. |
 | `tfsolve check [-c COURSE]` | Lint, build the PDF, and name every part whose layout breaks (text off the page, missing symbols). Must end with `CHECK OK`. |
 | `tfsolve pages scan.pdf` | Turn a scanned paper into page images (used when transcribing). |
 | `tfsolve doctor` | Check that Pandoc and LaTeX are ready. |
 | `tfsolve web [-o site]` | Build the website: plain HTML you can open from `site/index.html`, filter by topic, teacher and exam, and print. No LaTeX needed. |
 
-Build options: `--solutions best|all|none|human|ai`, `--by topic|year|faculty|none`, `--answers-at-end`, `-o file.pdf`, `--tex` (keeps the `.tex` too, e.g. for Overleaf).
+Year options:
+- `-y 2025` (exam year);
+- `-y 2021..2025` (range);
+- `-y 2025-09` (one exam, by month);
+- `--session 2023-24` (as printed on the paper).
+
+If nothing matches, tfsolve lists the years that exist.
+
+Output options: `--solutions best|all|none|human|ai`, `--answers-at-end`, `-o file.pdf`, `--tex` (keeps the `.tex` too, e.g. for Overleaf).
 
 ## How the bank is organised
 
@@ -51,8 +75,8 @@ Files are stored **by exam paper**. Topics are **tags**, so a part that covers t
 
 ```text
 bank/CSE/
-├── dept.yaml                 current_session (who is teaching now)
-├── faculty.yaml              initials, e.g. KRV, RRR
+├── dept.yaml                 department code and name
+├── faculty.yaml              initials, e.g. ABC, XYZ
 ├── teaching.yaml             the faculty sheet: course → session → section → teacher
 └── CSE313/
     ├── course.yaml           topic tree + aliases (pagetable → paging)
@@ -81,13 +105,13 @@ The repo includes Claude Code skills in `.claude/skills/`, plus a `CLAUDE.md` th
 
 ```text
 /add-paper ~/Downloads/CSE313-2021.pdf
-Faculty: CSE313 2021-2022 A: RRR, B: KRV. This term (2024-25): RRR, KRV.
+Faculty: CSE313 2021-2022 A: ABC, B: XYZ.
 ```
 
 It will:
 1. add the faculty list to `teaching.yaml`;
 2. transcribe the paper into `bank/<DEPT>/<COURSE>/<exam month>/`, tagging each part with topics;
-3. write AI solutions for the parts set by this term's teachers, leaving the rest for later;
+3. write AI solutions for the new parts (or only for the teachers you name, e.g. "solve only ABC's parts");
 4. run `tfsolve check` and fix layout problems until it passes;
 5. report anything it couldn't read.
 
@@ -97,9 +121,9 @@ Plain English works too ("add this paper"). Nothing is committed until you say s
 |---|---|
 | `/add-paper` | Everything at once: faculty list → questions → solutions → check |
 | `/transcribe` | Only turn a scan into question files |
-| `/solve` | Only write missing solutions, following `tfsolve todo` order (e.g. `/solve CSE313` later, for the other teachers' papers) |
+| `/solve` | Only write missing solutions, in `tfsolve todo` order (e.g. `/solve CSE313`, or "solve ABC's parts in CSE313") |
 
-Afterwards, compare the new files with the scan and add your GitHub username to `transcription.checked_by` in `paper.yaml`. Rendering rules and fixes are in [rendering.md](.claude/skills/add-paper/rendering.md).
+Afterwards, compare the new files with the scan and add your GitHub username to `transcription.checked_by` in `paper.yaml`. Rendering rules and fixes are in [rendering.md](https://github.com/ummehabiba16/tfsolve/blob/main/.claude/skills/add-paper/rendering.md).
 
 These skills only work in **Claude Code**, because they read and write files in this repo. A regular Claude chat on the web can't write into the repo.
 
@@ -123,5 +147,5 @@ Mark a solution `status: reviewed` (and add yourself to `reviewed_by`) only afte
 
 ## Licence and notice
 
-Code: MIT ([LICENSE](LICENSE)). Transcriptions, tags and solutions: CC BY-NC-SA 4.0 ([LICENSE-CONTENT](LICENSE-CONTENT)).
+Code: MIT ([LICENSE](https://github.com/ummehabiba16/tfsolve/blob/main/LICENSE)). Transcriptions, tags and solutions: CC BY-NC-SA 4.0 ([LICENSE-CONTENT](https://github.com/ummehabiba16/tfsolve/blob/main/LICENSE-CONTENT)).
 The original question papers belong to BUET and are reproduced here for non-commercial study. For a correction or takedown request, open an issue. Requests are handled promptly.

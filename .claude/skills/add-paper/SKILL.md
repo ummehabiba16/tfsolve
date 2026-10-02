@@ -1,6 +1,6 @@
 ---
 name: add-paper
-description: One-stop workflow to add BUET term-final papers to the tfsolve bank. Takes a scanned question paper (PDF or photos) and optionally a faculty list; updates the faculty sheet, transcribes the paper into the right exam folder, writes AI solutions for this term's teachers' questions, and checks that everything renders. Use when the user uploads or points to a question paper, e.g. "/add-paper ~/Downloads/CSE313-2021.pdf" or "add this paper, faculty list attached".
+description: One-stop workflow to add BUET term-final papers to the tfsolve bank. Takes a scanned question paper (PDF or photos) and optionally a faculty list; updates the faculty sheet, transcribes the paper into the right exam folder, writes AI solutions for the new questions (or only the teachers the user names), and checks that everything renders. Use when the user uploads or points to a question paper, e.g. "/add-paper ~/Downloads/CSE313-2021.pdf" or "add this paper, faculty list attached".
 ---
 
 # Add a paper (faculty list → questions → solutions → check)
@@ -16,17 +16,16 @@ Read these before starting:
 - **The paper**: a PDF path, an attached PDF, or photos.
   - For a PDF, render it with `.venv/bin/tfsolve pages <file.pdf>` (`--dpi 200` for small print) and read every PNG it lists. Do not rely on the PDF's text layer: scans have none, or a bad one.
   - Photos can be read directly.
-- **The faculty list** (optional): any format, e.g. `2019-2020 ADF, FGH`, a table, a photo of a sheet. It says who taught a course in which session, and sometimes which section each person set.
+- **The faculty list** (optional): any format, e.g. `2019-2020 ABC, XYZ`, a table, a photo of a sheet. It says who taught a course in which session, and sometimes which section each person set.
 - **Several papers at once**: handle them one at a time. Finish steps 2 to 6 for each before starting the next.
 
 ## 2. Faculty sheet → `bank/<DEPT>/teaching.yaml`
 
 - Add every initial to `bank/<DEPT>/faculty.yaml` (uppercase, `XYZ: {}`).
 - Add each course and session to `teaching.yaml`:
-  - `"2019-20": {A: [ADF], B: [FGH]}` when the sheet says which section each teacher set;
-  - `"2019-20": [ADF, FGH]` when it does not. Never guess sections.
+  - `"2019-20": {A: [ABC], B: [XYZ]}` when the sheet says which section each teacher set;
+  - `"2019-20": [ABC, XYZ]` when it does not. Never guess sections.
 - Sessions are written `YYYY-YY`.
-- If the list says who teaches **now**, set that session as `current_session` in `bank/<DEPT>/dept.yaml` and add its line to `teaching.yaml`. If it is unclear which session is current, ask.
 - Do not overwrite an existing line that disagrees with the new list. Show the user both versions and ask which is right.
 
 ## 3. Transcribe
@@ -40,12 +39,12 @@ Follow `.claude/skills/transcribe/SKILL.md` (steps 1-6). The result is `bank/<DE
 - If the department folder is new, also create `dept.yaml`, `faculty.yaml` and `teaching.yaml` there.
 - If a paper for that course and month already exists, stop and ask. It may be the same paper.
 
-## 4. Solve: this term's teachers first
+## 4. Solve
 
-Run `.venv/bin/tfsolve todo -c <COURSE> -n 200`. Following `.claude/skills/solve/SKILL.md`:
+Following `.claude/skills/solve/SKILL.md`, solve the parts of the new paper that have no solution.
 
-- solve the new parts marked `*` (set by a current teacher);
-- leave the other new parts without solutions unless the user said "solve all". They stay in their exam folder and show up in `todo` later.
+- If the user named teachers ("solve only ABC's parts"), run `.venv/bin/tfsolve todo -c <COURSE> -f ABC -n 200` and solve just those. The other parts stay unsolved in their exam folder and show up in `todo` later.
+- If the user said not to solve, skip this step.
 
 ## 5. Check and fix until clean
 

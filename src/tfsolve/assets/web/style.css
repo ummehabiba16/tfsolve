@@ -241,6 +241,30 @@ code span.al, code span.er, code span.wa { color: var(--tok-err); font-weight: 6
 .links { margin-top: 0.6rem; font-size: 0.85rem; display: flex; gap: 1rem; }
 .empty { color: var(--muted); text-align: center; padding: 2rem; }
 
+/* arrangement switch (highlighted: the first choice on a course page) */
+.arrange { background: var(--blue-soft); border: 1px solid var(--blue); border-radius: 8px; padding: 0.6rem; margin-bottom: 1rem; }
+.arrange-label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--title); margin-bottom: 0.4rem; }
+.seg { display: flex; border: 1px solid var(--blue); border-radius: 6px; overflow: hidden; }
+.seg button { flex: 1; border: 0; border-radius: 0; background: var(--card); color: var(--blue); font-weight: 600; padding: 0.45rem 0.3rem; }
+.seg button + button { border-left: 1px solid var(--blue); }
+.seg button[aria-pressed="true"] { background: var(--blue); color: var(--on-blue); }
+.seg button:hover { background: var(--navy-2); color: #fff; }
+
+/* contents list above the questions */
+.contents { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1rem; }
+.contents h2 { margin: 0 0 0.5rem; font-size: 1.05rem; border: 0; }
+.contents ol { margin: 0; padding-left: 1.2rem; }
+.contents ol ol { padding-left: 1rem; font-size: 0.92rem; }
+.contents li { margin: 0.15rem 0; }
+.contents a { text-decoration: none; }
+.contents .n { color: var(--muted); font-size: 0.8rem; margin-left: 0.4rem; }
+.contents .n::before { content: "("; }
+.contents .n::after { content: ")"; }
+.group > h2 { border-bottom: 2px solid var(--title); padding-bottom: 0.3rem; }
+.sub > h3 { color: var(--title); font-size: 1.05rem; margin: 1.25rem 0 0.5rem; }
+.qexam { color: var(--blue); font-weight: 600; font-size: 0.9rem; }
+#by-year .qexam { display: none; }
+
 /* Gantt charts */
 .gantt { margin: 0.75rem 0 1.5rem; }
 .gantt .bars, .gantt .ticks { position: relative; }
@@ -273,6 +297,8 @@ code span.al, code span.er, code span.wa { color: var(--tok-err); font-weight: 6
   }
   body { background: #fff; }
   .top, .crumbs, .filters, footer, .links, .chip { display: none !important; }
+  .contents { border: 0; padding: 0; break-after: page; }
+  .contents .n { color: #5b6577; }
   .layout { display: block; }
   .q { break-inside: avoid; border: 1px solid #999; }
   .body pre { white-space: pre-wrap; }

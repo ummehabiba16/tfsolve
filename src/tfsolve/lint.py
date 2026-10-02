@@ -69,8 +69,6 @@ def lint(bank):
                     for f in who:
                         if ":" not in f and f not in dept.faculty:
                             err(dept.path / "teaching.yaml", f"{code} {sess}: '{f}' is not in faculty.yaml")
-        if dept.meta.get("current_session") and not dept.current_session:
-            err(dept.path / "dept.yaml", "current_session must look like 2024-25")
 
     for course in bank.courses.values():
         if not course.topics:

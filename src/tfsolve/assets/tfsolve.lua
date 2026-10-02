@@ -164,7 +164,12 @@ local function box(div, env_begin, env_end)
   end
   body = body:walk(inner)
   local label = div.identifier ~= '' and ('\\phantomsection\\label{' .. div.identifier .. '}') or ''
-  local out = pandoc.Blocks({ raw(env_begin(title) .. label) })
+  local toc = ''
+  local level, text = div.attributes['toc-level'], div.attributes['toc-text']
+  if level and text then
+    toc = '\\phantomsection\\addcontentsline{toc}{' .. level .. '}{' .. tex_escape(text) .. '}\n'
+  end
+  local out = pandoc.Blocks({ raw(toc .. env_begin(title) .. label) })
   out:extend(body)
   out:insert(raw(env_end))
   return out

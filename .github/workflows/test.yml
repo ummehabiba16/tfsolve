@@ -25,7 +25,7 @@ jobs:
       - run: tfsolve lint
       - run: python -m pytest -q
       - name: Build a .tex without LaTeX (what a fresh install can always do)
-        run: tfsolve -c CSE313 -f current --tex -o out/check.pdf
+        run: tfsolve -c CSE313 --by year --tex -o out/check.pdf
 
   pdf:
     # One full PDF build with a real LaTeX install.

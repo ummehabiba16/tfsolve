@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tfsolve"
-version = "0.1.0"
+version = "0.1.1"
 description = "BUET term-final question bank: filter past questions by course, topic, faculty and year, and compile them into a LaTeX PDF."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -12,6 +12,7 @@ license = "MIT"
 dependencies = [
     "pyyaml>=6",
     "pypandoc_binary>=1.13",
+    "certifi",
 ]
 
 [project.optional-dependencies]

@@ -13,7 +13,6 @@ CSE309:
   "2018-19": {A: [MMA], B: [KMS]}
   "2017-18": {A: [MMA], B: [UNKNOWN]}  # B assigned by matching its topics to KMS_Slide/
 CSE313:
-  "2024-25": {A: [RRR], B: [KRV]}   # teaching now (see dept.yaml current_session)
   "2023-24": {A: [RRR], B: [KRV]}
   "2022-23": {A: [RRR], B: [KRV]}
   "2021-22": {A: [RRR], B: [KRV]}
@@ -23,7 +22,6 @@ CSE315:
   "2022-23": {A: [MHE], B: [EHP]}
 CSE317:
   # MMI's questions (agents, search, local search, CSP, games); from TF_Analysis_MMI.tex.
-  "2024-25": [MMI]               # teaching now (see dept.yaml current_session)
   "2023-24": {A: [MMI]}
   "2022-23": {A: [MMI]}
   "2021-22": {A: [MMI]}
