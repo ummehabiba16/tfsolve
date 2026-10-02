@@ -63,4 +63,7 @@ def test_website(tmp_path):
     page = (out / "CSE313" / "index.html").read_text(encoding="utf-8")
     assert 'href="CSE313/index.html"' in home
     assert 'class="q"' in page and 'class="gantt"' in page and 'class="math inline"' in page
+    about = (out / "about.html").read_text(encoding="utf-8")
+    assert 'href="about.html"' in home and 'href="../about.html"' in page
+    assert 'id="stat-views"' in about and 'id="stat-prints"' in about and 'id="stats"' not in page
     assert "TFSPLIT" not in page and (out / "style.css").exists() and (out / "app.js").exists()

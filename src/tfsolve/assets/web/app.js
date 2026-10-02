@@ -37,17 +37,24 @@ document.addEventListener("DOMContentLoaded", function () {
     gc.setAttribute("data-goatcounter", GC + "/count");
     document.head.appendChild(gc);
 
-    var stats = document.getElementById("stats");
+    // The About page shows the totals (GoatCounter's public counter, cached on its side for a few hours).
+    var views = document.getElementById("stat-views");
+    var prints = document.getElementById("stat-prints");
     var load = function (path) {
       return fetch(GC + "/counter/" + path + ".json").then(function (r) { return r.json(); })
         .then(function (d) { return d.count || "0"; });
     };
-    if (stats && window.fetch) {
-      Promise.all([load("TOTAL"), load("print-pdf")]).then(function (n) {
-        stats.textContent = n[0] + " page views \u00b7 " + n[1] + " PDF prints";
-        stats.hidden = false;
-      }).catch(function () {});
+    if (views && prints && window.fetch) {
+      load("TOTAL").then(function (n) { views.textContent = n; }).catch(function () { views.textContent = "n/a"; });
+      load("print-pdf").then(function (n) { prints.textContent = n; }).catch(function () { prints.textContent = "n/a"; });
     }
+  } else {
+    ["stat-views", "stat-prints"].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = "n/a";
+    });
+    var note = document.getElementById("stat-note");
+    if (note) note.textContent = "Not shown: your browser asks not to be tracked, so we make no request for these numbers.";
   }
   function countEvent(name, title) {
     try {

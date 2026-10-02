@@ -1,6 +1,7 @@
 """Build the static website: `tfsolve web` writes site/ (plain HTML + CSS + a little JS).
 
     site/index.html             home: every course in the bank
+    site/about.html             what the project is, plus page-view and PDF-print counts
     site/<COURSE>/index.html    one course: all questions, filtered in the browser
     site/style.css, site/app.js
 
@@ -112,7 +113,7 @@ def _page(title, body, root, crumbs=()):
 <header class="top">
   <div class="wrap">
     <a class="brand" href="{root}index.html">tfsolve</a>
-    <nav><a href="{root}index.html">Courses</a><a href="{REPO}">GitHub</a>{THEME_BUTTON}</nav>
+    <nav><a href="{root}index.html">Courses</a><a href="{root}about.html">About</a><a href="{REPO}">GitHub</a>{THEME_BUTTON}</nav>
   </div>
 </header>
 <div class="wrap crumbs"><a href="{root}index.html">Home</a>{trail}</div>
@@ -120,14 +121,48 @@ def _page(title, body, root, crumbs=()):
 {body}
 </main>
 <footer class="wrap">BUET term-final questions and solutions, kept on
-<a href="{REPO}">GitHub</a>. Spotted a mistake? Use the “Edit” link on any question.
-<p class="stats"><span id="stats" hidden></span>
-We count page views and Print / Save PDF clicks only: no cookies, no personal data.</p></footer>
+<a href="{REPO}">GitHub</a>. Spotted a mistake? Use the “Edit” link on any question.</footer>
 <script defer src="{KATEX}/katex.min.js"></script>
 <script defer src="{root}app.js"></script>
 </body>
 </html>
 """
+
+
+def _about():
+    body = f"""<section class="hero">
+  <h1>About tfsolve</h1>
+  <p>A community bank of BUET term-final questions and solutions.</p>
+</section>
+<div class="about">
+<h2>What it is</h2>
+<p>Past term-final questions, kept as plain text in a Git repository, with worked solutions. You can filter them by
+course, topic, teacher and exam. Every solution carries a badge: <b>verified</b>, <b>reviewed</b>,
+<b>not yet verified</b> (every AI solution starts here) or <b>disputed</b>.</p>
+<h2>Using it</h2>
+<ul>
+  <li><b>On this site:</b> pick a course, set the filters, then press <i>Print / Save PDF</i>.</li>
+  <li><b>On your computer:</b> <code>pip install tfsolve</code>, then for example
+  <code>tfsolve -c CSE313 -f current</code> builds a PDF of everything this term's teachers set.
+  See the <a href="{REPO}#readme">README</a> for all options.</li>
+</ul>
+<h2>Contributing</h2>
+<p>Add a paper, write a solution or review one by opening a pull request on
+<a href="{REPO}">GitHub</a>. Spotted a mistake? Use the “Edit” link on any question.</p>
+<h2>Credits and licence</h2>
+<p>Created and maintained by <a href="https://github.com/ummehabiba16">ummehabiba16</a>. The code was written with
+<a href="https://www.anthropic.com/claude">Claude</a> (Anthropic) through Claude Code. Code: MIT. Transcriptions, tags and
+solutions: CC BY-NC-SA 4.0. The original question papers belong to BUET and are reproduced for non-commercial study.</p>
+<h2>Site usage</h2>
+<div class="counts">
+  <div class="card count"><span class="num" id="stat-views">…</span><span class="label">page views</span></div>
+  <div class="card count"><span class="num" id="stat-prints">…</span><span class="label">PDF prints</span></div>
+</div>
+<p class="muted" id="stat-note">Counts update every few hours.</p>
+<p class="muted">We count page views and Print / Save PDF clicks only: no cookies, no personal data. Browsers that
+send Do Not Track are not counted.</p>
+</div>"""
+    return _page("About · tfsolve", body, "", [("About", None)])
 
 
 def _github(path, repo_root, new=False):
@@ -267,7 +302,8 @@ def build_site(bank, out_dir="site"):
         (out / name).write_text((resources.files("tfsolve") / "assets" / "web" / name).read_text(encoding="utf-8"),
                                 encoding="utf-8")
     (out / "index.html").write_text(_home(bank), encoding="utf-8")
-    n = 1
+    (out / "about.html").write_text(_about(), encoding="utf-8")
+    n = 2
     for course in bank.courses.values():
         (out / course.code).mkdir(exist_ok=True)
         (out / course.code / "index.html").write_text(_course(bank, course, repo_root), encoding="utf-8")
