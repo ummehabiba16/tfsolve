@@ -17,7 +17,7 @@ sections:
     answer_any: 2
     rule: There are FOUR questions in this section. Answer to Question no. 5 is compulsory and Answer any TWO questions from Questions 6-8.
 source: {file: CSE 317 merged.pdf, pages: 6-10}
-notes: ["Only Section A (MMI) is transcribed so far, from the list in TF_Analysis_MMI.tex; Section B (Q5-Q8) is not."]
+notes: ["Section A (MMI) is from the list in TF_Analysis_MMI.tex; Section B (Q5-Q8) was added later, setter not identified yet."]
 transcription:
   by: []
   checked_by: []

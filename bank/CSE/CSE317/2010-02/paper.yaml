@@ -1,0 +1,23 @@
+schema: 1
+course: CSE317
+kind: term-final
+exam_date: 2010-02-28
+session: 2008-09
+level_term: L4T1
+students_dept: CSE
+full_marks: 210
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+  B:
+    questions: [5, 6, 7, 8]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+source: {file: CSE 317 merged.pdf, pages: 70-73}
+notes: ["Printed as CSE 401 (Artificial Intelligence), the course's old code.", "Setters not identified yet.", "The scan is a prokoushol.com copy with a watermark and Bangla quotations added at the page feet; those are not part of the paper.", "Some lines are blacked out on the scan: the end of 1(b) (marks read as 25), the edges above E and F in Figure 4(c), the top of Figure 6(b), and the end of 8(b) (marks read as 3x6=18)."]
+transcription:
+  by: []
+  checked_by: []

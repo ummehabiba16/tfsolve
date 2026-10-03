@@ -1,0 +1,23 @@
+schema: 1
+course: CSE317
+kind: term-final
+exam_date: 2008-06-01
+session: 2006-07
+level_term: L3T2
+students_dept: CSE
+full_marks: 210
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+  B:
+    questions: [5, 6, 7, 8]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE
+source: {file: CSE 317 merged.pdf, pages: 74-79}
+notes: ["Setters not identified yet.", "The scan is a prokoushol.com copy with a watermark; the watermark is not part of the paper.", "Printed as CSE 317 (not CSE 401). The figures are collected on pages 78-79."]
+transcription:
+  by: []
+  checked_by: []

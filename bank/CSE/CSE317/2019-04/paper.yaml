@@ -17,7 +17,7 @@ sections:
     answer_any: 3
     rule: There are FOUR questions in this section. Answer any THREE.
 source: {file: CSE 317 merged.pdf, pages: 32-34}
-notes: ["Term is printed as 'L-3/T-II' on the paper.", "Only Section B (MMI) is transcribed so far, from the list in TF_Analysis_MMI.tex; Section A (Q1-Q4) is not."]
+notes: ["Term is printed as 'L-3/T-II' on the paper.", "Section B (MMI) is from the list in TF_Analysis_MMI.tex; Section A (Q1-Q4) was added later, setter not identified yet."]
 transcription:
   by: []
   checked_by: []

@@ -17,7 +17,7 @@ sections:
     answer_any: 3
     rule: There are FOUR questions in this section. Answer any THREE.
 source: {file: CSE 317 merged.pdf, pages: 24-26}
-notes: ["Printed as 'B. Sc. Engineering Examinations (January 2020 Semester)', 'L-3/T-II'; Section B's sheet says 'January 2020 Term'. Filed under session 2019-20 (an assumption).", "Full Marks: 180, Section Marks: 90, Time: 2 Hours (Sections A + B).", "Only Section A (MMI) is transcribed so far; Section B (Q5-Q8) is not."]
+notes: ["Printed as 'B. Sc. Engineering Examinations (January 2020 Semester)', 'L-3/T-II'; Section B's sheet says 'January 2020 Term'. Filed under session 2019-20 (an assumption).", "Full Marks: 180, Section Marks: 90, Time: 2 Hours (Sections A + B).", "Section A is MMI's; Section B (Q5-Q8) was added later, setter not identified yet."]
 transcription:
   by: []
   checked_by: []

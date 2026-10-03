@@ -17,7 +17,7 @@ sections:
     answer_any: 3
     rule: There are FOUR questions in this section. Answer any THREE. If you find any information missing in the question. Just assume a value of your choice and clearly mention your assumption.
 source: {file: CSE 317 merged.pdf, pages: 15-19}
-notes: ["Only Section A (MMI) is transcribed so far, from the list in TF_Analysis_MMI.tex; Section B (Q5-Q8) is not."]
+notes: ["Section A (MMI) is from the list in TF_Analysis_MMI.tex; Section B (Q5-Q8) was added later, setter not identified yet."]
 transcription:
   by: []
   checked_by: []

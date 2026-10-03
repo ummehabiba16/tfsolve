@@ -22,14 +22,23 @@ CSE315:
   "2022-23": {A: [MHE], B: [EHP]}
 CSE317:
   # MMI's questions (agents, search, local search, CSP, games); from TF_Analysis_MMI.tex.
-  "2023-24": {A: [MMI]}
-  "2022-23": {A: [MMI]}
-  "2021-22": {A: [MMI]}
-  "2020-21": {A: [MMI]}
-  "2019-20": {A: [MMI]}          # also the January 2020 term paper (sat 2021-01)
-  "2017-18": {B: [MMI]}          # both CSE401 (sat 2018-09) and CSE317 (sat 2019-04)
-  "2014-15": [MMI]               # CSE401; MMI's parts are in both sections
-  "2011-12": [MMI]               # CSE401; MMI's parts are in both sections
+  # The other half (uncertainty, logic, planning, learning) is UNKNOWN until the faculty sheet is known.
+  "2023-24": {A: [MMI], B: [MNM]}
+  "2022-23": {A: [MMI], B: [UNKNOWN]}
+  "2021-22": {A: [MMI], B: [UNKNOWN]}
+  "2020-21": {A: [MMI], B: [UNKNOWN]}
+  "2019-20": {A: [MMI], B: [UNKNOWN]}   # also the January 2020 term paper (sat 2021-01)
+  "2017-18": {A: [UNKNOWN], B: [MMI]}   # both CSE401 (sat 2018-09) and CSE317 (sat 2019-04)
+  "2016-17": [UNKNOWN]
+  "2015-16": [UNKNOWN]
+  "2014-15": [MMI]               # CSE401; MMI's parts are in both sections (the other parts say set_by: [UNKNOWN])
+  "2013-14": [UNKNOWN]
+  "2012-13": [UNKNOWN]
+  "2011-12": [MMI]               # CSE401; MMI's parts are in both sections (the other parts say set_by: [UNKNOWN])
+  "2010-11": [UNKNOWN]
+  "2009-10": [UNKNOWN]
+  "2008-09": [UNKNOWN]
+  "2006-07": [UNKNOWN]
 CSE301:
   # Setters not identified yet: every session is [UNKNOWN] until the faculty sheet is known.
   "2023-24": [UNKNOWN]

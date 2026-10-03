@@ -121,15 +121,71 @@ topics:
         name: Non-zero-sum and multi-player games
         aliases: [non-zero-sum, nonzero-sum-games]
 
-  # ---- The other half of the course (coarse for now; refine when those papers are added)
+  # ---- Section B in recent papers (MNM_Slide/): uncertainty, Bayes nets, HMMs, MDPs, learning.
+  #      Logic and planning come from older papers (setters not identified yet).
   - id: logic-planning
     name: Logic, knowledge representation and planning
-    aliases: [logic, propositional-logic, first-order-logic, fol, resolution, planning]
+    aliases: [logic, knowledge-representation, kr]
+    children:
+      - id: propositional-logic
+        name: "Propositional logic: knowledge bases, entailment, model checking, DPLL, resolution"
+        aliases: [propositional, prop-logic, dpll, model-checking, wumpus, wumpus-world, knowledge-base]
+      - id: first-order-logic
+        name: "First-order logic: representation, CNF, unification, resolution"
+        aliases: [fol, predicate-logic, resolution, unification, cnf, forward-chaining, backward-chaining]
+      - id: planning
+        name: "Planning: STRIPS actions, goal stack, regression, planning graphs, scheduling, frame problem"
+        aliases: [goal-stack, goal-stack-planning, strips, graphplan, planning-graph, scheduling, job-shop-scheduling, regression-planning, frame-problem, situational-calculus, situation-calculus]
 
   - id: uncertainty
     name: Probability, Bayesian networks, HMMs and MDPs
-    aliases: [probability, bayesian-network, bayes-net, hmm, mdp]
+    aliases: [probabilistic-reasoning]
+    children:
+      - id: probability
+        name: "Probability basics: conditional probability, Bayes' rule, independence, naive Bayes"
+        aliases: [bayes-rule, bayes-theorem, conditional-probability, joint-distribution, naive-bayes, de-finetti]
+      - id: bn-representation
+        name: "Bayesian networks: structure, CPTs and the full joint distribution"
+        aliases: [bayesian-network, bayes-net, bn, cpt, hybrid-bayesian-network]
+      - id: bn-independence
+        name: Conditional independence in Bayesian networks (d-separation, Markov blanket)
+        aliases: [d-separation, dseparation, markov-blanket, conditional-independence]
+      - id: bn-exact-inference
+        name: "Exact inference: enumeration and variable elimination"
+        aliases: [exact-inference, variable-elimination, enumeration, inference-by-enumeration, polytree]
+      - id: bn-sampling
+        name: "Approximate inference: prior, rejection, likelihood-weighting and Gibbs sampling"
+        aliases: [sampling, approximate-inference, rejection-sampling, likelihood-weighting, gibbs-sampling, prior-sampling]
+      - id: markov-hmm
+        name: Markov chains and hidden Markov models (forward algorithm, filtering, particle filtering)
+        aliases: [hmm, markov-chain, markov-model, hidden-markov-model, forward-algorithm, particle-filtering, stationary-distribution]
+      - id: mdp
+        name: "Markov decision processes: Bellman equation, value and policy iteration"
+        aliases: [markov-decision-process, value-iteration, policy-iteration, bellman, grid-world]
 
   - id: learning
     name: Machine learning and NLP
-    aliases: [machine-learning, ml, decision-tree, nlp]
+    aliases: [machine-learning, ml]
+    children:
+      - id: decision-tree
+        name: Decision trees (entropy, information gain, expressiveness)
+        aliases: [decision-trees, dt, information-gain, entropy, id3]
+      - id: learning-theory
+        name: "Learning theory: ERM, PAC learning, Occam's razor, agnostic learning, VC dimension"
+        aliases: [pac, pac-learning, erm, vc-dimension, vc, occam, agnostic-learning, sample-complexity]
+      - id: learning-concepts
+        name: "Learning basics: types of learning, overfitting, evaluation, regression, nearest neighbour, ensembles, clustering"
+        aliases: [supervised-learning, overfitting, ensemble, ensemble-learning, clustering, k-means, nearest-neighbor, knn, precision-recall, linear-regression, gradient-descent]
+      - id: neural-networks
+        name: Perceptrons and neural networks
+        aliases: [perceptron, neural-network, nn]
+      - id: reinforcement-learning
+        name: Reinforcement learning (Q-learning)
+        aliases: [rl, q-learning]
+      - id: nlp
+        name: "Natural language processing: grammars, parsing, word embeddings"
+        aliases: [natural-language, cfg, parsing, word-embedding, skip-gram, word2vec]
+
+  - id: robotics
+    name: Robotics and perception
+    aliases: [robot, degrees-of-freedom, perception]

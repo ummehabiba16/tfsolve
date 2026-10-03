@@ -17,7 +17,7 @@ sections:
     answer_any: 3
     rule: There are FOUR questions in this Section. Answer any THREE questions.
 source: {file: CSE 317 merged.pdf, pages: 27-31}
-notes: ["Printed as CSE 401 (Artificial Intelligence), the course's old code.", "Only Section B (MMI) is transcribed so far, from the list in TF_Analysis_MMI.tex; Section A (Q1-Q4) is not."]
+notes: ["Printed as CSE 401 (Artificial Intelligence), the course's old code.", "Section B (MMI) is from the list in TF_Analysis_MMI.tex; Section A (Q1-Q4) was added later, setter not identified yet."]
 transcription:
   by: []
   checked_by: []
