@@ -1,0 +1,23 @@
+schema: 1
+course: CSE315
+kind: term-final
+exam_date: 2023-04-13
+session: 2021-22
+level_term: L3T1
+students_dept: CSE
+full_marks: 210
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE questions.
+  B:
+    questions: [5, 6, 7, 8]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+source: {file: CSE 315 merged.pdf, pages: 25-32}
+notes: ["Term is printed as 'L-3/T-1' on the paper.", "In this paper Section A is the ATmega32 (microcontroller) part and Section B the 8086 (microprocessor) part.", "Section A instructions: assume system clock frequency 1MHz if not given; list of registers and necessary diagrams are at the end of the question; if configuration for any required register/control-word/bit is missing, just assume a configuration and clearly show the assumed configuration.", "The attached 'Figures and Tables for Section A' (page 31) and the ATmega32 pinout (page 32) are saved as figures/sheet-1.png and figures/sheet-2.png; the rows each part needs are copied into that part."]
+transcription:
+  by: []
+  checked_by: []

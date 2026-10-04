@@ -10,7 +10,7 @@ previous_codes: []
 # Asking for a parent (-t paging) also returns its children. Aliases are alternative
 # names for -t; they must be unique within the course.
 topics:
-  # ---- Section A (MHE): Intel 8086 / 80286 / 80386; decks in MHE_Resources/,
+  # ---- Microprocessor part (Section A from 2022-23; MHE): Intel 8086 / 80286 / 80386; decks in MHE_Resources/,
   #      textbook: Rafiquzzaman, Microprocessors and Microcomputer-Based System Design
   - id: mp-basics
     name: Microprocessor basics and design calculations
@@ -40,8 +40,11 @@ topics:
         aliases: [banks, bhe, even-odd-banks]
       - id: pins-8086
         name: 8086 pins and multiplexed address/data bus
-        aliases: [pins, pin-specification, demultiplexing, ale, hardware-specification]
+        aliases: [pins, pin-specification, demultiplexing, ale, hardware-specification, min-max-mode, minimum-mode, maximum-mode]
         deck: 8086 Hardware Specifications
+      - id: clock-generator
+        name: 8284A clock generator, RESET and READY
+        aliases: ["8284", 8284a, ready, wait-states]
 
   - id: instruction-encoding
     name: Machine code and addressing modes
@@ -54,6 +57,41 @@ topics:
     aliases: [interrupt-8086, interrupt-vector-table, ivt, nmi, intr, iret]
     deck: INTR
     slides: "3-21"
+    children:
+      - id: interrupt-hardware
+        name: "Interrupt hardware: INTR interfacing, vector generation (74ALS244), priority"
+        aliases: [74als244, interrupt-expansion, interrupt-priority, edge-triggered-intr]
+
+  - id: interfacing
+    name: Memory and I/O interfacing
+    aliases: [memory-interfacing, io-interfacing]
+    children:
+      - id: address-decoding
+        name: Address decoding and memory design (SRAM, DRAM, refresh)
+        aliases: [memory-design, sram, dram, dram-refresh, "62256", decoder]
+      - id: io-mapping
+        name: Memory-mapped vs port-mapped (isolated) I/O
+        aliases: [memory-mapped-io, port-mapped-io, isolated-io]
+      - id: buses-buffers
+        name: Buses, tri-state buffers and buffered systems
+        aliases: [bus, tri-state, buffered-system, "74ls245", "74ls244"]
+      - id: dma
+        name: DMA, HOLD and HLDA
+        aliases: [hold, hlda, direct-memory-access]
+
+  - id: parallel-io
+    name: Parallel I/O and the 8255 PPI
+    aliases: [parallel, parallel-data-transfer]
+    children:
+      - id: transfer-modes
+        name: "Parallel transfer modes: simple, strobed, single and double handshake"
+        aliases: [handshake, single-handshake, double-handshake, strobed-io, simple-io]
+      - id: ppi-8255
+        name: 8255 PPI control word, modes and interfacing
+        aliases: ["8255", 82c55, 8255a, control-word, ppi]
+      - id: led-matrix
+        name: MDA-8086 board and LED matrix
+        aliases: [mda-8086, dot-matrix]
 
   - id: i80286
     name: 80286 protected mode
@@ -82,8 +120,36 @@ topics:
         name: Paging, page directory and page tables (CR3), linear to physical address
         aliases: [paging, page-directory, page-table, cr3, linear-address, multilevel-paging, tlb]
         slides: "21-25"
+      - id: descriptors-386
+        name: 80386 descriptors, registers and modes (virtual 86), vs 80286
+        aliases: [descriptor-386, virtual-86, v86, granularity, program-invisible-registers]
+        slides: "8-20"
+      - id: flat-mode
+        name: Flat memory model, turning off segmentation, identity mapping
+        aliases: [flat-memory, identity-mapping]
+      - id: call-gates
+        name: Call gates and privilege transfer (stack switching)
+        aliases: [call-gate, gate-descriptor]
+      - id: task-switching
+        name: Task state segment (TSS) and task switching
+        aliases: [tss, task-switch, nt-bit, busy-bit]
+      - id: exceptions-386
+        name: Exceptions, page faults (CR2), double fault and shutdown
+        aliases: [page-fault, cr2, double-fault, shutdown, exception-handler]
 
-  # ---- Section B (EHP): ATmega32; decks in EHP_Slide/
+  - id: pentium
+    name: Pentium family
+    aliases: [pentium-pro, pentium-ii, pentium-iii, superscalar, inquire-cycle]
+
+  - id: coprocessor-8087
+    name: 8087 math coprocessor and floating-point format
+    aliases: ["8087", 80x87, floating-point, coprocessor]
+
+  - id: gpu-cuda
+    name: GPU and CUDA programming
+    aliases: [cuda, gpu]
+
+  # ---- Microcontroller part (Section B from 2022-23; EHP): ATmega32; decks in EHP_Slide/
   - id: mcu-intro
     name: Microcontrollers and processor architectures
     aliases: [microcontroller, introduction, intro]
@@ -99,6 +165,13 @@ topics:
         name: RISC vs CISC
         aliases: [risc, cisc]
         slides: "6"
+      - id: avr-core
+        name: "AVR CPU core: pipelining, register file, single-cycle execution"
+        aliases: [avr-pipeline, register-file, atmega-pipelining]
+        slides: "12-17"
+      - id: sleep-modes
+        name: Sleep modes and power saving
+        aliases: [sleep, power-down, idle-mode]
 
   - id: avr-memory
     name: ATmega32 memory and EEPROM
@@ -117,8 +190,11 @@ topics:
     children:
       - id: push-buttons
         name: Push buttons, pull-up and pull-down resistors
-        aliases: [push-button, pull-up, pull-down, active-low, active-high]
+        aliases: [push-button, pull-up, pull-down, active-low, active-high, debounce, debouncing]
         slides: "28-37"
+      - id: lcd
+        name: LCD interfacing
+        aliases: [lcd-h, display]
 
   - id: avr-interrupts
     name: ATmega32 interrupts
@@ -127,7 +203,7 @@ topics:
     children:
       - id: interrupt-execution
         name: Interrupt execution sequence in ATmega32
-        aliases: [interrupt-sequence, nested-interrupts, volatile]
+        aliases: [interrupt-sequence, nested-interrupts, volatile, polling-vs-interrupt, polling, ret-vs-reti, reti]
         slides: "3-14, 24-27"
       - id: external-interrupts
         name: External interrupts (INT0, INT1, INT2)
@@ -141,13 +217,16 @@ topics:
     children:
       - id: timer-normal
         name: Normal mode, overflows, delays and measuring elapsed time
-        aliases: [normal-mode, overflow, tov1, delay, delay-ms, elapsed-time]
+        aliases: [normal-mode, overflow, tov1, delay, delay-ms, elapsed-time, timer0, tcnt0, tcnt1]
       - id: timer-ctc
         name: CTC mode
         aliases: [ctc]
       - id: timer-pwm
         name: Fast PWM and phase-correct PWM, duty cycle and waveforms
         aliases: [pwm, fast-pwm, phase-correct-pwm, duty-cycle, waveform, oc1a, oc1b]
+      - id: timer-input-capture
+        name: Input capture (ICR1, ICP1) and measuring period
+        aliases: [input-capture, icr1, icp1, measure-period]
 
   - id: avr-adc
     name: ATmega32 ADC
@@ -156,12 +235,16 @@ topics:
     children:
       - id: adc-basics
         name: Sampling, quantization, resolution and error
-        aliases: [quantization, resolution, adc-error]
+        aliases: [quantization, resolution, adc-error, successive-approximation, sampling]
         slides: "6-15"
       - id: adc-registers
         name: ADMUX, ADCSRA, ADCH/ADCL, differential input, gain and ADC interrupt
         aliases: [admux, adcsra, adch, adcl, adlar, differential-adc, adc-interrupt]
         slides: "16-36"
+      - id: adc-auto-trigger
+        name: ADC auto-triggering (SFIOR, timer compare match)
+        aliases: [auto-trigger, sfior, adate]
+        slides: "45-55"
 
   - id: serial
     name: Serial communication
@@ -174,9 +257,13 @@ topics:
         slides: "2-8"
       - id: usart
         name: "USART: framing, baud rate (UBRR), registers, 9-bit data, FE/DOR/PE"
-        aliases: [uart, baud-rate, ubrr, ucsra, ucsrb, ucsrc, frame-error, data-overrun, parity]
+        aliases: [uart, baud-rate, ubrr, ucsra, ucsrb, ucsrc, frame-error, data-overrun, parity, rs232, max232]
         slides: "17-77"
       - id: spi
         name: SPI
         aliases: [spcr, spsr, spdr, master-slave]
         slides: "78-115"
+      - id: twi
+        name: Two-wire serial interface (TWI / I2C)
+        aliases: [i2c, two-wire]
+        slides: "14-16"

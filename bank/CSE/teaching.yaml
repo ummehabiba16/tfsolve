@@ -20,6 +20,19 @@ CSE313:
 CSE315:
   "2023-24": {A: [MHE], B: [EHP]}
   "2022-23": {A: [MHE], B: [EHP]}
+  # Setters not identified yet for the older papers.
+  "2021-22": [UNKNOWN]
+  "2020-21": [UNKNOWN]
+  "2019-20": [UNKNOWN]
+  "2018-19": [UNKNOWN]
+  "2017-18": [UNKNOWN]
+  "2016-17": [UNKNOWN]
+  "2015-16": [UNKNOWN]
+  "2014-15": [UNKNOWN]
+  "2013-14": [UNKNOWN]
+  "2012-13": [UNKNOWN]
+  "2011-12": [UNKNOWN]
+  "2010-11": [UNKNOWN]
 CSE317:
   # MMI's questions (agents, search, local search, CSP, games); from TF_Analysis_MMI.tex.
   # The other half (uncertainty, logic, planning, learning) is UNKNOWN until the faculty sheet is known.

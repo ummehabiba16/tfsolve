@@ -1,0 +1,23 @@
+schema: 1
+course: CSE315
+kind: term-final
+exam_date: 2017-08-20
+session: 2015-16
+level_term: L3T2
+students_dept: CSE
+full_marks: 300
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+  B:
+    questions: [5, 6, 7, 8]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE questions.
+source: {file: CSE 315 merged.pdf, pages: 70-74}
+notes: ["Course title printed as 'Microprocessors and Microcontrollers'; term printed as 'L-3/T-2'.", "Full marks printed as 300, although each question carries 35 marks (210 for six answers).", "Figure 2 (ATmega32 pinout, page 73) and Table 1 (list of registers, page 74) are saved as figures/sheet-1.png and figures/sheet-2.png."]
+transcription:
+  by: []
+  checked_by: []

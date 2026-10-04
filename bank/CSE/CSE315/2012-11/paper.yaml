@@ -1,0 +1,23 @@
+schema: 1
+course: CSE315
+kind: term-final
+exam_date: 2012-11-19
+session: 2010-11
+level_term: L3T2
+students_dept: CSE
+full_marks: 210
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 3
+    rule: There are FOUR questions in this Section. Answer any THREE.
+  B:
+    questions: [5, 6, 7, 8]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+source: {file: CSE 315 merged.pdf, pages: 91-93}
+notes: ["Course title printed as 'Microprocessors and Microcontrollers'; term printed as 'L-3/T-2'.", "In this paper Section A is the microcontroller (ATmega) part and Section B the 80386 protected-mode part.", "The marks for Q3(b)-(d) and Q4(b)-(c) are cut off at the page edge; they are read as 10, 7, 6 and 11, 6 (each question totals 35)."]
+transcription:
+  by: []
+  checked_by: []

@@ -1,0 +1,23 @@
+schema: 1
+course: CSE315
+kind: term-final
+exam_date: 2015-01-16
+session: 2012-13
+level_term: L3T2
+students_dept: CSE
+full_marks: 210
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 3
+    rule: There are FOUR questions in this Section. Answer any THREE.
+  B:
+    questions: [5, 6, 7, 8]
+    answer_any: 3
+    rule: There are FOUR questions in this Section. Answer any THREE.
+source: {file: CSE 315 merged.pdf, pages: 86-88}
+notes: ["Course title printed as 'Microprocessors and Microcontrollers'; term printed as 'L-3/T-2'.", "Section A rule printed as 'Answer any TRHEE'.", "In this paper Section A is the microcontroller (ATmega16/32) part and Section B the microprocessor part."]
+transcription:
+  by: []
+  checked_by: []

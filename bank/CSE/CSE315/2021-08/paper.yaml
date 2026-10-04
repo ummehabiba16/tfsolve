@@ -1,0 +1,23 @@
+schema: 1
+course: CSE315
+kind: term-final
+exam_date: 2021-08-31
+session: 2019-20
+level_term: L3T1
+students_dept: CSE
+full_marks: 210
+duration: 2h30m
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+  B:
+    questions: [5, 6, 7, 8]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+source: {file: CSE 315 merged.pdf, pages: 41-51}
+notes: ["Term is printed as 'L-3/T-1' on the paper.", "Online-era paper (2 hours 30 minutes); Sections A and B are printed as separate documents (pages 41-47 and 48-51).", "Section B general guidelines: list of registers and necessary diagrams are at the end of the question paper; assume system clock frequency 1MHz if not given; if configuration for any required register is missing, just assume a configuration and clearly show the assumed configuration; if any control word/bit configuration is missing, assume a pattern of your choice and clearly mention your assumption.", "The register list at the end (page 51) is saved as figures/sheet-1.png; the rows each part needs are copied into that part."]
+transcription:
+  by: []
+  checked_by: []

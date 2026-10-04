@@ -1,0 +1,23 @@
+schema: 1
+course: CSE315
+kind: term-final
+exam_date: 2016-08-07
+session: 2014-15
+level_term: L3T2
+students_dept: CSE
+full_marks: 210
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+  B:
+    questions: [5, 6, 7, 8]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+source: {file: CSE 315 merged.pdf, pages: 75-81}
+notes: ["Course title printed as 'Microprocessors and Micro-controllers'; term printed as 'L-3/T-2'.", "Section B instructions: find the pin diagram of ATmega32 microcontroller and its different register configuration at the end of the questions.", "Figure 1 (ATmega32 pin diagram) and Table 1 (list of ATmega32 registers) on page 81 are saved as figures/sheet-1.png."]
+transcription:
+  by: []
+  checked_by: []

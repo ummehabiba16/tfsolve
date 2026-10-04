@@ -1,0 +1,23 @@
+schema: 1
+course: CSE315
+kind: term-final
+exam_date: 2018-09-11
+session: 2017-18
+level_term: L3T1
+students_dept: CSE
+full_marks: 210
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 3
+    rule: There are FOUR questions in this Section. Answer any THREE.
+  B:
+    questions: [5, 6, 7, 8]
+    answer_any: 3
+    rule: There are FOUR questions in this Section. Answer any THREE questions.
+source: {file: CSE 315 merged.pdf, pages: 58-64}
+notes: ["Course title printed as 'Microprocessors and Microcontrollers'; term printed as 'L-3/T-1'.", "Section B instructions: find the pin configuration of ATmega32 MCU and its different register configurations at the end of the questions; if configuration for any of the required register is missing, just assume a configuration and clearly show the assumed configuration; if you believe any control word/bit configuration is missing, just assume a pattern of your choice and clearly mention your assumption.", "The ATmega32 pinout and register list (page 64) are saved as figures/sheet-1.png; the rows each part needs are copied into that part."]
+transcription:
+  by: []
+  checked_by: []
