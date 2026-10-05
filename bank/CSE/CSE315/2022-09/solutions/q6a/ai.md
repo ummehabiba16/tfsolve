@@ -19,7 +19,7 @@ sources: ["MHE 8086 Hardware Specifications slides 10-11 (clock, 8284A connected
                                               |
                                         [ divide by 3 ] --> CLK  (f/3, 33% duty)  -> 8086
                                               |
-                                        [ divide by 2 ] --> PCLK (f/6, 50% duty)  -> peripherals
+                                        [ divide by 2 ] --> PCLK (f/6, 50% duty)  -> periph.
 ```
 
 - **F/$\overline{C}$** (frequency/crystal select) chooses the clock source: **0 = crystal on X1/X2**, 1 = external frequency on EFI.

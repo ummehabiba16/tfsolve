@@ -34,8 +34,8 @@ The memory size (16 $\times$ 32K $\times$ 8 = 512 KB) and the address range **00
 ```text
  CPU A1-A15  ------------------------> A0-A14 of all 16 RAMs
  CPU A16-A18 --> C B A of U3 and U9
-                 U3 (even bank): G2A' = A0,   G2B' = A19, G1 = memory  -> CS' of 8 RAMs on D0-D7
-                 U9 (odd bank):  G2A' = BHE', G2B' = A19, G1 = memory  -> CS' of 8 RAMs on D8-D15
+            U3 (even): G2A' = A0,   G2B' = A19, G1 = mem -> CS' of 8 RAMs, D0-D7
+            U9 (odd):  G2A' = BHE', G2B' = A19, G1 = mem -> CS' of 8 RAMs, D8-D15
  D0-D7   <=> 74LS245 (existing) <=> even-bank RAM data
  D8-D15  <=> 74LS245 (new)      <=> odd-bank RAM data
              both: G = board select (A19 = 0, memory), DIR = RD'
