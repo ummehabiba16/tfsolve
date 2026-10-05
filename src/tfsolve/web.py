@@ -335,7 +335,10 @@ def _course(bank, course, repo_root, out_dir):
 
     body = f"""<h1>{esc(course.display_code)}: {esc(course.title)}</h1>
 <div class="layout">
-<aside class="filters">
+<aside class="filters" id="filters">
+  <button type="button" id="f-collapse" class="collapse" aria-expanded="true" aria-controls="filters"
+    title="Hide the filters to give the questions the full width"><span class="arrow" aria-hidden="true">«</span><span class="txt">Hide filters</span></button>
+  <div class="panel">
   <div class="arrange" role="group" aria-label="Arrange questions">
     <span class="arrange-label">Arrange questions</span>
     <div class="switch">
@@ -357,6 +360,7 @@ def _course(bank, course, repo_root, out_dir):
   </div>
   <p class="count" id="f-count"></p>
   <p class="muted"><a href="../help.html">How to use this page</a></p>
+  </div>
 </aside>
 <div class="questions">
 <nav class="contents" id="contents" aria-label="Contents"><h2 id="contents-title">Contents</h2><ol id="toc"></ol></nav>

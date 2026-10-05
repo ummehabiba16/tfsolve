@@ -175,6 +175,14 @@ footer { color: var(--muted); font-size: 0.85rem; padding-top: 2rem; padding-bot
   border: 1px solid var(--line); border-radius: 6px; background: var(--field); color: var(--text);
 }
 .filters .check { display: flex; gap: 0.5rem; align-items: center; font-weight: 400; color: var(--text); }
+.filters .collapse { display: flex; align-items: center; gap: 0.5rem; width: 100%; margin-bottom: 0.8rem; padding: 0.3rem 0.5rem;
+  background: transparent; color: var(--title); border: 1px solid var(--line); font-size: 0.85rem; }
+.filters .collapse:hover { background: var(--blue-soft); }
+/* collapsed: a thin strip with just the show button, questions get the whole width */
+.layout.filters-hidden { grid-template-columns: 52px minmax(0, 1fr); }
+.layout.filters-hidden .filters { padding: 0.5rem; }
+.layout.filters-hidden .filters .panel, .layout.filters-hidden .filters .collapse .txt { display: none; }
+.layout.filters-hidden .filters .collapse { margin: 0; justify-content: center; padding: 0.4rem 0; }
 .buttons { display: flex; flex-direction: column; gap: 0.5rem; }
 button {
   font: inherit; cursor: pointer; border-radius: 6px; padding: 0.5rem 0.75rem;
@@ -200,6 +208,7 @@ button.ghost:hover { background: var(--blue-soft); color: var(--blue); }
   padding: 0.15rem 0.65rem; font-size: 0.8rem;
 }
 .chip:hover { background: var(--blue); color: var(--on-blue); }
+.body img, .stem img { display: block; max-width: 100%; height: auto; margin: 0.5rem 0; }
 .stem { overflow-x: auto; background: var(--bg); border-left: 3px solid var(--blue); padding: 0.25rem 0.75rem; margin: 0.5rem 0; }
 .stem .label { font-size: 0.8rem; font-weight: 600; color: var(--muted); }
 .note { color: var(--muted); font-size: 0.85rem; }
@@ -286,7 +295,7 @@ code span.al, code span.er, code span.wa { color: var(--tok-err); font-weight: 6
 
 /* phones */
 @media (max-width: 760px) {
-  .layout { grid-template-columns: minmax(0, 1fr); }
+  .layout, .layout.filters-hidden { grid-template-columns: minmax(0, 1fr); }
   .filters { position: static; }
   h1 { font-size: 1.4rem; }
 }
@@ -310,6 +319,10 @@ code span.al, code span.er, code span.wa { color: var(--tok-err); font-weight: 6
   .q { border: 1px solid #999; }
   .qhead { break-after: avoid; }
   .body pre { white-space: pre-wrap; }
+  /* nothing may be clipped on paper: figures shrink to the page width, wide tables and code wrap */
+  .body, .stem, .body pre { overflow: visible; }
+  .body img, .stem img { max-width: 100%; max-height: 22cm; width: auto; break-inside: avoid; }
+  .body table { max-width: 100%; }
   /* solutions are always printed in full: a plain heading line, no arrow */
   .solution { break-inside: auto; }
   .print-questions-only .solution, .print-questions-only .nosol { display: none; }

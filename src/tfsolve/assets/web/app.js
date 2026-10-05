@@ -251,6 +251,24 @@ document.addEventListener("DOMContentLoaded", function () {
     apply();
   });
 
+  // Hide / show the filter sidebar; the choice is remembered in this browser.
+  var layout = document.querySelector(".layout");
+  var collapse = document.getElementById("f-collapse");
+  function setFilters(hidden) {
+    layout.classList.toggle("filters-hidden", hidden);
+    collapse.setAttribute("aria-expanded", hidden ? "false" : "true");
+    collapse.querySelector(".arrow").textContent = hidden ? "»" : "«";
+    collapse.title = hidden ? "Show the filters" : "Hide the filters to give the questions the full width";
+    collapse.querySelector(".txt").textContent = "Hide filters";
+    if (hidden) collapse.setAttribute("aria-label", "Show filters"); else collapse.removeAttribute("aria-label");
+  }
+  collapse.addEventListener("click", function () {
+    var hidden = !layout.classList.contains("filters-hidden");
+    setFilters(hidden);
+    try { localStorage.setItem("tfsolve-filters-hidden", hidden ? "1" : "0"); } catch (e) {}
+  });
+  try { setFilters(localStorage.getItem("tfsolve-filters-hidden") === "1"); } catch (e) {}
+
   // Printing includes the solutions unless "Questions only when printing" is ticked. Closed <details> print as
   // just their heading, so open every one for the print job (also for Ctrl/Cmd+P) and close them afterwards.
   var reopen = null;
