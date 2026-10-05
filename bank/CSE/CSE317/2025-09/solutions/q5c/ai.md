@@ -72,4 +72,4 @@ Down $=0.410$ and Right $=0.249$, so $\pi^*(4,1)=$ **Left**.
 | 2 | $\uparrow$ | wall | $\uparrow$ | $-1$ |
 | 1 | $\uparrow$ | $\leftarrow$ | $\leftarrow$ (rover) | $\leftarrow$ |
 
-*Check:* the utilities satisfy the Bellman equation $U(s)=-0.04+\max_a\sum_{s'}P(s'\mid s,a)U(s')$ with $\gamma=1$. For example, $U(3,1)=-0.04+0.651=0.611$. This is AIMA's 4$\times$3 world (Fig. 17.2(a)).
+*Check:* the utilities satisfy the Bellman equation $U(s)=-0.04+\max_a\sum_{s'}P(s'\mid s,a)U(s')$ with $\gamma=1$. For example, $U(3,1)=-0.04+0.651=0.611$. This is AIMA's $4\times3$ world (Fig. 17.2(a)).

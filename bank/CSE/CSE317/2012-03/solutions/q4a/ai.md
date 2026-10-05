@@ -12,9 +12,11 @@ Operators in the STRIPS style used for goal stack planning (Rich & Knight):
 
 | Action | Precondition | Add list | Delete list |
 |:--|:--|:--|:--|
-| **STACK(X, Y)** | $CLEAR(Y)\land HOLDING(X)$ | $ARMEMPTY$, $ON(X,Y)$ | $CLEAR(Y)$, $HOLDING(X)$ |
-| **UNSTACK(X, Y)** | $ON(X,Y)\land CLEAR(X)\land ARMEMPTY$ | $HOLDING(X)$, $CLEAR(Y)$ | $ON(X,Y)$, $ARMEMPTY$ |
-| **PICKUP(X)** | $CLEAR(X)\land ONTABLE(X)\land ARMEMPTY$ | $HOLDING(X)$ | $ONTABLE(X)$, $ARMEMPTY$ |
-| **PUTDOWN(X)** | $HOLDING(X)$ | $ONTABLE(X)$, $ARMEMPTY$ | $HOLDING(X)$ |
+| STACK(X,Y) | CLEAR(Y), HOLDING(X) | ARMEMPTY, ON(X,Y) | CLEAR(Y), HOLDING(X) |
+| UNSTACK(X,Y) | ON(X,Y), CLEAR(X), ARMEMPTY | HOLDING(X), CLEAR(Y) | ON(X,Y), ARMEMPTY |
+| PICKUP(X) | CLEAR(X), ONTABLE(X), ARMEMPTY | HOLDING(X) | ONTABLE(X), ARMEMPTY |
+| PUTDOWN(X) | HOLDING(X) | ONTABLE(X), ARMEMPTY | HOLDING(X) |
+
+(Preconditions are conjunctions: all listed literals must hold.)
 
 (In this formulation $CLEAR(X)$ stays true while X is held, since nothing is on top of it. Some texts also delete $CLEAR(X)$ on PICKUP and UNSTACK and add it back on STACK and PUTDOWN; either is acceptable if used consistently.)
