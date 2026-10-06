@@ -13,6 +13,17 @@ CSE309:
   "2018-19": {A: [MMA], B: [KMS]}
   "2017-18": {A: [MMA], B: [UNKNOWN]}  # B assigned by matching its topics to KMS_Slide/
 CSE313:
+  # Older sessions (before 2019-20) and 2020-21: setters not identified yet.
+  "2020-21": [UNKNOWN]
+  "2018-19": [UNKNOWN]
+  "2017-18": [UNKNOWN]
+  "2016-17": [UNKNOWN]
+  "2015-16": [UNKNOWN]
+  "2014-15": [UNKNOWN]
+  "2013-14": [UNKNOWN]
+  "2012-13": [UNKNOWN]
+  "2011-12": [UNKNOWN]
+  "2010-11": [UNKNOWN]
   "2023-24": {A: [RRR], B: [KRV]}
   "2022-23": {A: [RRR], B: [KRV]}
   "2021-22": {A: [RRR], B: [KRV]}

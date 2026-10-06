@@ -1,0 +1,23 @@
+schema: 1
+course: CSE313
+kind: term-final
+exam_date: 2017-08-16
+session: 2015-16
+level_term: L3T2
+students_dept: CSE
+full_marks: 210
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 3
+    rule: Answer any THREE.
+  B:
+    questions: [5, 6, 7, 8, 9, 10, 11, 12, 13]
+    answer_any: 7
+    rule: Answer any SEVEN.
+source: {file: CSE_313_merged.pdf, pages: 40-43}
+notes: ["Section B has NINE questions (Q5-Q13), answer any SEVEN.", "The scan has a dark vertical line through the text; all words were still readable.", Faculty are not known for this paper (UNKNOWN in teaching.yaml).]
+transcription:
+  by: []
+  checked_by: []

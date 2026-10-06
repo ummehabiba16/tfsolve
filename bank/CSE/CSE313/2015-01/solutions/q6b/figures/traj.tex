@@ -1,0 +1,23 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric,fit,backgrounds,patterns,matrix,decorations.pathreplacing}
+\begin{document}
+\begin{tikzpicture}[>=Stealth,font=\small]
+\def\s{0.016}
+\draw[->] (0,0) -- (8.6,0) node[right,font=\scriptsize]{P1 instructions executed};
+\draw[->] (0,0) -- (0,5.6) node[above,font=\scriptsize]{P2 instructions executed};
+\foreach \v in {100,200,300,400,500} { \draw (\v*\s,0.05) -- (\v*\s,-0.05) node[below,font=\tiny]{\v}; }
+\foreach \v in {50,100,150,200,300} { \draw (0.05,\v*\s) -- (-0.05,\v*\s) node[left,font=\tiny]{\v}; }
+\fill[red!25,opacity=0.75] (100*\s,100*\s) rectangle (300*\s,200*\s);
+\fill[blue!25,opacity=0.75] (200*\s,50*\s) rectangle (400*\s,150*\s);
+\fill[orange!35,opacity=0.55] (100*\s,50*\s) rectangle (200*\s,100*\s);
+\draw[red!70!black] (100*\s,100*\s) rectangle (300*\s,200*\s); \draw[blue!70!black] (200*\s,50*\s) rectangle (400*\s,150*\s);
+\node[font=\tiny,align=center] at (250*\s,175*\s) {DVD-ROM\\ forbidden};
+\node[font=\tiny,align=center] at (330*\s,75*\s) {printer\\ forbidden};
+\node[font=\tiny,align=center] at (150*\s,75*\s) {unsafe\\ region};
+\node[circle,fill=black,inner sep=1.2pt] at (200*\s,100*\s) {}; \node[font=\tiny,anchor=south west] at (200*\s,100*\s) {deadlock};
+\draw[very thick,gray,->] (0,0) -- (70*\s,50*\s) -- (110*\s,60*\s) -- (130*\s,90*\s) -- (200*\s,100*\s);
+\node[font=\tiny,gray,anchor=east] at (190*\s,60*\s) {};
+\draw[very thick,green!50!black,->] (0,0) -- (50*\s,50*\s) -- (95*\s,50*\s) -- (95*\s,95*\s) -- (95*\s,200*\s);
+\end{tikzpicture}
+\end{document}

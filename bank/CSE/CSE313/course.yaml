@@ -45,11 +45,22 @@ topics:
         aliases: [multi-processor, multiprocessor]
         slides: "36"
 
+  - id: multiprocessor-hw
+    name: Multiprocessor hardware (NUMA, interconnects)
+    aliases: [multiprocessors, multiprocessor-hardware]
+    children:
+      - id: numa-interconnect
+        name: NUMA machines, directories and omega switching networks
+        aliases: [numa, omega-network, uma, interconnect, directory-based-numa]
+
   - id: process-thread
     name: Processes and threads
     aliases: [processes, threads, process, thread]
     deck: ProcessAndThread-week2-RRR
     children:
+      - id: process-creation
+        name: Process creation and termination
+        aliases: [process-creation-scenarios, process-termination]
       - id: process-state-diagram
         name: Process life cycle and state diagram
         aliases: [process-states, process-lifecycle, state-diagram]
@@ -99,6 +110,12 @@ topics:
         name: Gantt chart and average turnaround (SJF, SRTN, RR, priority)
         aliases: [gantt, gantt-chart, turnaround, round-robin, rr, priority-scheduling]
         slides: "29-45"
+      - id: mlfq
+        name: Multi-level feedback queue (MLFQ)
+        aliases: [multilevel-feedback-queue, multi-level-feedback-queue]
+      - id: guaranteed-scheduling
+        name: Guaranteed (fair-share) scheduling
+        aliases: [guaranteed, fair-share]
       - id: lottery-scheduling
         name: Lottery scheduling
         aliases: [lottery]
@@ -125,6 +142,9 @@ topics:
         name: Producer-consumer with semaphores
         aliases: [producer-consumer, semaphore, semaphores, bounded-buffer]
         slides: "29-39"
+      - id: barriers
+        name: Barriers
+        aliases: [barrier]
       - id: dining-philosophers-definition
         name: "Dining philosophers: problem definition"
         aliases: [dining-philosophers, dining]
@@ -135,6 +155,9 @@ topics:
       - id: dining-philosophers-asymmetric
         name: "Dining philosophers: asymmetric (even/odd) protocol"
         slides: "52-54"
+      - id: locks
+        name: Locks and atomic instructions (spinlock, test-and-set, fetch-and-add)
+        aliases: [spinlock, spin-lock, test-and-set, tsl, atomic-instructions, fetch-and-add]
 
   - id: deadlock
     name: Deadlocks
@@ -148,6 +171,9 @@ topics:
       - id: deadlock-non-cycle-processes
         name: Deadlocked processes outside the cycle
         slides: "7, 10-13"
+      - id: deadlock-strategies
+        name: Dealing with deadlock (ostrich, detection, avoidance, prevention) and recovery
+        aliases: [deadlock-recovery, recovery, ostrich, deadlock-handling]
       - id: deadlock-detection-graph
         name: Deadlock detection on a resource graph
         aliases: [resource-graph, deadlock-detection, rag]
@@ -203,6 +229,9 @@ topics:
       - id: page-replacement
         name: Page replacement policies
         aliases: [replacement, clock, lru, fifo, optimal, opt, belady, beladys-anomaly, second-chance]
+      - id: swap-space
+        name: Swap space and swapping
+        aliases: [swapping, swap]
       - id: thrashing
         name: Page faults and thrashing
         aliases: [page-fault, working-set]
@@ -214,6 +243,12 @@ topics:
       - id: io-devices
         name: I/O devices, interrupts, DMA and drivers
         aliases: [io, polling, interrupts, interrupt, dma, device-driver, drivers, iommu]
+      - id: disk-scheduling
+        name: Disk scheduling (SSTF, SCAN, C-SCAN)
+        aliases: [sstf, scan, c-scan, disk-scheduler, seek-time]
+      - id: clock-timers
+        name: Clocks and timers (virtual clocks, software timers)
+        aliases: [clock, clocks, timers, virtual-clocks]
       - id: raid
         name: Hard disks and RAID
         aliases: [raid0, raid1, raid4, raid5, raid-0, raid-1, raid-4, raid-5, disk, disks, hdd]
@@ -241,3 +276,39 @@ topics:
   - id: distributed
     name: Distributed systems (RPC)
     aliases: [rpc, remote-procedure-call]
+
+  # ---- UNIX internals (kernel structure, buffer cache, inodes, regions); older papers follow Bach's book
+  - id: unix-internals
+    name: UNIX internals (kernel, buffer cache, inodes, regions)
+    aliases: [unix, unix-kernel-internals]
+    children:
+      - id: unix-kernel-structure
+        name: UNIX kernel block diagram and subsystems
+        aliases: [kernel-block-diagram, unix-kernel, kernel-subsystems, monolithic-problems]
+      - id: kernel-stack
+        name: User stack vs kernel stack
+        aliases: [user-stack]
+      - id: buffer-cache
+        name: Buffer cache (buffer headers, free list, getblk, delayed write)
+        aliases: [buffer, buffers, getblk, buffer-header, delayed-write, brelse]
+      - id: unix-inodes
+        name: Inodes (disk and in-core, iget, iput, namei, remembered inode)
+        aliases: [incore-inode, in-core-inode, iget, iput, namei, ialloc, ifree, remembered-inode, inode-link-count]
+      - id: unix-inode-addressing
+        name: Inode block addressing, maximum file size and byte offsets
+        aliases: [toc, table-of-contents, byte-offset, unix-max-file-size, direct-indirect-blocks]
+      - id: unix-free-lists
+        name: Superblock free inode list and free disk block list
+        aliases: [superblock, free-block-list, free-inode-list, free-disk-blocks, alloc, bmap]
+      - id: unix-file-syscalls
+        name: File system calls (open, create, file table, user file descriptor table)
+        aliases: [open-file, create-file, file-table, unix-file-descriptors, mount]
+      - id: unix-regions
+        name: Regions, region table, register triple, fork and region duplication
+        aliases: [region, regions, region-table, register-triple, per-process-region-table, growreg, fork-regions]
+      - id: unix-context
+        name: Process context, u area, kernel-mode consistency
+        aliases: [u-area, process-context, register-context, system-level-context, user-level-context, kernel-consistency]
+      - id: unix-sleep-wakeup
+        name: sleep and wakeup algorithms
+        aliases: [sleep-algorithm, wakeup-algorithm, sleeping-process]

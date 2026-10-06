@@ -1,0 +1,23 @@
+schema: 1
+course: CSE313
+kind: term-final
+exam_date: 2021-01-13
+session: 2018-19
+level_term: L3T2
+students_dept: CSE
+full_marks: 180
+duration: 2h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 3
+    rule: Answer any THREE.
+  B:
+    questions: [5, 6, 7, 8]
+    answer_any: 3
+    rule: Answer any THREE.
+source: {file: CSE_313_merged.pdf, pages: 30-32}
+notes: ["Section A header reads 'B. Sc. Engineering Examinations 2018-2019'; Section B header reads 'B. Sc. Engineering Examination (January 2020 Term)'. Both carry the date 13/01/2021, so they are treated as one paper (session 2018-19).", "Section marks 90 each; time 2 hours for Sections A + B.", Faculty are not known for this paper (UNKNOWN in teaching.yaml).]
+transcription:
+  by: []
+  checked_by: []
