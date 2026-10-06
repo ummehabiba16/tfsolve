@@ -1,0 +1,30 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta}
+\begin{document}
+\begin{forest}
+for tree={align=center,font=\small,l=1.0cm,s sep=3mm,edge={->,>=Stealth}},
+tm/.style={font=\ttfamily\small,inner sep=1pt},
+[{S\\{\scriptsize code = t1=a+b; t2=minus c; t3=t1+t2; d=t3}}
+  [{id\\{\scriptsize d}}]
+  [{$=$},tm]
+  [{E\\{\scriptsize addr=t3}\\{\scriptsize code = t1=a+b; t2=minus c; t3=t1+t2}}
+    [{$E_1$ \texttt{(}$E_3$\texttt{)}\\{\scriptsize addr=t1}\\{\scriptsize code = t1=a+b}}
+      [{$($},tm]
+      [{$E_3$\\{\scriptsize addr=t1}\\{\scriptsize code = t1=a+b}}
+        [{$E_5$\\{\scriptsize addr=a}\\{\scriptsize code=''}} [{id\\{\scriptsize a}}]]
+        [{$+$},tm]
+        [{$E_6$\\{\scriptsize addr=b}\\{\scriptsize code=''}} [{id\\{\scriptsize b}}]]
+      ]
+      [{$)$},tm]
+    ]
+    [{$+$},tm]
+    [{$E_2 \to -E_4$\\{\scriptsize addr=t2}\\{\scriptsize code = t2=minus c}}
+      [{$-$},tm]
+      [{$E_4$\\{\scriptsize addr=c}\\{\scriptsize code=''}} [{id\\{\scriptsize c}}]]
+    ]
+  ]
+  [{$;$},tm]
+]
+\end{forest}
+\end{document}

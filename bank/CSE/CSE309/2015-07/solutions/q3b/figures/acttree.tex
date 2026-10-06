@@ -1,0 +1,22 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta}
+\begin{document}
+\begin{forest}
+for tree={align=center,font=\footnotesize,l=0.9cm,s sep=3mm,edge={->,>=Stealth},inner sep=2pt},
+hl/.style={draw,rounded corners=2pt,fill=yellow!35},
+[fib(5)
+  [fib(4)
+    [fib(3)
+      [fib(2) [{fib(1)\\{\tiny\#1}}] [fib(0)]]
+      [{fib(1)\\{\tiny\#2}}]
+    ]
+    [fib(2) [{fib(1)\\{\tiny\#3}},hl] [fib(0)]]
+  ]
+  [fib(3)
+    [fib(2) [{fib(1)\\{\tiny\#4}}] [fib(0)]]
+    [{fib(1)\\{\tiny\#5}}]
+  ]
+]
+\end{forest}
+\end{document}

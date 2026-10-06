@@ -1,0 +1,10 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta}
+\begin{document}
+\begin{forest}
+for tree={align=center,font=\small,l=0.55cm,s sep=7mm,edge={->,>=Stealth}},
+tm/.style={font=\ttfamily\small,inner sep=1pt},
+[S$_{9}$\\{\scriptsize state=0, count=2} [S$_{8}$\\{\scriptsize state=0, count=2} [S$_{7}$\\{\scriptsize state=2, count=1} [S$_{6}$\\{\scriptsize state=1, count=1} [S$_{5}$\\{\scriptsize state=0, count=1} [S$_{4}$\\{\scriptsize state=0, count=1} [S$_{3}$\\{\scriptsize state=2, count=0} [S$_{2}$\\{\scriptsize state=2, count=0} [S$_{1}$\\{\scriptsize state=1, count=0} [\texttt{a},tm]] [\texttt{b},tm]] [\texttt{b},tm]] [\texttt{c},tm]] [\texttt{c},tm]] [\texttt{a},tm]] [\texttt{b},tm]] [\texttt{c},tm]] [\texttt{b},tm]]
+\end{forest}
+\end{document}

@@ -1,0 +1,28 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta}
+\begin{document}
+\begin{forest}
+for tree={align=center,font=\footnotesize,l=1.1cm,s sep=2.5mm,edge={->,>=Stealth}},
+tm/.style={font=\ttfamily\footnotesize,inner sep=1pt},
+[{S\\{\tiny next=L1}}
+  [{if (},tm]
+  [{B\\{\tiny true=L2, false=L3}}
+    [{$B_1$\\{\tiny true=L2, false=L4}}
+      [{E relop E\\{\tiny\texttt{x < 100}}\\{\tiny code: if x<100 goto L2; goto L4}}]]
+    [{$\vert\vert$},tm]
+    [{$B_2$\\{\tiny true=L2, false=L3}}
+      [{$B_3$\\{\tiny true=L5, false=L3}}
+        [{E relop E\\{\tiny\texttt{x > 200}}\\{\tiny code: if x>200 goto L5; goto L3}}]]
+      [{\&\&},tm]
+      [{$B_4$\\{\tiny true=L2, false=L3}}
+        [{E relop E\\{\tiny\texttt{x != y}}\\{\tiny code: if x!=y goto L2; goto L3}}]]
+    ]
+  ]
+  [{)},tm]
+  [{$S_1$\\{\tiny next=L1}\\{\tiny code: x = 0}}]
+  [{else},tm]
+  [{$S_2$\\{\tiny next=L1}\\{\tiny code: x = 1}}]
+]
+\end{forest}
+\end{document}

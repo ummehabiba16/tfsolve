@@ -198,6 +198,18 @@ topics:
         aliases: [switch, switch-statement, break-continue]
         slides: "115-120"
 
+  - id: semantic-analysis
+    name: Semantic analysis (type systems, type checking, symbol tables)
+    aliases: [semantic-analyzer, semantic-errors, context-sensitive-analysis]
+    # Not in KMS's 2025 decks; added for the 2012-2017 papers. Dragon book 2e sec. 2.7, 6.3-6.5.
+    children:
+      - id: type-checking
+        name: Type systems, type checking and type inference (Post-system rules, name vs structural equivalence)
+        aliases: [type-system, type-systems, type-inference, type-checker, post-system, name-equivalence, structural-equivalence, strong-typing, type-graph]
+      - id: symbol-table-management
+        name: Symbol table organisation and scope handling (spaghetti stack, nested scopes)
+        aliases: [symbol-tables, spaghetti-stack, scoped-symbol-table, symbol-table-structure]
+
   - id: runtime
     name: Run-time environments
     aliases: [run-time, runtime-environments]

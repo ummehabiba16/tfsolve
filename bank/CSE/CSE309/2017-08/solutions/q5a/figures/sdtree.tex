@@ -1,0 +1,21 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta}
+\begin{document}
+\begin{forest}
+for tree={align=center,font=\small,l=0.8cm,s sep=4mm,edge={->,>=Stealth}},
+tm/.style={font=\ttfamily\small,inner sep=1pt},
+act/.style={draw,dashed,rounded corners=2pt,font=\footnotesize,inner sep=2pt,fill=yellow!15},
+[expr
+  [expr
+    [expr [term [9,tm] [{print('9')},act]]]
+    [$-$,tm]
+    [term [5,tm] [{print('5')},act]]
+    [{print('$-$')},act]
+  ]
+  [$+$,tm]
+  [term [2,tm] [{print('2')},act]]
+  [{print('$+$')},act]
+]
+\end{forest}
+\end{document}

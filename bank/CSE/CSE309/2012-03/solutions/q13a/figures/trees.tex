@@ -1,0 +1,31 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta}
+\begin{document}
+\begin{tikzpicture}
+\node[anchor=north] at (0,0) {\begin{forest}
+for tree={align=center,font=\small,l=0.65cm,s sep=2.5mm,edge={->,>=Stealth}},
+tm/.style={font=\ttfamily\small,inner sep=1pt},
+[D
+  [T [B [int,tm]] [C [P [{$\epsilon$},tm]] [A [{$\epsilon$},tm]]]]
+  [id,tm] [{;},tm]]
+\end{forest}};
+\node[font=\small] at (0,-6.2) {(1) \texttt{int x;}};
+\node[anchor=north] at (6.6,0) {\begin{forest}
+for tree={align=center,font=\small,l=0.65cm,s sep=2.5mm,edge={->,>=Stealth}},
+tm/.style={font=\ttfamily\small,inner sep=1pt},
+[D
+  [T [B [float,tm]] [C [P [{$*$},tm] [P [{$\epsilon$},tm]]] [A [{$\epsilon$},tm]]]]
+  [id,tm] [{;},tm]]
+\end{forest}};
+\node[font=\small] at (6.6,-6.2) {(2) \texttt{float * y;}};
+\node[anchor=north] at (14.0,0) {\begin{forest}
+for tree={align=center,font=\small,l=0.65cm,s sep=2.5mm,edge={->,>=Stealth}},
+tm/.style={font=\ttfamily\small,inner sep=1pt},
+[D
+  [T [B [int,tm]] [C [P [{$*$},tm] [P [{$\epsilon$},tm]]] [A [{[},tm] [num,tm] [{]},tm] [A [{$\epsilon$},tm]]]]]
+  [id,tm] [{;},tm]]
+\end{forest}};
+\node[font=\small] at (14.0,-6.2) {(3) \texttt{int * [10] z;}};
+\end{tikzpicture}
+\end{document}

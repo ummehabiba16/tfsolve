@@ -1,0 +1,28 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta}
+\begin{document}
+\begin{forest}
+for tree={align=center,font=\small,l=0.7cm,s sep=5mm,edge={->,>=Stealth}},
+tm/.style={font=\ttfamily\small,inner sep=1pt},
+[{F\\{\scriptsize val=43/64}}
+  [0,tm] [.,tm]
+  [{B\\{\scriptsize val=43/64}}
+    [1,tm]
+    [{B\\{\scriptsize val=11/32}}
+      [0,tm]
+      [{B\\{\scriptsize val=11/16}}
+        [1,tm]
+        [{B\\{\scriptsize val=3/8}}
+          [0,tm]
+          [{B\\{\scriptsize val=3/4}}
+            [1,tm]
+            [{B\\{\scriptsize val=1/2}} [1,tm]]
+          ]
+        ]
+      ]
+    ]
+  ]
+]
+\end{forest}
+\end{document}

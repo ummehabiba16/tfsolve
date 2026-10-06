@@ -1,0 +1,10 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\begin{document}
+\begin{forest}
+for tree={align=center,font=\scriptsize,l=0.65cm,s sep=1.2mm,edge={->,>=Stealth},inner sep=1.5pt},
+hl/.style={draw,rounded corners=2pt,fill=yellow!35},
+[f(6) [f(5) [f(4) [f(3) [f(2) [{f(1)\\{\tiny\#1}}] [f(0)]] [{f(1)\\{\tiny\#2}}]] [f(2) [{f(1)\\{\tiny\#3}}] [f(0)]]] [f(3) [f(2) [{f(1)\\{\tiny\#4}},hl] [f(0)]] [{f(1)}]]] [f(4) [f(3) [f(2) [{f(1)}] [f(0)]] [{f(1)}]] [f(2) [{f(1)}] [f(0)]]]]
+\end{forest}
+\end{document}

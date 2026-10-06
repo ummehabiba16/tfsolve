@@ -1,0 +1,27 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta}
+\begin{document}
+\begin{forest}
+for tree={align=center,font=\small,l=0.9cm,s sep=3mm,edge={->,>=Stealth}},
+tm/.style={font=\ttfamily\small,inner sep=1pt},
+[{E\\{\scriptsize val=11}}
+  [{T\\{\scriptsize val=15}}
+    [{F\\{\scriptsize val=3}} [{digit\\{\scriptsize lexval=3}}]]
+    [{$T'$\\{\scriptsize inh=3, syn=15}}
+      [{$*$},tm]
+      [{F\\{\scriptsize val=5}} [{digit\\{\scriptsize lexval=5}}]]
+      [{$T'_1$\\{\scriptsize inh=15, syn=15}} [{$\epsilon$},tm]]
+    ]
+  ]
+  [{$E'$\\{\scriptsize inh=15, syn=11}}
+    [{$-$},tm]
+    [{T\\{\scriptsize val=4}}
+      [{F\\{\scriptsize val=4}} [{digit\\{\scriptsize lexval=4}}]]
+      [{$T'$\\{\scriptsize inh=4, syn=4}} [{$\epsilon$},tm]]
+    ]
+    [{$E'_1$\\{\scriptsize inh=11, syn=11}} [{$\epsilon$},tm]]
+  ]
+]
+\end{forest}
+\end{document}

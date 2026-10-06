@@ -1,0 +1,23 @@
+schema: 1
+course: CSE309
+kind: term-final
+exam_date: 2017-08-13
+session: 2016-17
+level_term: L3T1
+students_dept: CSE
+full_marks: 210
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+  B:
+    questions: [5, 6, 7, 8]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+source: {file: CSE 309 merged.pdf, pages: 41-46}
+notes: ["Subject printed as 'CSE 309 (Compiler)'; term printed as 'L-3/T-1'; examinations printed as '2016-2017'.", "Section A header: Symbols have their usual meanings. Setters of this session are not identified yet."]
+transcription:
+  by: []
+  checked_by: []

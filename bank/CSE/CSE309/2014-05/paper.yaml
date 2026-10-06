@@ -1,0 +1,23 @@
+schema: 1
+course: CSE309
+kind: term-final
+exam_date: 2014-05-24
+session: 2012-13
+level_term: L3T1
+students_dept: CSE
+full_marks: 210
+duration: 3h
+sections:
+  A:
+    questions: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    answer_any: 7
+    rule: There are NINE questions in this section. Answer any SEVEN.
+  B:
+    questions: [10, 11, 12, 13]
+    answer_any: 3
+    rule: There are FOUR questions in this section. Answer any THREE.
+source: {file: CSE 309 merged.pdf, pages: 55-59}
+notes: ["Subject printed as 'CSE 309 (Compiler)'; term printed as 'L-3/T-1'; examinations printed as '2012-2013'.", "Setters of this session are not identified yet."]
+transcription:
+  by: []
+  checked_by: []
