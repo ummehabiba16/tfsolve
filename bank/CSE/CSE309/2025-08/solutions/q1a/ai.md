@@ -7,6 +7,8 @@ created: 2026-10-01
 status: unverified
 summary: "Relocatable code = object code whose addresses are relative and fixed up later; the linker resolves foo/bar/baz across main.o, libfoo, libbar and records dynamic references; the loader maps the executable and shared libraries into memory, relocates them and binds the shared-library symbols before main runs."
 sources: ["MMA introduction slides 27-39 (Assembler, Relocatable Machine Code, Linker and Loader)", "Dragon book 2e sec. 1.1"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/linkload.png) showing how the three object files are linked and loaded; the answer itself is unchanged."
 ---
 **Relocatable machine code.** The compiler (with the assembler) turns each `.c` file into machine code whose addresses start at 0 and are *relative*. Calls to functions defined elsewhere are left as **unresolved external references**, with relocation entries that say "patch this address later".
 
@@ -15,6 +17,8 @@ sources: ["MMA introduction slides 27-39 (Assembler, Relocatable Machine Code, L
 - `libbar.o` contains `baz` and `bar`; `bar` calls `baz` internally.
 
 None of these can run on its own: the addresses are not final and some symbols are missing.
+
+![Linking and loading of main.o, libfoo.o and libbar.o](figures/linkload.png)
 
 **Linker.** The linker combines relocatable object files and libraries into one executable:
 

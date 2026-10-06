@@ -7,6 +7,8 @@ created: 2026-10-01
 status: unverified
 summary: "Motivation: separate the source-language-dependent analysis (front end: lexical, syntax, semantic analysis, intermediate code) from the machine-dependent synthesis (back end: optimisation, code generation) via an IR, so front and back ends can be reused/combined (m+n instead of m x n) and each is simpler. Symbol table: the front end creates entries (lexer inserts identifiers, parser/semantic analyser add type, scope, storage size, offset), and the back end reads them (addresses, sizes, types) to generate code."
 sources: ["MMA introduction slides 40-98 (The Structure of a Compiler, Symbol-Table Management, Grouping of Phases)", "Dragon book 2e sec. 1.2, 1.2.8"]
+changes:
+  - "2026-10-06: replaced the ASCII drawing by a TikZ figure (figures/phases.png); the answer itself is unchanged."
 ---
 **The two groups**
 
@@ -22,15 +24,7 @@ sources: ["MMA introduction slides 40-98 (The Structure of a Compiler, Symbol-Ta
 
 **Interaction with the symbol table** (a data structure with one record per identifier, accessible to all phases):
 
-```text
-   FRONT END                          BACK END
-   lexical analyzer   --+        +--  code optimizer
-   syntax analyzer    --+        |
-   semantic analyzer  --+--------+--  code generator
-   IR generator       --+   |
-                            v
-                       SYMBOL TABLE
-```
+![Front end, back end and the symbol table](figures/phases.png)
 
 - **Lexical analyser:** when it finds an identifier, it enters the lexeme in the symbol table (if not already there) and returns `<id, pointer to entry>`.
 - **Syntax analyser:** may record the kind of name (variable, function, type) and its scope; declarations are processed in the parser's semantic actions.

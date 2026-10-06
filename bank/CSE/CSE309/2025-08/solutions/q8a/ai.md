@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "Temporal locality: recently accessed data is likely to be accessed again soon; spatial locality: data near a recently accessed location is likely to be accessed soon. A GC improves locality by compacting/copying live objects into a contiguous region (removing fragmentation) and placing objects that refer to each other close together. Root set: data the program can access directly without dereferencing, i.e. static/global variables, variables on the run-time stack (locals, parameters) and registers. LookupNewLocation(o): if NewLocation(o) = NULL { NewLocation(o) = free; free = free + sizeof(o); copy o to NewLocation(o); } return NewLocation(o)."
 sources: ["KMS Chapter 7 slides 35-36 (Locality in Programs), 46-53 (Preliminaries, Reachability), 85-92 (Copying Garbage Collectors, Cheney)", "Dragon book 2e sec. 7.4.3, 7.5.2, 7.6.4 (Fig. 7.26)"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/cheney.png) for the From/To spaces and the scan pointers; the answer itself is unchanged."
 ---
 **Locality of reference.**
 
@@ -28,6 +30,8 @@ Caches and pages exploit both, so the layout of heap data matters.
 - machine registers holding pointers.
 
 Every object reachable from the root set by following pointers is live; all others are garbage.
+
+![Spaces and pointers of Cheney's copying collector](figures/cheney.png)
 
 **Completing Cheney's copying collector.** `NewLocation(o)` is NULL while `o` has not been copied. `free` is the next free address in To space. `LookupNewLocation` copies an object the first time it is reached and returns its new address:
 

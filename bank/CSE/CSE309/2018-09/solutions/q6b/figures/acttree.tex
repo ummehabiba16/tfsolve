@@ -1,0 +1,14 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta,positioning,calc,decorations.pathreplacing,shapes.geometric}
+\begin{document}
+\begin{forest}
+for tree={align=center,font=\scriptsize,l=0.8cm,s sep=2mm,edge={->,>=Stealth},inner sep=2pt,draw,rounded corners=2pt},
+live/.style={fill=yellow!40,thick},
+done/.style={fill=green!15},
+todo/.style={fill=gray!15,dashed},
+[{main},live [{r},done ][{q(1,9)},live [{p(1,9)},done ][{q(1,3)},live [{p(1,3)},done ][{q(1,0)},done ][{q(2,3)},live [{p(2,3)},done ][{q(2,1)},done ][{q(3,3)},live ]]][{q(5,9)},todo [{p(5,9)},todo ][{q(5,5)},todo ][{q(7,9)},todo [{p(7,9)},todo ][{q(7,7)},todo ][{q(9,9)},todo ]]]]]
+\end{forest}
+\vspace{0.2cm}
+\end{document}

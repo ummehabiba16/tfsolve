@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "Parse (x != y && x > 20) || x < 100 (|| written II). Starting at 200: 200: if x != y goto 202; 201: goto 204; 202: if x > 20 goto \\_; 203: goto 204; 204: if x < 100 goto \\_; 205: goto \\_. M (for &&).instr = 202, M (for ||).instr = 204; B.truelist = {202, 204}, B.falselist = {205}."
 sources: ["KMS Chapter 6 slides 104-114 (Backpatching, Backpatching for Boolean Expression)", "Dragon book 2e sec. 6.7.2 (Example 6.24, Fig. 6.44)"]
+changes:
+  - "2026-10-06: replaced the ASCII drawing by a TikZ figure (figures/annotated.png); the answer itself is unchanged."
 ---
 **Assumptions.** The operator printed as "II" is `||`. The scheme of Q12(a) is used, and the first instruction generated gets the number 200. The true and false exits of the whole expression are left unfilled (they are filled by the enclosing statement).
 
@@ -26,20 +28,7 @@ sources: ["KMS Chapter 6 slides 104-114 (Backpatching, Backpatching for Boolean 
 
 **Annotated parse tree:**
 
-```text
-                        B   t = {202, 204}   f = {205}
-              __________|________________________
-             /                  |       |        \
-      B3  t = {202}            ||    M2         B4  t = {204}
-          f = {201, 203}             instr=204      f = {205}
-     ________|____________                        |
-    /       |    |        \                    x < 100
-  B1      &&    M1        B2
- t={200}       instr=202  t={202}
- f={201}                  f={203}
-   |                        |
- x != y                   x > 20
-```
+![Annotated parse tree](figures/annotated.png)
 
 **Resulting code:**
 

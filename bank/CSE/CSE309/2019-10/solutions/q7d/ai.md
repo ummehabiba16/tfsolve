@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "Root set: everything the program can reach without following pointers (static/global variables, variables on the stack, registers). With A -> D deleted and roots X, Y, marking from A and B reaches A, B, E, C, H, I; D, F, G stay unmarked and are freed by the sweep. Mark-and-compact moves live objects within the same heap (several passes, order kept); Cheney copies live objects into a separate semispace in one pass over the live objects only (needs half the memory as reserve)."
 sources: ["KMS Chapter 7 slides 46-53, 65-70, 79-93 (Reachability, Mark-and-Sweep, Relocating and Copying Collectors)", "Dragon book 2e sec. 7.5.2, 7.6.1 (Algorithm 7.12), 7.6.3-7.6.4"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/network.png) showing the marked and the unmarked objects; the answer itself is unchanged."
 ---
 **Root set (2 marks).** The data that the program can access **directly, without dereferencing any pointer**: static (global) variables, the variables and temporaries in the activation records on the run-time stack, and the machine registers. In the figure, $X$ and $Y$ are the roots. Every object reachable from them by following pointers is live.
 
@@ -27,6 +29,8 @@ sources: ["KMS Chapter 7 slides 46-53, 65-70, 79-93 (Reachability, Mark-and-Swee
 | 6 | I | E (already marked) | none | empty |
 
 Marked (reachable): **A, B, C, E, H, I**.
+
+![Network after marking](figures/network.png)
 
 *Sweep phase:* scan the whole heap chunk by chunk.
 

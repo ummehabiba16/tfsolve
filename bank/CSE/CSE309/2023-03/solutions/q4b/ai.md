@@ -7,6 +7,8 @@ created: 2026-10-01
 status: unverified
 summary: "14 LR(1) item sets I0-I13; the key ones are I6 = {[A -> c., d], [B -> c., e]} (after ac) and I9 = {[A -> c., e], [B -> c., d]} (after bc)."
 sources: ["MMA syntax analysis slides 407-478 (Canonical LR(1) Items, Constructing LR(1) Sets of Items)", "Dragon book 2e sec. 4.7.2, Example 4.58"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/lr1.png) drawing the LR(1) automaton described by the table; the answer itself is unchanged."
 ---
 Augment and number the productions:
 
@@ -32,5 +34,7 @@ Closure: for $[X \to \alpha \cdot Y\beta, x]$ add $[Y \to \cdot\gamma, y]$ for $
 | $I_{11}$ | $[S \to aBe \cdot, \$]$ | |
 | $I_{12}$ | $[S \to bAe \cdot, \$]$ | |
 | $I_{13}$ | $[S \to bBd \cdot, \$]$ | |
+
+![Canonical LR(1) automaton](figures/lr1.png)
 
 $I_6$ and $I_9$ have the same core $\{A \to c\cdot, B \to c\cdot\}$ but different lookaheads. This is what makes the grammar LR(1) but not LALR(1) (see part (c)).

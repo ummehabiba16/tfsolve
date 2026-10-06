@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "DAG: \\* node (b0, c0) labelled d; =[] node (a0, i0) labelled e, b; + node (e, d) labelled f; []= node (a0, j0, e) for a[j] = b, which kills the earlier a[i] node, so a new =[] (a0, i0) node is labelled c. With d, f dead: e = a[i]; b = e; a[j] = e; c = a[i]."
 sources: ["KMS Chapter 8 slides 40-50 (DAG representation of Basic Blocks, Representation of Array References)", "Dragon book 2e sec. 8.5.1-8.5.5 (Example 8.12)"]
+changes:
+  - "2026-10-06: replaced the ASCII drawing of the DAG by a TikZ figure (figures/dag.png); the answer itself is unchanged."
 ---
 **Use of DAGs for basic blocks.** Build a DAG with one leaf per initial value and one node per distinct operation, re-using an existing node when the same operator with the same children is seen again. This lets us:
 
@@ -28,13 +30,7 @@ Array accesses need care: `x = a[i]` creates an `=[]` node, and an assignment `a
 | `a[j] = b` | leaf $j_0$; node $n_4$: `[]=`($a_0$, $j_0$, $n_2$). This **kills** $n_2$ for further reuse |
 | `c = a[i]` | $n_2$ is killed, so create a new node $n_5$: `=[]`($a_0$, $i_0$), label c (it must follow $n_4$) |
 
-```text
-     n3 (+) f            n4 ([]=)                n5 (=[]) c
-      /   \             /   |    \                 /   \
- n1 (*) d  n2 (=[]) e,b   a0   j0  n2            a0    i0
-   /  \        /  \
-  b0   c0     a0   i0          (n5 must come after n4)
-```
+![DAG of the basic block](figures/dag.png)
 
 Note that `b` gets a new value, so the leaf $b_0$ (old `b`) is used by $n_1$, while the label b now sits on $n_2$.
 

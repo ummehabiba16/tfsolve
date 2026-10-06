@@ -1,0 +1,20 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta,positioning,calc,decorations.pathreplacing,shapes.geometric}
+\begin{document}
+\begin{forest}
+for tree={align=center,font=\small,l=0.8cm,s sep=4mm,edge={->,>=Stealth}},
+tm/.style={font=\ttfamily\small,inner sep=1pt},
+[{S\\{\tiny reduction 7}\\{\tiny handle SS+}}
+  [{S\\{\tiny 1}} [a,tm]]
+  [{S\\{\tiny reduction 6}\\{\tiny handle SS+}}
+    [{S\\{\tiny reduction 4}\\{\tiny handle SS*}}
+      [{S\\{\tiny 2}} [a,tm]]
+      [{S\\{\tiny 3}} [a,tm]]
+      [{$*$},tm]]
+    [{S\\{\tiny 5}} [a,tm]]
+    [{$+$},tm]]
+  [{$+$},tm]]
+\end{forest}
+\end{document}

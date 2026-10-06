@@ -1,0 +1,30 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric}
+\begin{document}
+\begin{tikzpicture}[>=Stealth,font=\scriptsize,x=1.000cm,y=1.000cm,
+ box/.style={draw,rounded corners=2pt,align=left,inner sep=3pt,fill=blue!5},
+ circ/.style={draw,circle,align=center,inner sep=1pt,minimum size=0.75cm,fill=blue!5},
+ lab/.style={font=\scriptsize,inner sep=1pt,fill=white,fill opacity=0.85,text opacity=1}]
+\node[box] (b1) at (0.000,0.000) {\textbf{B1}\\\texttt{t1 = n - 1}\\\texttt{t11 = t1 * 8}\\\texttt{t12 = n * 8}\\\texttt{t2 = 0}};
+\node[box] (b2) at (0.000,-2.000) {\textbf{B2}\\\texttt{iffalse t2 \textless{} t11 goto B9}};
+\node[box] (b3) at (0.000,-3.300) {\textbf{B3}\\\texttt{t4 = t2 + 8}};
+\node[box] (b4) at (0.000,-4.600) {\textbf{B4}\\\texttt{iffalse t4 \textless{} t12 goto B8}};
+\node[box] (b5) at (0.000,-6.500) {\textbf{B5}\\\texttt{t3 = a[t2]}\\\texttt{t5 = a[t4]}\\\texttt{iffalse t3 \textgreater{} t5 goto B7}};
+\node[box] (b6) at (4.000,-8.000) {\textbf{B6}\\\texttt{a[t2] = t5}\\\texttt{a[t4] = t3}};
+\node[box] (b7) at (0.000,-8.800) {\textbf{B7}\\\texttt{t4 = t4 + 8}\\\texttt{goto B4}};
+\node[box] (b8) at (3.900,-4.600) {\textbf{B8}\\\texttt{t2 = t2 + 8}\\\texttt{goto B2}};
+\node[box] (b9) at (-3.600,-2.000) {\textbf{B9}\\\texttt{(exit)}};
+\draw[->] (b1) --  (b2);
+\draw[->] (b2) --  (b3);
+\draw[->] (b2) --  (b9);
+\draw[->] (b3) --  (b4);
+\draw[->] (b4) --  (b5);
+\draw[->] (b4) --  (b8);
+\draw[->] (b5) to[bend left=5]  (b6);
+\draw[->] (b5) to[bend left=12]  (b7);
+\draw[->] (b6) --  (b7);
+\draw[->] (b7) to[bend left=55]  (b4);
+\draw[->] (b8) to[bend right=25]  (b2);
+\end{tikzpicture}
+\end{document}

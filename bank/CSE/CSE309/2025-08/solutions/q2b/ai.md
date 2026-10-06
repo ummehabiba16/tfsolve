@@ -7,6 +7,8 @@ created: 2026-10-01
 status: unverified
 summary: "No, an IR is not strictly necessary (a one-pass compiler can emit target code directly), but it brings retargetability (m front ends x n back ends needs m+n not mxn), machine-independent optimisation, simpler code generation and modular design; examples: syntax trees, three-address code, SSA, JVM bytecode, LLVM IR."
 sources: ["MMA introduction slides 76-80 (Intermediate Code Generation)", "Dragon book 2e sec. 1.2.4, 2.8, 6.1"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/ir.png) for the m + n versus m x n argument; the answer itself is unchanged."
 ---
 **Strictly necessary? No.** A simple one-pass compiler can translate source directly into target code during parsing (syntax-directed translation straight to assembly). Early compilers and some small compilers do this. But almost every production compiler uses one or more IRs, because of the benefits below.
 
@@ -33,5 +35,7 @@ and the repeated `b * c` is visible and removed.
 4. **Modularity and clarity.** Each phase has a well-defined input and output, so phases can be developed and tested separately.
 
 5. **Portability and interpretation.** An IR can be executed directly by a virtual machine, e.g. Java bytecode on the JVM: compile once, run anywhere.
+
+![Front ends and back ends connected through an IR](figures/ir.png)
 
 **Kinds of IR:** high-level (syntax trees, DAGs), medium (three-address code: quadruples/triples, SSA form), low-level (close to machine code); also stack-based bytecode.

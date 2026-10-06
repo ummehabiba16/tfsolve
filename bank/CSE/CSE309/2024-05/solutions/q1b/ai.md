@@ -7,6 +7,8 @@ created: 2026-10-01
 status: unverified
 summary: "Tokens: id cse123 (0-5), -- (6-7), ++ (8-9), number 12.45 (10-14), == (15-16), white space (17), number 1 (18), white space (19); forward runs one past an id/number/space and is retracted, while --, ++ and == are complete without lookahead in C."
 sources: ["MMA lexical analysis slides 37-49 (Input Buffering), 93-110 (transition-diagram lexer)", "Dragon book 2e sec. 3.2, 3.4"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/strip.png) showing the lexemes in the buffer; the answer itself is unchanged."
 ---
 Positions in the buffer:
 
@@ -14,6 +16,8 @@ Positions in the buffer:
 position: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19
 char:     c s e 1 2 3 - - + + 1  2  .  4  5  =  =  _  1  _
 ```
+
+![Buffer contents with the lexemes and tokens found](figures/strip.png)
 
 Rules (C, longest match): `lexemeBegin` marks the start of a lexeme; `forward` scans until the lexeme is certain. For identifiers, numbers and white space, the lexer must read **one character beyond** the lexeme and then retract `forward`. For `--`, `++` and `==`, C has no longer token beginning with them, so the second character completes the token with no further lookahead. After each token, `lexemeBegin` is set to the character after the lexeme.
 

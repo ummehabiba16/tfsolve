@@ -7,6 +7,8 @@ created: 2026-10-01
 status: unverified
 summary: "Yes, but only reduce/reduce conflicts: merging cannot create a shift/reduce conflict (the shift item has the same core in every merged state, so the conflict would already be in the LR(1) state), but it can create reduce/reduce ones, e.g. S -> aAd | bBd | aBe | bAe, A -> c, B -> c: states {[A->c.,d],[B->c.,e]} and {[A->c.,e],[B->c.,d]} merge into a conflict on d and e."
 sources: ["MMA syntax analysis slides 495-520 (Constructing LALR Parsing Tables)", "Dragon book 2e sec. 4.7.4 (Example 4.58)"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/merge.png) for the merged LALR state; the answer itself is unchanged."
 ---
 **Yes, it is possible, but only a reduce/reduce conflict, never a shift/reduce conflict.**
 
@@ -37,6 +39,8 @@ Each has no conflict: reduce $A \to c$ on $d$ and $B \to c$ on $e$ in $I_a$, the
 Both have the core $\{A \to c\cdot,\ B \to c\cdot\}$, so LALR merges them:
 
 $$I_{ab} = \{[A \to c \cdot, d/e],\ [B \to c \cdot, d/e]\}$$
+
+![Merging two LR(1) states with the same core gives a reduce/reduce conflict](figures/merge.png)
 
 Now on $d$ (and on $e$) the parser can reduce by either $A \to c$ or $B \to c$: a **reduce/reduce conflict**. The grammar is LR(1) but **not LALR(1)**.
 

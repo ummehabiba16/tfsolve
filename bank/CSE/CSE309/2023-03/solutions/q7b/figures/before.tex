@@ -1,0 +1,40 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta,positioning,calc,decorations.pathreplacing,shapes.geometric}
+\begin{document}
+\begin{tikzpicture}[>=Stealth,font=\small]
+\node[draw,minimum width=1.15cm,minimum height=0.7cm,fill=blue!10] (oA) at (0.00,0) {A};
+\node[font=\tiny,gray,below=0.05cm of oA] {0};
+\node[draw,minimum width=1.15cm,minimum height=0.7cm,fill=blue!10] (oB) at (1.15,0) {B};
+\node[font=\tiny,gray,below=0.05cm of oB] {100};
+\node[draw,minimum width=1.15cm,minimum height=0.7cm,fill=gray!25] (oC) at (2.30,0) {C};
+\node[font=\tiny,gray,below=0.05cm of oC] {200};
+\node[draw,minimum width=1.15cm,minimum height=0.7cm,fill=blue!10] (oD) at (3.45,0) {D};
+\node[font=\tiny,gray,below=0.05cm of oD] {300};
+\node[draw,minimum width=1.15cm,minimum height=0.7cm,fill=blue!10] (oE) at (4.60,0) {E};
+\node[font=\tiny,gray,below=0.05cm of oE] {400};
+\node[draw,minimum width=1.15cm,minimum height=0.7cm,fill=gray!25] (oF) at (5.75,0) {F};
+\node[font=\tiny,gray,below=0.05cm of oF] {500};
+\node[draw,minimum width=1.15cm,minimum height=0.7cm,fill=blue!10] (oG) at (6.90,0) {G};
+\node[font=\tiny,gray,below=0.05cm of oG] {600};
+\node[draw,minimum width=1.15cm,minimum height=0.7cm,fill=blue!10] (oH) at (8.05,0) {H};
+\node[font=\tiny,gray,below=0.05cm of oH] {700};
+\node[draw,minimum width=1.15cm,minimum height=0.7cm,fill=blue!10] (oI) at (9.20,0) {I};
+\node[font=\tiny,gray,below=0.05cm of oI] {800};
+\draw[->,black] (oA.north) to[bend left=30] (oB.north);
+\draw[->,black] (oB.north) to[bend left=35] (oD.north);
+\draw[->,black] (oB.north) to[bend left=40] (oE.north);
+\draw[->,gray] (oC.north) to[bend left=35] (oE.north);
+\draw[->,gray] (oC.north) to[bend left=40] (oF.north);
+\draw[->,black] (oD.north) to[bend left=40] (oG.north);
+\draw[->,black] (oE.north) to[bend left=40] (oH.north);
+\draw[->,gray] (oF.north) to[bend left=35] (oH.north);
+\draw[->,black] (oG.south) to[bend left=35] (oE.south);
+\draw[->,black] (oG.north) to[bend left=35] (oI.north);
+\draw[->,black] (oH.north) to[bend left=30] (oI.north);
+\node[draw,fill=red!10,font=\footnotesize] (x) at (-1.4,1.6) {root set $X$};
+\draw[->] (x) -- (oA.north west);
+\node[font=\scriptsize,anchor=west] at (0,-1.3) {From space, 100 bytes per object; C and F (grey) are unreachable after A$\to$C is deleted.};
+\end{tikzpicture}
+\end{document}

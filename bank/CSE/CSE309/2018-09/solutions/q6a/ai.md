@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "Taking unary minus to bind tighter than +, a = -(b) + c parses as S -> id = E with E -> E1 + E2, E1 -> - E3, E3 -> ( E4 ), E4 -> id(b), E2 -> id(c). Attributes: E4.addr = b, E3.addr = b, E1.addr = t1 (code t1 = minus b), E2.addr = c, E.addr = t2 (code t1 = minus b; t2 = t1 + c); S.code adds a = t2. Generated code: t1 = minus b; t2 = t1 + c; a = t2."
 sources: ["KMS Chapter 6 slides 52-62 (Three Address Code Generation, Translation of Expressions)", "Dragon book 2e sec. 6.4.1 (Fig. 6.19, Example 6.11)"]
+changes:
+  - "2026-10-06: replaced the ASCII tree by a TikZ annotated parse tree (attributes unchanged)"
 ---
 **Assumptions.** The grammar is ambiguous. Use the usual convention that unary minus has higher precedence than `+`, so `-(b) + c` means `(-(b)) + c`. Temporaries are numbered t1, t2, ... in creation order.
 
@@ -14,25 +16,7 @@ sources: ["KMS Chapter 6 slides 52-62 (Three Address Code Generation, Translatio
 
 **Annotated parse tree** (`addr` and `code` at each internal node):
 
-```text
-S   code = t1 = minus b || t2 = t1 + c || a = t2
-|-- id (a)
-|-- =
-|-- E   addr = t2
-|   |   code = t1 = minus b || t2 = t1 + c
-|   |-- E1  addr = t1
-|   |   |   code = t1 = minus b
-|   |   |-- -
-|   |   `-- E3  addr = b, code = ''
-|   |       |-- (
-|   |       |-- E4  addr = b, code = ''
-|   |       |   `-- id (b)
-|   |       `-- )
-|   |-- +
-|   `-- E2  addr = c, code = ''
-|       `-- id (c)
-`-- ;
-```
+![Annotated parse tree of a = -(b) + c; with addr and code](figures/annotated.png)
 
 **Evaluation bottom-up:**
 

@@ -1,0 +1,16 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta,positioning,calc,decorations.pathreplacing,shapes.geometric}
+\begin{document}
+\begin{tikzpicture}[>=Stealth,font=\small]
+\node[draw,minimum width=1.20cm,minimum height=0.7cm,fill=blue!12] (a) at (0.00,0.00) {A};
+\node[draw,minimum width=1.20cm,minimum height=0.7cm,fill=blue!12] (c) at (1.20,0.00) {C};
+\node[draw,minimum width=1.20cm,minimum height=0.7cm,fill=blue!12] (e) at (2.40,0.00) {E};
+\node[draw,minimum width=3.6cm,minimum height=0.7cm] at (4.8,0) {free};
+\node[font=\tiny,gray,below=0.02cm of a] {0}; \node[font=\tiny,gray,below=0.02cm of c] {100}; \node[font=\tiny,gray,below=0.02cm of e] {200};
+\node[draw,fill=red!10,font=\footnotesize] (root) at (-1.8,1.4) {root set};
+\draw[->] (root) -- (a); \draw[->,bend left=30] (a) to (c); \draw[->,bend left=30] (c) to (e);
+\node[font=\scriptsize,anchor=west] at (7.0,0) {after: mark, compute NewLocation, update pointers, slide};
+\end{tikzpicture}
+\end{document}

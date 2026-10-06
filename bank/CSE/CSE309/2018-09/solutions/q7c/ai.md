@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "Assuming doSomething() is called on a Derived object (and the classes are in their own files), the output is 4, 2, 3, 6: inside Derived, publicBaseInt finds Derived's own field (4), which hides Base's (1); baseInt is found in the superclass Base (2); derivedInt is Derived's field (3); after the local declaration int publicBaseInt = 6, the local hides the field, giving 6. Justified with chained symbol tables: method scope -> Derived class table -> Base class table, searched innermost first."
 sources: ["MMA introduction slides 87-89 (Symbol-Table Management)", "Dragon book 2e sec. 1.6.3, 2.7.1 (Symbol Table Per Scope), 6.3.6"]
+changes:
+  - "2026-10-06: replaced the ASCII chain by a TikZ figure of the linked symbol tables"
 ---
 **Assumptions.** `doSomething()` is called on an object of class `Derived` (e.g. `new Derived().doSomething();`). The two public classes are in separate files, as Java requires.
 
@@ -21,15 +23,7 @@ sources: ["MMA introduction slides 87-89 (Symbol-Table Management)", "Dragon boo
 
 **Justification with chained symbol tables (one table per scope).** Each scope has its own symbol table, linked to the table of the enclosing scope. A name is looked up in the **innermost** table first; if it is not found, the search continues outward along the chain. For a class, the enclosing table is that of its superclass.
 
-```text
- method doSomething (local scope)      { publicBaseInt -> local, value 6 }   (only after its declaration)
-          |
-          v
- class Derived                          { derivedInt -> 3, publicBaseInt -> 4 }
-          |
-          v
- class Base (superclass)                { publicBaseInt -> 1, baseInt -> 2 }
-```
+![Chain of symbol tables: method, Derived, Base](figures/chain.png)
 
 | Statement | Lookup | Found in | Printed |
 |:--|:--|:--|:-:|

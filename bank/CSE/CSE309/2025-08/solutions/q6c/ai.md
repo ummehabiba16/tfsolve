@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "An activation record holds actual parameters, returned value, control link, access link, saved machine status (return address, registers), local data and temporaries. The calling sequence allocates the AR and fills it in (caller: parameters, return address, old top\\_sp; callee: saved registers, locals); the return sequence restores the machine state and returns control (callee stores the result, restores top\\_sp and registers, jumps to the return address; caller reads the result). Principles: values exchanged between caller and callee go at the start of the callee's AR, fixed-length items (control link, access link, machine status) in the middle, variable-length items at the end, and top\\_sp points to the end of the fixed-length fields."
 sources: ["KMS Chapter 7 slides 17-27 (Activation Records, Calling and Return Sequence, Principles of Designing Calling Sequences)", "Dragon book 2e sec. 7.2.3-7.2.4 (Figs. 7.5, 7.7)"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/record.png) for the activation record layout; the answer itself is unchanged."
 ---
 **Contents of an activation record (AR)** for one call of a procedure, from the caller's end to the callee's end:
 
@@ -19,6 +21,8 @@ sources: ["KMS Chapter 7 slides 17-27 (Activation Records, Calling and Return Se
 | Saved machine status | Return address (old program counter) and registers that must be restored |
 | Local data | The procedure's local variables |
 | Temporaries | Values of expressions that do not fit in registers |
+
+![Layout of an activation record](figures/record.png)
 
 **Calling sequence:** the code that **allocates** an AR on the stack and **enters** information in its fields when a procedure is called. Part is executed by the caller, part by the callee:
 

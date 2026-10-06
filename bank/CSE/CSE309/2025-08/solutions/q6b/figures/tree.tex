@@ -1,0 +1,25 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta,positioning,calc,decorations.pathreplacing,shapes.geometric}
+\begin{document}
+\begin{forest}
+for tree={align=center,font=\small,l=0.8cm,s sep=3mm,edge={->,>=Stealth}},
+tm/.style={font=\ttfamily\small,inner sep=1pt},
+act/.style={draw,dashed,rounded corners=2pt,font=\footnotesize,inner sep=2pt,fill=yellow!15},
+[L
+ [E
+  [{print('+')},act]
+  [E [T [F [digit\\{\scriptsize 1}] [{print(1)},act]]]]
+  [{$+$},tm]
+  [T
+    [{print('*')},act]
+    [T [F [digit\\{\scriptsize 2}] [{print(2)},act]]]
+    [{$*$},tm]
+    [F [digit\\{\scriptsize 3}] [{print(3)},act]]
+  ]
+ ]
+ [n,tm]
+]
+\end{forest}
+\end{document}

@@ -7,8 +7,12 @@ created: 2026-10-01
 status: unverified
 summary: "With buffer pairs the lookahead (forward pointer) can move at most one buffer length N beyond lexemeBegin, so the buffer size limits the maximum lexeme length (identifiers, string literals) and the amount of lookahead the language can require; a language with long lexemes or unbounded lookahead (e.g. Fortran DO statements) needs larger buffers or a different scheme."
 sources: ["MMA lexical analysis slides 37-49 (Input Buffering, Buffer Pairs, Sentinels)", "Dragon book 2e sec. 3.2"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/buffers.png) for the buffer pair; the answer itself is unchanged."
 ---
 In the buffer-pair scheme, two buffers of $N$ characters each (typically $N$ = one disk block, e.g. 4096) are reloaded alternately. `lexemeBegin` marks the start of the current lexeme, and `forward` scans ahead.
+
+![Buffer pair with sentinels, lexemeBegin and forward](figures/buffers.png)
 
 **Effect of the buffer size:**
 

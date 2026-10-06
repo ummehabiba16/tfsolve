@@ -1,0 +1,11 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta,positioning,calc,decorations.pathreplacing,shapes.geometric}
+\begin{document}
+\begin{forest}
+for tree={align=center,font=\scriptsize,l=0.7cm,s sep=2mm,edge={->,>=Stealth},inner sep=1.5pt},
+leaf/.style={draw,rounded corners=2pt,fill=green!10},
+[main [{binCoeff\\(5,3)} [{(4,2)} [{(3,1)} [{(2,0)\\{\tiny =1}},leaf] [{(2,1)} [{(1,0)\\{\tiny =1}},leaf] [{(1,1)\\{\tiny =1}},leaf]]] [{(3,2)} [{(2,1)} [{(1,0)\\{\tiny =1}},leaf] [{(1,1)\\{\tiny =1}},leaf]] [{(2,2)\\{\tiny =1}},leaf]]] [{(4,3)} [{(3,2)} [{(2,1)} [{(1,0)\\{\tiny =1}},leaf] [{(1,1)\\{\tiny =1}},leaf]] [{(2,2)\\{\tiny =1}},leaf]] [{(3,3)\\{\tiny =1}},leaf]]]]
+\end{forest}
+\end{document}

@@ -7,28 +7,12 @@ created: 2026-10-02
 status: unverified
 summary: "The parse tree is a left-leaning chain of N nodes: N(3): cnt 1, max 3, maxi 0, gt 1; N(3,6): cnt 2, max 6, maxi 1, gt 2; N(..1): cnt 3, max 6, maxi 1, gt 2; N(..2): cnt 4, max 6, maxi 1, gt 2; N(..5): cnt 5, max 6, maxi 1, gt 3; L prints 1 and 3."
 sources: ["KMS Chapter 5 slides 16-22 (Annotated parse tree, Evaluating an SDD)", "Dragon book 2e sec. 5.1.2"]
+changes:
+  - "2026-10-06: replaced the ASCII drawing by a TikZ figure (figures/annotated.png); the answer itself is unchanged."
 ---
 Using the SDD of 1(a). Each $N$ node is annotated with (cnt, max, maxi, gt); each **num** leaf with its value.
 
-```text
-L   [prints maxi = 1, gt = 3]
-|-- {
-|-- N5  [cnt=5, max=6, maxi=1, gt=3]
-|   |-- N4  [cnt=4, max=6, maxi=1, gt=2]
-|   |   |-- N3  [cnt=3, max=6, maxi=1, gt=2]
-|   |   |   |-- N2  [cnt=2, max=6, maxi=1, gt=2]
-|   |   |   |   |-- N1  [cnt=1, max=3, maxi=0, gt=1]
-|   |   |   |   |   `-- num [val=3]
-|   |   |   |   |-- ,
-|   |   |   |   `-- num [val=6]
-|   |   |   |-- ,
-|   |   |   `-- num [val=1]
-|   |   |-- ,
-|   |   `-- num [val=2]
-|   |-- ,
-|   `-- num [val=5]
-`-- }
-```
+![Annotated parse tree for {3, 6, 1, 2, 5}](figures/annotated.png)
 
 **How the values were computed (bottom-up):**
 

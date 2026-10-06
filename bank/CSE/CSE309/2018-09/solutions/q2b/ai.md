@@ -7,26 +7,14 @@ created: 2026-10-01
 status: unverified
 summary: "With one buffer, when forward reaches the end the buffer must be reloaded, overwriting the beginning of the current lexeme still pointed to by lexemeBegin (the lexeme is lost, and retracting forward past the boundary is impossible) unless it is copied first; sentinels do not change this, they only reduce the per-character tests (end-of-buffer and character check in one comparison)."
 sources: ["MMA lexical analysis slides 37-49 (Input Buffering, Buffer Pairs, Sentinels)", "Dragon book 2e sec. 3.2.1-3.2.2"]
+changes:
+  - "2026-10-06: replaced the ASCII drawing by a TikZ figure of the single buffer before and after the reload (answer unchanged)"
 ---
 **Buffer pair (for reference).** Two halves of $N$ characters each. `lexemeBegin` marks the start of the current lexeme and `forward` scans ahead. When `forward` reaches the end of one half, the **other** half is reloaded. The half that holds the start of the lexeme is untouched, so any lexeme of up to $N$ characters survives.
 
 **Single buffer with the same two pointers:**
 
-```text
-  before reload:
-  +---+---+---+---+---+---+---+---+
-  | . | . | . | . | i | n | d | e |   <- end of buffer, lexeme "inde..." not finished
-  +---+---+---+---+---+---+---+---+
-                    ^               ^
-               lexemeBegin        forward (needs next character)
-
-  after reload (whole buffer refilled):
-  +---+---+---+---+---+---+---+---+
-  | x | ; | . | . | . | . | . | . |   <- "inde" is gone
-  +---+---+---+---+---+---+---+---+
-    ^
-  forward          lexemeBegin now points to garbage
-```
+![Single buffer with the two pointers, before and after the reload](figures/single.png)
 
 What would happen:
 

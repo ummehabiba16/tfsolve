@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "With A -> D deleted and roots X, Y: start Unscanned = {A, B}, Unreached = {C, D, E, F, G, H, I}. Scanning A moves E; B moves C; E moves H; C moves I; H and I add nothing. Scanned = {A, B, E, C, H, I}; the objects left in Unreached (D, F, G) are moved to Free, and Scanned becomes the new Unreached list. Time: proportional to the number of reachable objects (no sweep over the whole heap); space: the four lists are linked through the objects' headers, so O(1) extra per object and no extra stack."
 sources: ["KMS Chapter 7 slides 71-73 (Optimizing Mark-and-Sweep, Baker's Mark-and-Sweep)", "Dragon book 2e sec. 7.6.2 (Algorithm 7.14)"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/network.png) showing which objects are reached; the answer itself is unchanged."
 ---
 **Assumptions.** The edges are read from the figure: X $\to$ A, Y $\to$ B, A $\to$ D (deleted), A $\to$ E, B $\to$ C, B $\to$ E, C $\to$ I, D $\to$ F, D $\to$ G, D $\to$ H, E $\to$ H, F $\to$ I, G $\to$ H, H $\to$ I, I $\to$ E. The heap holds the nine objects A-I. The *Unscanned* list is processed first-in first-out, adding objects in alphabetical order.
 
@@ -22,6 +24,8 @@ Steps:
 1. Move the objects referenced by the root set from *Unreached* to *Unscanned*.
 2. While *Unscanned* is not empty: move an object $o$ to *Scanned*; for each object $o'$ referenced by $o$, if $o'$ is in *Unreached*, move it to *Unscanned*.
 3. Finally *Free* = *Free* $\cup$ *Unreached*, and *Unreached* = *Scanned* (ready for the next collection).
+
+![Network of objects after A->D is deleted](figures/network.png)
 
 **Trace (A $\to$ D deleted):**
 

@@ -1,0 +1,37 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric}
+\begin{document}
+\begin{tikzpicture}[>=Stealth,font=\scriptsize,x=1.000cm,y=1.000cm,
+ box/.style={draw,rounded corners=2pt,align=left,inner sep=3pt,fill=blue!5},
+ circ/.style={draw,circle,align=center,inner sep=1pt,minimum size=0.75cm,fill=blue!5},
+ lab/.style={font=\scriptsize,inner sep=1pt,fill=white,fill opacity=0.85,text opacity=1}]
+\node[box] (s0) at (0.000,0.000) {\textbf{$I_{0}$}\\$[S' \to \cdot\,S,\ \$]$\\$[S \to \cdot\,\mathtt{a} A \mathtt{d},\ \$]$\\$[S \to \cdot\,\mathtt{a} B \mathtt{e},\ \$]$\\$[S \to \cdot\,\mathtt{b} A \mathtt{e},\ \$]$\\$[S \to \cdot\,\mathtt{b} B \mathtt{d},\ \$]$};
+\node[box] (s1) at (-2.300,-3.060) {\textbf{$I_{2}$}\\$[S \to \mathtt{a}\,\cdot\,A \mathtt{d},\ \$]$\\$[S \to \mathtt{a}\,\cdot\,B \mathtt{e},\ \$]$\\$[A \to \cdot\,\mathtt{c},\ \mathtt{d}]$\\$[B \to \cdot\,\mathtt{c},\ \mathtt{e}]$};
+\node[box] (s2) at (0.250,-3.060) {\textbf{$I_{3}$}\\$[S \to \mathtt{b}\,\cdot\,A \mathtt{e},\ \$]$\\$[S \to \mathtt{b}\,\cdot\,B \mathtt{d},\ \$]$\\$[A \to \cdot\,\mathtt{c},\ \mathtt{e}]$\\$[B \to \cdot\,\mathtt{c},\ \mathtt{d}]$};
+\node[box] (s3) at (2.550,-3.060) {\textbf{$I_{1}$}\\$[S' \to S\,\cdot,\ \$]$};
+\node[box] (s4) at (-6.225,-5.580) {\textbf{$I_{6}$}\\$[A \to \mathtt{c}\,\cdot,\ \mathtt{d}]$\\$[B \to \mathtt{c}\,\cdot,\ \mathtt{e}]$};
+\node[box] (s5) at (-3.825,-5.580) {\textbf{$I_{4}$}\\$[S \to \mathtt{a} A\,\cdot\,\mathtt{d},\ \$]$};
+\node[box] (s6) at (-1.275,-5.580) {\textbf{$I_{5}$}\\$[S \to \mathtt{a} B\,\cdot\,\mathtt{e},\ \$]$};
+\node[box] (s7) at (1.125,-5.580) {\textbf{$I_{9}$}\\$[A \to \mathtt{c}\,\cdot,\ \mathtt{e}]$\\$[B \to \mathtt{c}\,\cdot,\ \mathtt{d}]$};
+\node[box] (s8) at (3.525,-5.580) {\textbf{$I_{7}$}\\$[S \to \mathtt{b} A\,\cdot\,\mathtt{e},\ \$]$};
+\node[box] (s9) at (6.075,-5.580) {\textbf{$I_{8}$}\\$[S \to \mathtt{b} B\,\cdot\,\mathtt{d},\ \$]$};
+\node[box] (s10) at (-3.825,-7.560) {\textbf{$I_{10}$}\\$[S \to \mathtt{a} A \mathtt{d}\,\cdot,\ \$]$};
+\node[box] (s11) at (-1.275,-7.560) {\textbf{$I_{11}$}\\$[S \to \mathtt{a} B \mathtt{e}\,\cdot,\ \$]$};
+\node[box] (s12) at (1.275,-7.560) {\textbf{$I_{12}$}\\$[S \to \mathtt{b} A \mathtt{e}\,\cdot,\ \$]$};
+\node[box] (s13) at (3.825,-7.560) {\textbf{$I_{13}$}\\$[S \to \mathtt{b} B \mathtt{d}\,\cdot,\ \$]$};
+\draw[->] (s0) -- node[lab,midway] {$\mathtt{a}$} (s1);
+\draw[->] (s0) -- node[lab,midway] {$\mathtt{b}$} (s2);
+\draw[->] (s0) -- node[lab,midway] {$S$} (s3);
+\draw[->] (s1) -- node[lab,midway] {$\mathtt{c}$} (s4);
+\draw[->] (s1) -- node[lab,midway] {$A$} (s5);
+\draw[->] (s1) -- node[lab,midway] {$B$} (s6);
+\draw[->] (s2) -- node[lab,midway] {$\mathtt{c}$} (s7);
+\draw[->] (s2) -- node[lab,midway] {$A$} (s8);
+\draw[->] (s2) -- node[lab,midway] {$B$} (s9);
+\draw[->] (s5) -- node[lab,midway] {$\mathtt{d}$} (s10);
+\draw[->] (s6) -- node[lab,midway] {$\mathtt{e}$} (s11);
+\draw[->] (s8) -- node[lab,midway] {$\mathtt{e}$} (s12);
+\draw[->] (s9) -- node[lab,midway] {$\mathtt{d}$} (s13);
+\end{tikzpicture}
+\end{document}

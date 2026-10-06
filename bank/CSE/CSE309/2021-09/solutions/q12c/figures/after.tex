@@ -1,0 +1,24 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta,positioning,calc,decorations.pathreplacing,shapes.geometric}
+\begin{document}
+\begin{tikzpicture}[>=Stealth,font=\small]
+\node[draw,minimum width=1.10cm,minimum height=0.7cm,fill=blue!12] (a) at (0.00,0.00) {A};
+\node[draw,minimum width=1.10cm,minimum height=0.7cm,fill=blue!12] (b) at (1.10,0.00) {B};
+\node[draw,minimum width=1.10cm,minimum height=0.7cm,fill=blue!12] (d) at (2.20,0.00) {D};
+\node[draw,minimum width=1.10cm,minimum height=0.7cm,fill=blue!12] (e) at (3.30,0.00) {E};
+\node[draw,minimum width=1.10cm,minimum height=0.7cm,fill=blue!12] (g) at (4.40,0.00) {G};
+\node[draw,minimum width=1.10cm,minimum height=0.7cm,fill=blue!12] (h) at (5.50,0.00) {H};
+\node[draw,minimum width=1.10cm,minimum height=0.7cm,fill=blue!12] (i) at (6.60,0.00) {I};
+\node[draw,minimum width=2.2cm,minimum height=0.7cm] at (8.25,0) {free};
+\node[font=\tiny,gray,below=0.05cm of a] {0};
+\node[font=\tiny,gray,below=0.05cm of b] {50};
+\node[font=\tiny,gray,below=0.05cm of d] {100};
+\node[font=\tiny,gray,below=0.05cm of e] {150};
+\node[font=\tiny,gray,below=0.05cm of g] {200};
+\node[font=\tiny,gray,below=0.05cm of h] {250};
+\node[font=\tiny,gray,below=0.05cm of i] {300};
+\node[font=\scriptsize,anchor=west] at (0,-1.1) {after: A 0, B 50, D 100, E 150, G 200, H 250, I 300, free from 350};
+\end{tikzpicture}
+\end{document}

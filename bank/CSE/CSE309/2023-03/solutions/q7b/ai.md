@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "Reachable after deleting A -> C: A, B, D, E, G, H, I (C and F are garbage). Cheney copies breadth-first: NewLocation(A) = 10000, B = 10100, D = 10200, E = 10300, G = 10400, H = 10500, I = 10600 (free ends at 10700); C and F keep NewLocation = NULL. Before: A 0, B 100, ..., I 800 in From space; after: the seven objects packed at 10000-10699 in To space with redirected pointers. Time: proportional to the total size of the reachable objects (here 7 objects), independent of the garbage."
 sources: ["KMS Chapter 7 slides 85-93 (Copying Garbage Collectors, Cheney, Comparing Costs)", "Dragon book 2e sec. 7.6.4 (Fig. 7.26)"]
+changes:
+  - "2026-10-06: replaced the ASCII drawing by a TikZ figure (figures/before.png); the answer itself is unchanged. (heaps before and after)"
 ---
 **Assumptions.** The edges are read from the figure: X $\to$ A, A $\to$ B, A $\to$ C (deleted), B $\to$ D, B $\to$ E, C $\to$ E, C $\to$ F, D $\to$ G, G $\to$ E, E $\to$ H, F $\to$ H, G $\to$ I, H $\to$ I. $X$ is the root set and points only to A. Objects are 100 bytes each, as stated.
 
@@ -14,11 +16,7 @@ sources: ["KMS Chapter 7 slides 85-93 (Copying Garbage Collectors, Cheney, Compa
 
 **Heap before GC (From space):**
 
-```text
-address:  0     100   200   300   400   500   600   700   800   900
-          | A   | B   | C   | D   | E   | F   | G   | H   | I   |
-pointers: A->B; B->D,E; C->E,F; D->G; E->H; F->H; G->E,I; H->I
-```
+![Heap before collection](figures/before.png)
 
 **Cheney's algorithm.** `free` and `unscanned` start at 10000. `LookupNewLocation(o)` copies `o` to `free` the first time it is reached; the region between `unscanned` and `free` is the queue.
 
@@ -41,17 +39,7 @@ pointers: A->B; B->D,E; C->E,F; D->G; E->H; F->H; G->E,I; H->I
 
 **Heap after GC (To space):** all pointers are redirected to the new addresses.
 
-```text
-address:  10000  10100  10200  10300  10400  10500  10600  10700
-          | A    | B    | D    | E    | G    | H    | I    |  free ...
-A(10000) -> B(10100)
-B(10100) -> D(10200), E(10300)
-D(10200) -> G(10400)
-E(10300) -> H(10500)
-G(10400) -> E(10300), I(10600)
-H(10500) -> I(10600)
-root X   -> A(10000)
-```
+![Heap after Cheney's collector](figures/after.png)
 
 C and F are never copied. The whole From space (0-899) becomes free, and the roles of the two semispaces swap for the next collection.
 

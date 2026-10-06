@@ -1,0 +1,19 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta,positioning,calc,decorations.pathreplacing,shapes.geometric}
+\begin{document}
+\begin{forest}
+for tree={align=center,font=\small,l=0.9cm,s sep=4mm,edge={->,>=Stealth}},
+tm/.style={font=\ttfamily\small,inner sep=1pt},
+[{B\\{\scriptsize val=11}}
+  [1,tm]
+  [{R\\{\scriptsize i=1, s=11}}
+    [0,tm]
+    [{$R_1$\\{\scriptsize i=2, s=11}}
+      [1,tm]
+      [{$R_2$\\{\scriptsize i=5, s=11}}
+        [1,tm]
+        [{$R_3$\\{\scriptsize i=11, s=11}} [{$\epsilon$},tm]]]]]]
+\end{forest}
+\end{document}

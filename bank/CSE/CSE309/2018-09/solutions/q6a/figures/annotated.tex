@@ -1,0 +1,23 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta,positioning,calc,decorations.pathreplacing,shapes.geometric}
+\begin{document}
+\begin{forest}
+for tree={align=center,font=\footnotesize,l=1.0cm,s sep=3mm,edge={->,>=Stealth}},
+tm/.style={font=\ttfamily\footnotesize,inner sep=1pt},
+[{S\\{\tiny code = t1 = minus b; t2 = t1 + c; a = t2}}
+  [{id\\{\tiny a}}]
+  [{$=$},tm]
+  [{E\\{\tiny addr=t2}\\{\tiny code = t1 = minus b; t2 = t1 + c}}
+    [{$E_1$\\{\tiny addr=t1}\\{\tiny code = t1 = minus b}}
+      [{$-$},tm]
+      [{$E_3$\\{\tiny addr=b, code=''}}
+        [{$($},tm]
+        [{$E_4$\\{\tiny addr=b, code=''}} [{id\\{\tiny b}}]]
+        [{$)$},tm]]]
+    [{$+$},tm]
+    [{$E_2$\\{\tiny addr=c, code=''}} [{id\\{\tiny c}}]]]
+  [{$;$},tm]]
+\end{forest}
+\end{document}

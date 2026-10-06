@@ -7,8 +7,12 @@ created: 2026-10-01
 status: unverified
 summary: "Popping X and pushing Yk...Y1 (Y1 on top) replaces X in the left-sentential form by the body, with Y1 leftmost; since the stack (top to bottom) after the matched input is always the unexpanded part of the sentential form and X is its leftmost symbol, each output step is exactly one leftmost-derivation step X => Y1...Yk, and the outputs in order form the leftmost derivation."
 sources: ["MMA syntax analysis slides 124-151 (Nonrecursive Predictive Parsing)", "Dragon book 2e sec. 4.4.4 (Algorithm 4.34, Fig. 4.21)"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/model.png) for the parser model; the answer itself is unchanged."
 ---
 **Model of the parser.** The table-driven predictive parser has an input buffer ($w$ followed by \$), a stack (initially $S$ on top of \$), the table $M$, and an output.
+
+![Model of a table-driven predictive parser](figures/model.png)
 
 **Invariant.** At every step,
 

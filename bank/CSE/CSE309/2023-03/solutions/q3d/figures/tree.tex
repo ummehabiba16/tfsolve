@@ -1,0 +1,11 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta,positioning,calc,decorations.pathreplacing,shapes.geometric}
+\begin{document}
+\begin{forest}
+for tree={align=center,font=\small,l=0.9cm,s sep=5mm,edge={->,>=Stealth}},
+tm/.style={font=\ttfamily\small,inner sep=1pt},
+[A [k,tm] [X [X [w,tm]] [w,tm] [r,tm]] [Y [g,tm]] [z,tm]]
+\end{forest}
+\end{document}

@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "In SSA every variable is assigned exactly once; where control-flow paths with different definitions of a variable meet, a phi-function x3 = phi(x1, x2) selects the value of the argument corresponding to the path by which control arrived, so the single-assignment property is kept. Example: if (flag) x = -1; else x = 1; y = x \\* a; becomes if (flag) x1 = -1; else x2 = 1; x3 = phi(x1, x2); y = x3 \\* a."
 sources: ["KMS Chapter 6 slides 35-36 (Static Single Assignment Form)", "Dragon book 2e sec. 6.2.4"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/ssa.png) for the flow graph with the phi-function; the answer itself is unchanged."
 ---
 **SSA form** has two properties: (1) every assignment is to a variable with a **distinct name** (each variable is defined exactly once in the program text), and (2) when the same variable is defined on different control-flow paths, the definitions are combined with a **$\varphi$-function**.
 
@@ -30,6 +32,8 @@ In SSA form:
     x3 = phi(x1, x2);
     y  = x3 * a;
 ```
+
+![Control-flow graph in SSA form](figures/ssa.png)
 
 If `flag` is true, $x_3 = x_1 = -1$; otherwise $x_3 = x_2 = 1$.
 

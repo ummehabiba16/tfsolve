@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "Vertices = variables (live ranges); an edge joins two variables that are live at the same point, so they cannot share a register. Register allocation = colour the RIG with k = 3 colours. Every node has degree 4, so Chaitin removes a (troublesome), then c (troublesome), then b, d, e, f; popping gives f = R0, e = R1, d = R0, b = R1, c = R2, a = R2, with no spill (classes {a,c}, {b,e}, {d,f}). A spill is a variable that gets no register: it is kept in memory, with a store after each definition and a load before each use; the RIG is rebuilt and colouring repeated."
 sources: ["KMS Global Register Allocation slides 72-166 (Register Interference Graph, Chaitin, Chaitin Reloaded, Improvements)", "Dragon book 2e sec. 8.8.4"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/rig.png) showing the final colouring; the answer itself is unchanged."
 ---
 **Meaning of the RIG.**
 
@@ -46,6 +48,8 @@ sources: ["KMS Global Register Allocation slides 72-166 (Register Interference G
 | a | b = R1, d = R0, e = R1, f = R0 | **R2** |
 
 **Allocation:** a, c $\to$ R2; b, e $\to$ R1; d, f $\to$ R0. **No variable is spilled.** The two troublesome nodes found free colours, because a and c are not adjacent (and likewise b/e, d/f). A pessimistic version that spills as soon as no node of degree < 3 exists would have spilled `a` unnecessarily.
+
+![Register interference graph coloured with three registers](figures/rig.png)
 
 **Spill.** A *spill* is a variable that cannot be given a register: when a troublesome node is popped, all $k$ colours are used by its neighbours. Handling:
 

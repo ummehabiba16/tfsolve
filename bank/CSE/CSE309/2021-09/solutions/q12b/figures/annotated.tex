@@ -1,0 +1,19 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta,positioning,calc,decorations.pathreplacing,shapes.geometric}
+\begin{document}
+\begin{forest}
+for tree={align=center,font=\footnotesize,l=1.0cm,s sep=3mm,edge={->,>=Stealth}},
+tm/.style={font=\ttfamily\footnotesize,inner sep=1pt},
+[{B\\{\tiny t=\{202, 204\}  f=\{205\}}}
+  [{$B_3$\\{\tiny t=\{202\}  f=\{201, 203\}}}
+    [{$B_1$\\{\tiny t=\{200\}  f=\{201\}}} [{\texttt{x != y}\\{\tiny 200: if x!=y goto \_}\\{\tiny 201: goto \_}}]]
+    [{\&\&},tm]
+    [{$M_1$\\{\tiny instr=202}}]
+    [{$B_2$\\{\tiny t=\{202\}  f=\{203\}}} [{\texttt{x > 20}\\{\tiny 202: if x>20 goto \_}\\{\tiny 203: goto \_}}]]]
+  [{$\vert\vert$},tm]
+  [{$M_2$\\{\tiny instr=204}}]
+  [{$B_4$\\{\tiny t=\{204\}  f=\{205\}}} [{\texttt{x < 100}\\{\tiny 204: if x<100 goto \_}\\{\tiny 205: goto \_}}]]]
+\end{forest}
+\end{document}

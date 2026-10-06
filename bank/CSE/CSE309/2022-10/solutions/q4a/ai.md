@@ -7,6 +7,9 @@ created: 2026-10-02
 status: unverified
 summary: "Same code as 2022-23 Q5(a). Loops: inner {B4, B5, B6, B7} (back edge B7 -> B4, header B4) and outer {B2, ..., B8} (back edge B8 -> B2, header B2). (i) Leaders 1, 2, 4, 5, 6, 11, 19, 21, 23 give B1 = {1}, B2 = {2-3}, B3 = {4}, B4 = {5}, B5 = {6-10}, B6 = {11-18}, B7 = {19-20}, B8 = {21-22}, B9 = {23}; edges B1-B2, B2-B3/B9, B3-B4, B4-B5/B8, B5-B6/B7, B6-B7, B7-B4, B8-B2. (ii) CSE and copy propagation reduce B6 to a[t2] = t5; a[t4] = t3; t1 = n - 1 is moved to B1 (code motion); t2 and t4 are strength-reduced (t2 = t2 + 8, t4 = t4 + 8) and i, j eliminated (tests t2 < 8(n-1), t4 < 8n)."
 sources: ["KMS Chapter 8 slides 27-36 (Basic Blocks and Flow Graphs)", "KMS Chapter 9 slides 9-35", "Dragon book 2e sec. 8.4, 9.1"]
+changes:
+  - "2026-10-06: replaced the ASCII drawing by a TikZ figure (figures/flowgraph.png); the answer itself is unchanged."
+  - "2026-10-06: added TikZ figure (figures/optimized.png) for the optimised flow graph; the answer itself is unchanged."
 ---
 **Assumptions.** Array elements are 8 bytes (as the code's `*8` shows). `n` is not changed anywhere in the code and `a` is the only array. `8*n` does not overflow. Labels L1, L4, L7, L9, L10 and L11 are never jump targets, so they do not start blocks.
 
@@ -26,30 +29,9 @@ Leaders (Algorithm 8.5): the first instruction (1); every jump target (L3 = 2, L
 | B8 | 21-22 | `i = i + 1`; `goto B2` |
 | B9 | 23 | (exit) |
 
-```text
-          B1
-          |
-          v
-   +----> B2 ----------------> B9 (exit)
-   |      | (i < t1)
-   |      v
-   |      B3
-   |      |
-   |      v
-   |  +-> B4 ----------+
-   |  |   | (j < n)    | (j >= n)
-   |  |   v            v
-   |  |   B5 ---+      B8 ---> back to B2
-   |  |   |     | (t3 <= t5)
-   |  |   v     |
-   |  |   B6    |
-   |  |   |     |
-   |  |   v     v
-   |  +-- B7 <--+
-```
+![Flow graph of the three-address code](figures/flowgraph.png)
 
 Edges: B1 $\to$ B2; B2 $\to$ B3, B9; B3 $\to$ B4; B4 $\to$ B5, B8; B5 $\to$ B6, B7; B6 $\to$ B7; B7 $\to$ B4; B8 $\to$ B2. The inner loop is {B4, B5, B6, B7} and the outer loop is {B2, ..., B8}.
-
 
 **Loops in the flow graph.** A loop is identified by a **back edge** $t \to h$, whose head $h$ dominates its tail $t$. The loop consists of $h$ plus all nodes that can reach $t$ without passing through $h$.
 
@@ -95,6 +77,8 @@ B8:  t2 = t2 + 8
      goto B2
 B9:
 ```
+
+![Flow graph of the optimised code](figures/optimized.png)
 
 `t3 = a[t2]` cannot be moved out of the inner loop, because B6 stores into `a[t2]`. The inner loop shrinks from 17 instructions (B4-B7) to 9, with no multiplications.
 

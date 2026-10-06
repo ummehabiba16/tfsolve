@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "Postfix SDT: E -> E1 + T { E.node = Node('+', E1.node, T.node) }; E -> T { E.node = T.node }; T -> T1 \\* F { T.node = Node('\\*', T1.node, F.node) }; T -> F; F -> ( E ) { F.node = E.node }; F -> id { F.node = Leaf(id, id.entry) }; F -> num { F.node = Leaf(num, num.val) }. Node and Leaf first look up a hash table keyed by <op, left, right> (value-number method) and return an existing node if one matches, so a repeated subexpression gets the same node (common subexpression detected)."
 sources: ["KMS Chapter 6 slides 12-19 (DAG, SDD for Constructing DAG, Value Number Method)", "KMS Chapter 5 slides 55-57 (Postfix SDT, Parser-Stack Implementation)", "Dragon book 2e sec. 6.1.1-6.1.2"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/dag.png) for the DAG of the example; the answer itself is unchanged."
 ---
 **Assumptions.** `id` has the attribute `entry` (symbol-table pointer) and `num` has `val`. The SDT is implemented by an LR parser (the grammar is left recursive).
 
@@ -45,5 +47,7 @@ So a subexpression that occurs twice is built once, and both occurrences point t
 | 8 | `Node('+', 2, 3)` | **existing** node 4: `b+c` recognised as common |
 | 9 | `Leaf(id, d)`; `Node('*', 4, 7)` | nodes 7, 8 |
 | 10 | `Node('+', 6, 8)` | node 9 (root) |
+
+![DAG built for a + a*(b+c) + (b+c)*d](figures/dag.png)
 
 For the paper's example `2*(3+4)*5`, the leaves 2, 3, 4, 5 and the nodes for `3+4`, `2*(3+4)` and `...*5` are created. A number that appears twice would also be shared.

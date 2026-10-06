@@ -7,12 +7,16 @@ created: 2026-10-01
 status: unverified
 summary: "Invariant: matched input followed by the stack (top to bottom) is always a left-sentential form; on X = nonterminal on top and lookahead a, the entry M[X,a] = X -> Y1..Yk replaces X (the leftmost nonterminal) by Y1..Yk with Y1 on top, i.e. one leftmost-derivation step; terminals on top are matched with input. So the sequence of table entries used is the leftmost derivation."
 sources: ["MMA syntax analysis slides 124-151 (Nonrecursive Predictive Parsing)", "Dragon book 2e sec. 4.4.4 (Algorithm 4.34, Example 4.35)"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/model.png) for the parser model; the answer itself is unchanged."
 ---
 **Parser:** stack (initially `S $`), input `w$`, table $M$. With $X$ on top and lookahead $a$:
 
 - if $X = a$: pop and advance (match);
 - if $X$ is a nonterminal and $M[X, a] = X \to Y_1 \ldots Y_k$: output it, pop $X$, push $Y_k \ldots Y_1$ ($Y_1$ on top);
 - otherwise: error.
+
+![Model of a table-driven predictive parser](figures/model.png)
 
 **Invariant:** at every step,
 

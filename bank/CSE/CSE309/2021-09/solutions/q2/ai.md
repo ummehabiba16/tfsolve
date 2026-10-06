@@ -7,6 +7,8 @@ created: 2026-10-01
 status: unverified
 summary: "The compiler/assembler produces relocatable machine code (addresses relative to 0, external references unresolved); the linker combines such object files and libraries, resolves external references (code in one file referring to a location in another), assigns each module its place and relocates (patches) the addresses, producing an executable that the loader then loads."
 sources: ["MMA introduction slides 26-39 (Assembler, Relocatable Machine Code, Linker and Loader)", "Dragon book 2e sec. 1.1"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/relocation.png) for the relocation example; the answer itself is unchanged."
 ---
 **Relocatable machine code.** Large programs are compiled in pieces. The compiler (and assembler) produces, for each piece, **relocatable machine code**:
 
@@ -20,6 +22,8 @@ sources: ["MMA introduction slides 26-39 (Assembler, Relocatable Machine Code, L
 3. **Relocation.** Once each module's start address is known, every address that depends on it is adjusted.
 
 **Example from the slides.** Program SUBR is compiled starting at location 1. A jump at location 13 goes to statement ST at location 5. The linker places SUBR at location 120: the jump is now at 133 and must be relocated to point to ST's new location 125 ($= 120 + 5$). If the loader later puts the program at 300, the address is relocated again, to 305.
+
+![Relocation of the SUBR example by the linker and the loader](figures/relocation.png)
 
 **Result.** The linker's output is an executable file. The **loader** then puts the executable (and any shared libraries) into memory and starts it, possibly relocating it again for its actual load address.
 

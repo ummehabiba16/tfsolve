@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "Treat the action as a terminal and eliminate left recursion (A -> A alpha | beta becomes A -> beta R, R -> alpha R | eps): E -> T R;  R -> + T { print('+') } R | eps. Assuming T -> num { print(num.val) }, 2+3+4 is parsed E -> T R with T printing 2, R -> + T {+} R printing 3 then +, then 4 then +, R -> eps: output 2 3 + 4 +, the correct postfix."
 sources: ["KMS Chapter 5 slides 62-69 (Eliminating Left Recursion from SDTs)", "Dragon book 2e sec. 5.4.4 (Example 5.17)"]
+changes:
+  - "2026-10-06: replaced the ASCII drawing by a TikZ figure (figures/tree.png); the answer itself is unchanged."
 ---
 **Assumptions.** The question gives only the $E$-productions. For the output, $T$ is assumed to be $T \to \textbf{num}\ \{\text{print}(\textbf{num}.val);\}$ (a number is printed as soon as it is read).
 
@@ -38,18 +40,6 @@ The action stays in the same position relative to the symbols around it (after $
 | 8 | action `print('+')` | 2 3 + 4 + |
 | 9 | $R \to \epsilon$ (input at end) | 2 3 + 4 + |
 
-```text
-E
-|-- T -- 2 {print 2}
-`-- R
-    |-- +
-    |-- T -- 3 {print 3}
-    |-- {print '+'}
-    `-- R
-        |-- +
-        |-- T -- 4 {print 4}
-        |-- {print '+'}
-        `-- R -- eps
-```
+![Parse tree with action nodes for 2+3+4](figures/tree.png)
 
 Output **`2 3 + 4 +`**, the postfix form of $(2+3)+4$: `+` is left-associative, as in the original SDT.

@@ -7,24 +7,12 @@ created: 2026-10-02
 status: unverified
 summary: "Java uses a hybrid compiler: javac compiles source (.java) to platform-independent bytecode (.class); the Java Virtual Machine loads and verifies the bytecode and executes it by interpreting it, while a just-in-time (JIT) compiler translates frequently executed bytecode into native machine code. This gives portability (write once, run anywhere), safety checks and good speed."
 sources: ["MMA introduction slides 4-13 (Language Processors, hybrid compiler)", "Dragon book 2e sec. 1.1 (Fig. 1.4)"]
+changes:
+  - "2026-10-06: replaced the ASCII drawing by a TikZ figure (figures/java.png); the answer itself is unchanged."
 ---
 Java uses a **hybrid compiler**: compilation followed by interpretation (Dragon book Fig. 1.4).
 
-```text
- source program (.java)
-        |
-        v
-   [ translator: javac ]
-        |
-        v
- intermediate program: bytecode (.class)
-        |
-        v
-   [ virtual machine (JVM) ] <---- input
-        |
-        v
-      output
-```
+![Language processor of Java](figures/java.png)
 
 **Working principle:**
 

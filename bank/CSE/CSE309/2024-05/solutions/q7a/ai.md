@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "Translate S -> switch (E) { case V1: S1 ... default: Sn } as: code for E into t; goto test; Li: code for Si; goto next (for each case, with Ln for default); test: if t = V1 goto L1; ...; if t = Vn-1 goto Ln-1; goto Ln; next:. The SDT creates a label for each case, records (Vi, Li) in a queue, and emits the tests (or case t Vi Li instructions) at the end. The n-way branch can be evaluated by a sequence of conditional jumps (few cases), a hash table of value/label pairs (many cases), or a jump table indexed by t - Vmin (values in a small dense range)."
 sources: ["KMS Chapter 6 slides 117-120 (Switch-Statements, Translation of Switch-Statements, SDT)", "Dragon book 2e sec. 6.8 (Figs. 6.49-6.51)"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/layout.png) for the code layout; the answer itself is unchanged."
 ---
 **Outline of the syntax-directed translation (10 marks).**
 
@@ -50,6 +52,8 @@ test:   if t = V1 goto L1
         goto Ln
 next:
 ```
+
+![Layout of the code generated for a switch statement](figures/layout.png)
 
 Placing the tests at the end lets the code generator see all the cases together. With a special instruction it can be written as `case t V1 L1`, `case t V2 L2`, ..., `case t t Ln`, `next:`, and the code generator then chooses the best implementation. (Alternatively, the tests can come first: `if t != V1 goto L1'` before each body. That is simpler for a one-pass translator, but it is less flexible.)
 

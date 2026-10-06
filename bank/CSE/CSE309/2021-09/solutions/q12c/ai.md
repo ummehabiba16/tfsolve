@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "After deleting A -> C, the reachable objects are A, B, D, E, G, H, I (C and F are garbage). Before: A 0, B 50, C 100, D 150, E 200, F 250, G 300, H 350, I 400. Mark-and-compact slides the live objects down in address order: A 0, B 50, D 100, E 150, G 200, H 250, I 300; free space starts at 350."
 sources: ["KMS Chapter 7 slides 79-84 (Relocating Garbage Collectors, Mark-and-Compact)", "Dragon book 2e sec. 7.6.3 (Fig. 7.25)"]
+changes:
+  - "2026-10-06: replaced the ASCII drawing by a TikZ figure (figures/before.png); the answer itself is unchanged. (heap before and after)"
 ---
 **Assumptions.** The edges are read from the figure: X $\to$ A, A $\to$ B, A $\to$ C, B $\to$ D, B $\to$ E, C $\to$ E, C $\to$ F, D $\to$ G, G $\to$ E, E $\to$ H, F $\to$ H, G $\to$ I, H $\to$ I. $X$ is the root set. The basic mark-and-compact collector of the text is used, which keeps the objects in their original order.
 
@@ -32,16 +34,10 @@ sources: ["KMS Chapter 7 slides 79-84 (Relocating Garbage Collectors, Mark-and-C
 
 **Heap before:**
 
-```text
-0     50    100   150   200   250   300   350   400   450
-| A   | B   | C   | D   | E   | F   | G   | H   | I   |
-```
+![Heap before collection](figures/before.png)
 
 **Heap after:**
 
-```text
-0     50    100   150   200   250   300   350         450
-| A   | B   | D   | E   | G   | H   | I   |   free    |
-```
+![Heap after mark-and-compact](figures/after.png)
 
 The seven live objects (350 bytes) are now contiguous at the low end, and the free space (from 350) is one block. The relative order of the objects is unchanged.

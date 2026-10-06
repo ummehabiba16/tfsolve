@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "Liveness (b, e live at exit; b, c, d, f live on entry) shows that every pair of a-f is live together at some point (e.g. a, b, c, d, f after a = b + c; a, c, d, e, f after e = a + f; b, c, d, f on entry; b, e at exit), so the RIG is the complete graph on 6 nodes: at most 3 variables can get registers. Chaitin with k = 3, spilling the lowest-cost node when stuck (cost = uses + defs: e 2, c 3, f 3, b 4, a 5, d 5): remove e, c, f (troublesome), then a, b, d; colour d = R0, b = R1, a = R2; f, c, e get no colour and are spilled to memory (loaded/stored around each use and definition, then the RIG is rebuilt)."
 sources: ["KMS Global Register Allocation slides 72-166 (Register Interference Graph, Chaitin, Chaitin Reloaded, Improvements)", "Dragon book 2e sec. 8.8.4, 9.2.5 (liveness)"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/rig.png) showing the complete interference graph and the colouring; the answer itself is unchanged."
 ---
 **Assumptions.**
 
@@ -63,6 +65,8 @@ Select (pop):
 | e | R0, R1, R2 all used | **spill** |
 
 **Allocation:** `d` $\to$ R0, `b` $\to$ R1, `a` $\to$ R2. **`c`, `e` and `f` are spilled**: they live in memory, with a load before each use and a store after each definition.
+
+![Interference graph with the Chaitin colouring](figures/rig.png)
 
 **Handling the spills.** Rewrite the code with the spilled variables in memory, e.g. B1 becomes
 

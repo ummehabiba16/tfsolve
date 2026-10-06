@@ -7,6 +7,8 @@ created: 2026-10-01
 status: unverified
 summary: "Taking the alternative as the terminal a: right-sentential forms and handles: aaa\\*a++ (a at 1), Saa\\*a++ (a at 2), SSa\\*a++ (a at 3), SSS\\*a++ (SS\\* at 2-4), SSa++ (a at 3), SSS++ (SS+ at 2-4), SS+ (SS+ at 1-3), S."
 sources: ["MMA syntax analysis slides 152-200 (Reductions, Handle Pruning, Shift-Reduce Parsing)", "Dragon book 2e sec. 4.5.2-4.5.3, Exercise 4.5.2"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/tree.png) showing the handles on the parse tree; the answer itself is unchanged."
 ---
 The last alternative is printed as $\alpha$; the input string uses `a`, so take the grammar as $S \to SS+ \mid SS* \mid a$.
 
@@ -28,6 +30,8 @@ Handle pruning (reading the derivation backwards):
 | S S S + + | S S + (2-4) | $S \to SS+$ |
 | S S + | S S + (1-3) | $S \to SS+$ |
 | S | | accept |
+
+![Parse tree with the order of reductions](figures/tree.png)
 
 **Computation (shift-reduce parser):**
 

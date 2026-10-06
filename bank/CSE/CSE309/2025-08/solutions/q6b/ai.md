@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "The print actions sit at the start of the bodies, before E1 and T1: top-down, the grammar is left recursive (and E -> {print} E1 + T vs E -> T cannot be chosen before seeing the +); bottom-up, the action needs a marker reduced before E1 is parsed, when the parser cannot yet know whether a + (or \\*) will come, giving conflicts. Implement it by first building the parse tree, then a preorder (left-to-right depth-first) traversal executing each action when it is reached."
 sources: ["KMS Chapter 5 slides 58-61 (SDTs with Action Inside Productions, SDTs Non Implementable during Parsing, SDT Implementation using Parse Tree)", "Dragon book 2e sec. 5.4.3 (Example 5.16)"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/tree.png) for the preorder execution of the actions; the answer itself is unchanged."
 ---
 **Why it cannot be done during parsing.** An action must be executed when everything to its left has been recognised. Here `print('+')` and `print('*')` are at the **left end** of their bodies, before $E_1$ and $T_1$.
 
@@ -26,3 +28,5 @@ In both cases, the prefix form needs the operator to be printed before its opera
 3. Do a **preorder (left-to-right, depth-first) traversal** of the tree, executing each action node when it is visited.
 
 For `1 + 2 * 3 n`: the root's $E \to E_1 + T$ prints `+`; then $E_1 \to T \to F \to$ digit prints `1`; then $T \to T_1 * F$ prints `*`, then `2`, then `3`. Output: **`+ 1 * 2 3`**, which is the prefix form. Any SDT can be implemented this way, at the cost of building the whole tree first.
+
+![Parse tree with action nodes for 1 + 2 * 3 n](figures/tree.png)

@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "Assuming b and e live on exit, liveness gives live intervals a [1,9], b [1,11], c [1,11], d [1,11], e [3,11], f [1,8] (b, c, d, f live on entry). Scanning by start point with 3 registers and spilling the interval that ends last: a -> R0, b -> R1, c -> R2; d spilled; f takes R2 and c is spilled; e spilled. Final: a R0, b R1, f R2, with c, d, e in memory. Advantage: very fast (one linear pass over the sorted intervals after liveness), so it suits JIT compilers."
 sources: ["KMS Global Register Allocation slides 1-60 (Live Ranges and Live Intervals, Register Allocation with Live Intervals, Register Spilling, Linear Scan)", "Poletto and Sarkar, Linear scan register allocation (1999)"]
+changes:
+  - "2026-10-06: replaced the ASCII drawing by a TikZ figure (figures/intervals.png); the answer itself is unchanged."
 ---
 **Assumptions.**
 
@@ -39,15 +41,7 @@ sources: ["KMS Global Register Allocation slides 1-60 (Live Ranges and Live Inte
 | e | [3, 11] |
 | f | [1, 8] |
 
-```text
-line:  1  2  3  4  5  6  7  8  9 10 11
-a      |-------------------------|
-b      |--------------------------------|
-c      |--------------------------------|
-d      |--------------------------------|
-e            |--------------------------|
-f      |----------------------|
-```
+![Live intervals and the allocation](figures/intervals.png)
 
 `b` is actually dead from line 3 to line 7 (and its definition at line 8 is never used), but an interval cannot express such holes. This is the imprecision of live intervals.
 

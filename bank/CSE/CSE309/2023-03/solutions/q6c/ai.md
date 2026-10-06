@@ -7,19 +7,14 @@ created: 2026-10-02
 status: unverified
 summary: "Markers: M -> eps { M.instr = nextinstr; } and N -> eps { N.nextlist = makelist(nextinstr); gen('goto \\_'); }. S -> for ( S1 ; M1 B ; M2 S2 N ) M3 S3 { backpatch(S1.nextlist, M1.instr); backpatch(B.truelist, M3.instr); backpatch(S2.nextlist, M1.instr); backpatch(N.nextlist, M1.instr); backpatch(S3.nextlist, M2.instr); gen('goto' M2.instr); S.nextlist = B.falselist; }. Layout: S1; M1: B; M2: S2; goto M1; M3: S3; goto M2."
 sources: ["KMS Chapter 6 slides 104-114 (Backpatching, Backpatching for Flow-of-Control Statements)", "Dragon book 2e sec. 6.7.3 (Fig. 6.46)"]
+changes:
+  - "2026-10-06: replaced the ASCII drawing by a TikZ figure (figures/layout.png); the answer itself is unchanged."
 ---
 **Assumptions.** The usual backpatching functions are used: `makelist(i)`, `merge(p1, p2)`, `backpatch(p, i)` and `nextinstr`. $B$ has `truelist` and `falselist`; statements have `nextlist`. $S_1$ and $S_2$ are statements (e.g. assignments) with their own `nextlist`.
 
 **Code layout to be produced:**
 
-```text
-        code for S1                (initialisation)
-M1:     code for B                 (test: true -> M3, false -> exit)
-M2:     code for S2                (increment)
-        goto M1                    (N)
-M3:     code for S3                (body)
-        goto M2
-```
+![Code layout of the for statement](figures/layout.png)
 
 **Marker nonterminals:**
 

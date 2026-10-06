@@ -7,34 +7,24 @@ created: 2026-10-01
 status: unverified
 summary: "lexemeBegin = forward = 1st +; forward reads the 2nd + and ++ is complete (no +++ in C++), so token INC, lexemeBegin = forward = 3rd +; forward reads the newline, which cannot extend + (++ or +=), so retract and return PLUS; lexemeBegin = forward = newline; if forward reaches the sentinel eof at the end of a buffer half on the way, the other half is reloaded and scanning continues."
 sources: ["MMA lexical analysis slides 37-49 (Input Buffering, Buffer Pairs, Sentinels)", "Dragon book 2e sec. 3.2"]
+changes:
+  - "2026-10-06: replaced the ASCII drawing by a TikZ figure (figures/step0.png); the answer itself is unchanged. (three buffer snapshots)"
 ---
 Input: `+++\n`. Buffer pair, each half ending with a sentinel `eof`. Initially `lexemeBegin` (lB) and `forward` (f) both point to the first `+`.
 
-```text
-   ... | + | + | + | \n | ... | eof |
-         ^
-        lB, f
-```
+![Buffer at the start](figures/step0.png)
 
 **Step 1: read the first `+`.** f moves past the first `+`. A `+` may start `+`, `++` or `+=`, so the lexer cannot decide yet and must look at the next character.
 
 **Step 2: read the second `+`.** The next character is `+`, so the lexeme is `++`. In C++ no token begins with `++` and is longer (there is no `+++`), so `++` is complete. No retraction is needed (f was not advanced beyond the lexeme). Return token **INC** (`++`).
 
-```text
-   ... | + | + | + | \n | ...
-         ^---^
-         lexeme "++"
-```
+![Buffer after the second +](figures/step2.png)
 
 Set lB = f = the third `+`.
 
 **Step 3: read the third `+`.** Again it may be `+`, `++` or `+=`. f advances to the next character, which is `\n`. That is neither `+` nor `=`, so the lexeme is just `+`. **Retract** f by one, back to the third `+`. Return token **PLUS** (`+`).
 
-```text
-   ... | + | + | + | \n | ...
-                 ^   ^
-                lB   f (read, then retracted)
-```
+![Buffer after reading the newline and retracting](figures/step3.png)
 
 This is the longest-match rule: `+++` is tokenised as `++` followed by `+`, never `+` `++`.
 

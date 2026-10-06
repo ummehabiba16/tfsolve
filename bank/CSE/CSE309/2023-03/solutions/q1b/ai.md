@@ -7,6 +7,8 @@ created: 2026-10-01
 status: unverified
 summary: "Tokens: id dhaka (0-4; forward goes to 5 and retracts), white space (5), ++ (6-7, complete without lookahead), + (8; forward reads the blank at 9 and retracts), white space (9), number 123.456 (10-16; forward goes to 17 and retracts), white space (17)."
 sources: ["MMA lexical analysis slides 37-49 (Input Buffering), 50-110 (Recognition of Tokens)", "Dragon book 2e sec. 3.2, 3.4"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/strip.png) showing the lexemes and the retracts; the answer itself is unchanged."
 ---
 Positions in the buffer:
 
@@ -14,6 +16,8 @@ Positions in the buffer:
 position: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17
 char:     d h a k a _ + + + _ 1  2  3  .  4  5  6  _
 ```
+
+![Buffer contents with lexemes and retracts](figures/strip.png)
 
 `lexemeBegin` (lB) marks the start of the current lexeme, and `forward` (f) scans ahead. When a token is found, f is set to its last character (retracting if it went one too far), the token is returned, and lB = f = the next character. C uses the **longest match**.
 

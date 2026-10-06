@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "Leaders 1, 2, 3, 10, 12, 13 give B1 = {1: i = 1}, B2 = {2: j = 1}, B3 = {3-9}, B4 = {10-11}, B5 = {12: i = 1}, B6 = {13-17}; edges B1-B2, B2-B3, B3-B3, B3-B4, B4-B2, B4-B5, B5-B6, B6-B6, B6-exit. Loops: {B3}, {B2, B3, B4}, {B6}."
 sources: ["KMS Chapter 8 slides 27-36 (Basic Blocks and Flow Graphs, Constructing Basic Blocks, Loops)", "Dragon book 2e sec. 8.4.1, 8.4.3 (Example 8.6, Figs. 8.7, 8.9)"]
+changes:
+  - "2026-10-06: replaced the ASCII flow graph by a TikZ flow graph with the full code of each block"
 ---
 This is the textbook code that sets a 10 $\times$ 10 matrix to the identity matrix.
 
@@ -31,30 +33,7 @@ Leaders: **1, 2, 3, 10, 12, 13**.
 
 **Flow graph:**
 
-```text
-   ENTRY
-     |
-     v
-    B1   i = 1
-     |
-     v
- +-> B2   j = 1
- |   |
- |   v
- |   B3   t1 = 10*i ... a[t4] = 0.0; j = j + 1
- |   |  \__ if j <= 10 goto B3   (self loop)
- |   v
- +-- B4   i = i + 1; if i <= 10 goto B2
-     |
-     v
-    B5   i = 1
-     |
-     v
-    B6   t5 = i - 1 ... a[t6] = 1.0; i = i + 1
-     |  \__ if i <= 10 goto B6   (self loop)
-     v
-   EXIT
-```
+![Flow graph of the basic blocks B1-B6](figures/flowgraph.png)
 
 Edges: B1 $\to$ B2; B2 $\to$ B3; B3 $\to$ B3, B3 $\to$ B4; B4 $\to$ B2, B4 $\to$ B5; B5 $\to$ B6; B6 $\to$ B6, B6 $\to$ EXIT.
 

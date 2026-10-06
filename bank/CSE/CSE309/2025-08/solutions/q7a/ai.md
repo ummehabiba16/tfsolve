@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "Types are used for type checking (catch errors such as adding an int to a function) and for translation (storage size/offset, choosing integer vs float operations, coercions). SDT: P -> { offset = 0 } D;  D -> T id ; { top.put(id.lexeme, T.type, offset); offset = offset + T.width; } D1 | eps;  T -> int { T.type = integer; T.width = 2; } | float { T.type = float; T.width = 4; }. Offsets: a = 0, b = 2, f = 4 (total 8 bytes)."
 sources: ["KMS Chapter 6 slides 37-50 (Types and Declarations, Storage Layout, Computing Types and Their Widths)", "Dragon book 2e sec. 6.3 (Fig. 6.17)"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/offsets.png) for the resulting offsets; the answer itself is unchanged."
 ---
 **Two applications of types (4 marks):**
 
@@ -39,5 +41,7 @@ T  ->  float    { T.type = float;   T.width = 4; }
 | `int a;` | integer, 2 | **0** | 2 |
 | `int b;` | integer, 2 | **2** | 4 |
 | `float f;` | float, 4 | **4** | 8 |
+
+![Offsets of the declared variables](figures/offsets.png)
 
 So `a` is at offset 0, `b` at offset 2 and `f` at offset 4. The declarations occupy 8 bytes.

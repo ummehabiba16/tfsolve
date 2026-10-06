@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "Parse: B = B1 || B2 with B2 = B3 && B4 (&& binds tighter). With S.next = L1: B.true = fall, B.false = L1; B1.true = L2 (new), B1.false = fall; B2.true = fall, B2.false = L1; B3.true = fall, B3.false = L1; B4.true = fall, B4.false = L1. Code: if x > 100 goto L2; ifFalse x > 200 goto L1; ifFalse x != y goto L1; L2: x = 0; L1:."
 sources: ["KMS Chapter 6 slides 93-101 (SDD for Flow-of-Control and Booleans, Avoiding Redundant Gotos)", "Dragon book 2e sec. 6.6.5"]
+changes:
+  - "2026-10-06: replaced the ASCII drawing of the annotated parse tree by a TikZ figure (figures/annotated.png); the answer itself is unchanged."
 ---
 `&&` has higher precedence than `||`, so the condition parses as
 
@@ -16,21 +18,7 @@ Let $B$ be the whole condition, $B_1$ = `x > 100`, $B_2$ = `x > 200 && x != y`, 
 
 **Annotated parse tree** (inherited *true*/*false* attributes shown at each node):
 
-```text
-S  [next = L1]
-|-- if ( B ) S1
-    B   [true = fall, false = L1]                       (B -> B1 || B2)
-    |-- B1  [true = L2, false = fall]                   (x > 100)
-    |    `-- E1.addr = x   rel.op = >   E2.addr = 100
-    |-- ||
-    `-- B2  [true = fall, false = L1]                   (B2 -> B3 && B4)
-         |-- B3  [true = fall, false = L1]              (x > 200)
-         |    `-- E1.addr = x   rel.op = >   E2.addr = 200
-         |-- &&
-         `-- B4  [true = fall, false = L1]              (x != y)
-              `-- E1.addr = x   rel.op = !=  E2.addr = y
-    S1  [next = L1]   x = 0
-```
+![Annotated parse tree](figures/annotated.png)
 
 **How the attributes are computed:**
 

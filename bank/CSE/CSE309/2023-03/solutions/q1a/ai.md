@@ -7,8 +7,12 @@ created: 2026-10-01
 status: unverified
 summary: "Linker: subfunction is undefined in main.o and must be resolved from subcode.o (also exit from libc, and the implicit declaration int vs void mismatch, return n in a void function); the loader must allocate memory, relocate both modules and load libc. Resolved by declaring int subfunction(void) / extern, #include <stdlib.h>, linking both objects and libc, and relocation by linker and loader."
 sources: ["MMA introduction slides 26-39 (Relocatable Machine Code, Linker and Loader)", "Dragon book 2e sec. 1.1"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/linkload.png) for the link and load steps; the answer itself is unchanged."
 ---
 `main.c` and `subcode.c` are compiled separately into relocatable object files `main.o` and `subcode.o`. Each starts at address 0, and each contains references it cannot resolve itself.
+
+![Linking and loading of main.o, subcode.o and libc](figures/linkload.png)
 
 **Issues for the linker**
 

@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "DAG: leaves b0, c0, a0, i0, j0; node n1 = \\* (b0, c0) with labels d and g (b \\* c is a common subexpression); n2 = =[] (a0, i0) labelled e; n3 = + (n2, n1) labelled f; n4 = []= (a0, j0, n3) for a[j] = f, which kills n2 for later reuse. Reassembled: d = b \\* c; e = a[i]; f = e + d; g = d; a[j] = f."
 sources: ["KMS Chapter 8 slides 40-50 (DAG representation of Basic Blocks, Representation of Array References)", "Dragon book 2e sec. 8.5.1-8.5.5"]
+changes:
+  - "2026-10-06: replaced the ASCII drawing by a TikZ figure (figures/dag.png); the answer itself is unchanged."
 ---
 **Assumptions.** All of `d`, `e`, `f`, `g` may be live on exit (the question does not say otherwise), so every label is kept.
 
@@ -22,15 +24,7 @@ sources: ["KMS Chapter 8 slides 40-50 (DAG representation of Basic Blocks, Repre
 
 **DAG:**
 
-```text
-            n4 ( []= )
-           /    |    \
-         a0     j0    n3 ( + )  f
-                     /     \
-             e  n2 (=[])    n1 ( * )  d, g
-                /    \       /   \
-              a0      i0   b0     c0
-```
+![DAG of the basic block](figures/dag.png)
 
 (The leaf $a_0$ is shared by $n_2$ and $n_4$.)
 

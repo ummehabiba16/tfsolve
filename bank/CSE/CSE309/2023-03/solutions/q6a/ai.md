@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "Two aspects: (1) each name is assigned exactly once (every definition gets a new version: x1, x2, ...), (2) phi-functions merge different definitions at control-flow join points. SSA helps optimisation because every use has exactly one reaching definition, so def-use chains are explicit and simple: e.g. constant propagation, copy propagation, dead-code elimination and redundancy elimination need no extra data-flow analysis."
 sources: ["KMS Chapter 6 slides 35-36 (Static Single Assignment Form)", "Dragon book 2e sec. 6.2.4"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/ssa.png) for the phi-function example; the answer itself is unchanged."
 ---
 **Two distinctive aspects of SSA (8 marks).**
 
@@ -27,6 +29,8 @@ if (flag) x1 = -1; else x2 = 1;
 x3 = phi(x1, x2);
 y1 = x3 * a;
 ```
+
+![Flow graph with a phi-function](figures/ssa.png)
 
 **How SSA facilitates optimisation (5 marks).** Because each name has a single definition, **every use has exactly one reaching definition**. The definition-use relation is visible directly in the names, without iterative reaching-definitions analysis. Many optimisations become simple and fast:
 

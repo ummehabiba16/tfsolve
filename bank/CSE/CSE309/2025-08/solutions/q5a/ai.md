@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "Global CSE (4\\*i -> t2, 4\\*j -> t4, 4\\*n -> t1, a[t2] -> t3, a[t4] -> t5, a[t1] -> v), copy propagation (x = t3), dead-code elimination, code motion of v = a[t1] out of the B2 loop, strength reduction (t2 = t2 + 4, t4 = t4 - 4) and induction-variable elimination (test t2 >= t4). Final: B1: i = m-1; t1 = 4\\*n; t2 = 4\\*i; t4 = t1;  B2: t2 = t2+4; t3 = a[t2]; if t3 < v goto B2 (v = a[t1] in a preheader);  B3: t4 = t4-4; t5 = a[t4]; if t5 > v goto B3;  B4: if t2 >= t4 goto B6;  B5: a[t2] = t5; a[t4] = t3; goto B2;  B6: a[t2] = v; a[t1] = t3."
 sources: ["KMS Chapter 9 slides 9-35 (Semantic-Preserving Transformations)", "Dragon book 2e sec. 9.1 (Figs. 9.5-9.9)"]
+changes:
+  - "2026-10-06: replaced the text listing of the optimised blocks by a TikZ flow graph (figures/optimized.png); the answer itself is unchanged."
 ---
 This is the textbook quicksort fragment. Apply the transformations step by step.
 
@@ -38,25 +40,7 @@ B5: x = t3              B6: x = t3
 
 **Optimised flow graph:**
 
-```text
-B1:  i = m - 1
-     t1 = 4 * n
-     t2 = 4 * i
-     t4 = t1
-B2': v = a[t1]                  (preheader, entered from B1 and B5)
-B2:  t2 = t2 + 4
-     t3 = a[t2]
-     if t3 < v goto B2
-B3:  t4 = t4 - 4
-     t5 = a[t4]
-     if t5 > v goto B3
-B4:  if t2 >= t4 goto B6
-B5:  a[t2] = t5
-     a[t4] = t3
-     goto B2'
-B6:  a[t2] = v
-     a[t1] = t3
-```
+![Optimised flow graph](figures/optimized.png)
 
 | Transformation | Where |
 |:--|:--|

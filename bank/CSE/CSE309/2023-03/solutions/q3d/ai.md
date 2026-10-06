@@ -7,19 +7,12 @@ created: 2026-10-01
 status: unverified
 summary: "Parse tree: A -> k X Y z with X -> X w r, inner X -> w, Y -> g. Rightmost derivation A => kXYz => kXgz => kXwrgz => kwwrgz; handles in order: w (first w, X -> w), Xwr (X -> Xwr), g (Y -> g), kXYz (A -> kXYz)."
 sources: ["MMA syntax analysis slides 152-200 (Reductions, Handle Pruning)", "Dragon book 2e sec. 4.5.1-4.5.2"]
+changes:
+  - "2026-10-06: replaced the ASCII drawing by a TikZ figure (figures/tree.png); the answer itself is unchanged."
 ---
 **Parse tree for `kwwrgz`:**
 
-```text
-              A
-     _________|_________
-    /     |       |     \
-   k      X       Y      z
-        / | \     |
-       X  w  r    g
-       |
-       w
-```
+![Parse tree for kwwrgz](figures/tree.png)
 
 **Rightmost derivation:**
 

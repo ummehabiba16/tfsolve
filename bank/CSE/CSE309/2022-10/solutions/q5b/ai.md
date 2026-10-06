@@ -7,18 +7,14 @@ created: 2026-10-02
 status: unverified
 summary: "Use a common intermediate representation: build 10 language-specific front ends (lexer, parser, semantic analyser, IR generator) that all produce the same IR, one shared machine-independent optimiser on the IR, and one back end per target machine (instruction selection, register allocation, scheduling). Then 10 languages on k machines need 10 + k components instead of 10 x k complete compilers; front ends can be generated with Lex/Yacc."
 sources: ["MMA introduction slides 40-50, 90-98 (Structure of a Compiler, Grouping of Phases into Passes, Compiler-Construction Tools)", "KMS Chapter 6 slides 2-7 (Why Need IR?, LLVM)", "Dragon book 2e sec. 1.2, 1.2.8"]
+changes:
+  - "2026-10-06: replaced the ASCII drawing by a TikZ figure (figures/ir.png); the answer itself is unchanged."
 ---
 **Assumptions.** The company must support 10 source languages on $k$ target machines (the question does not give $k$). "Efficient" means minimal development effort and maximal reuse.
 
 **Approach: separate front ends and back ends around one common intermediate representation (IR).**
 
-```text
- C ------> [front end 1] --+
- Java ---> [front end 2] --+                               +--> [back end x86]   --> x86 code
- Python -> [front end 3] --+--> common IR --> [optimizer] -+--> [back end ARM]   --> ARM code
-   ...          ...        |                               +--> [back end RISC-V]--> RISC-V code
- Lang10 -> [front end 10] -+                                       ...
-```
+![Front ends and back ends around a common IR](figures/ir.png)
 
 **Design:**
 

@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: "Reference counting cannot reclaim cyclic garbage: objects in an unreachable cycle keep each other's counts above zero, so they are never freed (a memory leak). Example: A -> B and B -> A with the root pointing to A; after the root pointer is removed, A and B both have count 1 but are unreachable."
 sources: ["KMS Chapter 7 slides 59-64 (Reference Counting Garbage Collectors, Problem with Reference Counting, Reference Cycles)", "Dragon book 2e sec. 7.5.3"]
+changes:
+  - "2026-10-06: replaced the ASCII example by a TikZ figure of the reference-counting cycle"
 ---
 **Reference counting** keeps, in each object, a count of the references pointing to it. The count is incremented when a reference to the object is created, and decremented when a reference is removed or overwritten. When the count becomes 0, the object is garbage and is freed immediately; the counts of the objects it points to are then decremented.
 
@@ -14,14 +16,7 @@ sources: ["KMS Chapter 7 slides 59-64 (Reference Counting Garbage Collectors, Pr
 
 **Example:**
 
-```text
-Before:   root ---> A <----+          After "root = null":     A <----+
-                    |      |                                   |      |
-                    v      |                                   v      |
-                    B -----+                                   B -----+
-          count(A) = 2 (root, B)                    count(A) = 1, count(B) = 1
-          count(B) = 1 (A)                          unreachable, but never freed
-```
+![Reference-count cycle: A and B are never freed after root = null](figures/cycle.png)
 
 1. Initially the root points to A, A points to B, and B points back to A. So count(A) = 2 and count(B) = 1.
 2. The program sets the root pointer to null, and count(A) drops to 1.

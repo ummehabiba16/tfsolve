@@ -1,0 +1,27 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta,positioning,calc,decorations.pathreplacing,shapes.geometric}
+\begin{document}
+\begin{forest}
+for tree={align=center,font=\footnotesize,l=1.0cm,s sep=2.5mm,edge={->,>=Stealth}},
+tm/.style={font=\ttfamily\footnotesize,inner sep=1pt},
+[{S\\{\tiny next=L1}}
+  [{if (},tm]
+  [{B\\{\tiny true=fall, false=L1}}
+    [{$B_1$\\{\tiny true=L2, false=fall}}
+      [{E rel E\\{\tiny \texttt{x > 100}}\\{\tiny code: if x>100 goto L2}}]]
+    [{$\vert\vert$},tm]
+    [{$B_2$\\{\tiny true=fall, false=L1}}
+      [{$B_3$\\{\tiny true=fall, false=L1}}
+        [{E rel E\\{\tiny \texttt{x > 200}}\\{\tiny code: ifFalse x>200 goto L1}}]]
+      [{\&\&},tm]
+      [{$B_4$\\{\tiny true=fall, false=L1}}
+        [{E rel E\\{\tiny \texttt{x != y}}\\{\tiny code: ifFalse x!=y goto L1}}]]
+    ]
+  ]
+  [{)},tm]
+  [{$S_1$\\{\tiny next=L1}\\{\tiny code: x = 0}}]
+]
+\end{forest}
+\end{document}

@@ -7,14 +7,12 @@ created: 2026-10-02
 status: unverified
 summary: "Mark-and-compact marks reachable objects, computes new addresses by scanning the heap, updates all references, then slides live objects to the low end of the same heap (order preserved, no extra space, several passes); Cheney's copying collector copies reachable objects breadth-first into a separate To semispace in one pass over the reachable objects, leaving garbage untouched, but needs half the memory as reserve. Running times: basic mark-and-compact is proportional to the number of chunks in the heap plus the total size of the reached objects; Cheney's is proportional to the total size of the reached objects only."
 sources: ["KMS Chapter 7 slides 79-93 (Relocating, Mark-and-Compact, Copying Garbage Collectors, Comparing Costs)", "Dragon book 2e sec. 7.6.3-7.6.5"]
+changes:
+  - "2026-10-06: replaced the ASCII drawing by a TikZ figure (figures/heap_before.png); the answer itself is unchanged. (three heap drawings replaced)"
 ---
 **Example scenario (assumption).** The heap holds six objects A-F of 100 bytes each at addresses 0, 100, ..., 500, in alphabetical order. The root set points to A, and A $\to$ C, C $\to$ E, D $\to$ F. B, D and F are unreachable.
 
-```text
-Heap before GC:  | A | B | C | D | E | F |
-address:           0  100 200 300 400 500
-reachable: A, C, E   (root -> A -> C -> E)
-```
+![Heap before collection](figures/heap_before.png)
 
 **Basic mark-and-compact (in one heap):**
 
@@ -23,10 +21,7 @@ reachable: A, C, E   (root -> A -> C -> E)
 3. **Update references:** in the root set and in every marked object, replace each pointer `p` by `NewLocation(p)`: root $\to$ 0, A.ptr $\to$ 100, C.ptr $\to$ 200.
 4. **Move:** slide each marked object to its new address, in address order.
 
-```text
-Heap after:      | A | C | E |      free      |
-address:           0  100 200 300 ........ 600
-```
+![Heap after mark-and-compact](figures/heap_after.png)
 
 **Cheney's copying collector (two semispaces).** Assume the From space is 0-599 and the To space starts at 1000.
 
@@ -35,11 +30,7 @@ address:           0  100 200 300 ........ 600
 3. Scan C: E is copied to 1200 (`free` = 1300) and C.ptr becomes 1200.
 4. Scan E: no references. `unscanned` = `free`, so stop. The roles of the two semispaces are swapped, and B, D and F are never touched.
 
-```text
-From (abandoned): | A | B | C | D | E | F |
-To:               | A | C | E |   free ...
-address:           1000 1100 1200 1300
-```
+![From and To spaces after Cheney's collector](figures/cheney.png)
 
 **Differences:**
 

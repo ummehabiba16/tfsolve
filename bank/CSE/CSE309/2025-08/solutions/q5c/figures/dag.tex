@@ -1,0 +1,27 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usepackage[edges]{forest}
+\usetikzlibrary{arrows.meta,positioning,calc,decorations.pathreplacing,shapes.geometric}
+\begin{document}
+\begin{tikzpicture}[>=Stealth,font=\small,
+ op/.style={draw,circle,minimum size=0.95cm,inner sep=0pt,fill=blue!6,align=center,font=\footnotesize},
+ lf/.style={draw,rectangle,minimum size=0.7cm,inner sep=2pt,fill=green!8,font=\footnotesize},
+ lb/.style={font=\scriptsize,blue!50!black}]
+\node[lf] (b0) at (0,0) {$b_0$};
+\node[lf] (c0) at (1.6,0) {$c_0$};
+\node[lf] (a0) at (4.8,0) {$a_0$};
+\node[lf] (i0) at (6.6,0) {$i_0$};
+\node[lf] (j0) at (9.4,0) {$j_0$};
+\node[op] (n1) at (0.8,1.9) {$*$}; \node[lb,left=0.05cm of n1] {$d$};
+\node[op] (n2) at (3.4,1.9) {$=[\,]$}; \node[lb,left=0.05cm of n2] {$e,\ b$};
+\node[op] (n5) at (7.0,1.9) {$=[\,]$}; \node[lb,right=0.05cm of n5] {$c$};
+\node[op] (n3) at (2.1,3.9) {$+$}; \node[lb,left=0.05cm of n3] {$f$};
+\node[op] (n4) at (6.2,3.9) {$[\,]=$};
+\draw[->] (n1)--(b0); \draw[->] (n1)--(c0);
+\draw[->] (n2)--(a0); \draw[->] (n2)--(i0);
+\draw[->] (n3)--(n1); \draw[->] (n3)--(n2);
+\draw[->] (n4)--(a0); \draw[->] (n4)--(j0); \draw[->] (n4)--(n2);
+\draw[->] (n5)--(a0); \draw[->] (n5)--(i0);
+\draw[->,dashed,red!60!black] (n4) to[bend left=12] node[above right,font=\scriptsize,pos=0.4]{must execute before} (n5);
+\end{tikzpicture}
+\end{document}

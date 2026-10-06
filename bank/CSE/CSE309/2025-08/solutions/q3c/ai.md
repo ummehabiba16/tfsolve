@@ -7,6 +7,8 @@ created: 2026-10-01
 status: unverified
 summary: "The LR(1) automaton has 13 states (I0-I12, no conflicts, so the grammar is LR(1)); it is NOT SLR(1): in the LR(0) state {A->a.), B->a., B->a.B, B->.a, B->.aB} the input ) both shifts (A->a.)) and reduces B->a because ) is in FOLLOW(B) = {-, )}."
 sources: ["MMA syntax analysis slides 404-489 (Canonical LR(1) Items, Constructing LR(1) Sets of Items), 354-387 (Constructing SLR-Parsing Tables)", "Dragon book 2e sec. 4.6.4, 4.7.2"]
+changes:
+  - "2026-10-06: added TikZ figure (figures/lr1.png) drawing the LR(1) automaton described by the state table; the answer itself is unchanged."
 ---
 Terminals: `-`, `)`, `a`. Augment and number the productions:
 
@@ -33,6 +35,8 @@ $$(3)\ A \to a\,) \quad (4)\ B \to aB \quad (5)\ B \to a$$
 | $I_{12}$ | $[B \to aB \cdot, )]$ | |
 
 *In the table, \$ inside an item is the endmarker.*
+
+![Canonical LR(1) automaton](figures/lr1.png)
 
 Canonical LR(1) table (no conflicts, so the grammar **is** LR(1)):
 
