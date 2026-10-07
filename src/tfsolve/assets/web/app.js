@@ -78,14 +78,32 @@ document.addEventListener("DOMContentLoaded", function () {
   var COURSE = JSON.parse(indexEl.textContent);
   var PAGE = 10;
   function $(id) { return document.getElementById(id); }
+
+  // A multi-choice filter: a <details> holding a checklist. Nothing selected means "all".
+  function picker(id) {
+    var root = $(id), boxes = root.querySelectorAll("input[type=checkbox]");
+    return {
+      root: root,
+      get: function () {
+        var v = [];
+        boxes.forEach(function (b) { if (b.checked) v.push(b.value); });
+        return v;
+      },
+      set: function (list) { boxes.forEach(function (b) { b.checked = list.indexOf(b.value) !== -1; }); },
+      toggle: function (v) {
+        boxes.forEach(function (b) { if (b.value === v) b.checked = !b.checked; });
+      }
+    };
+  }
   function esc(s) {
     return String(s).replace(/[&<>"]/g, function (ch) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]; });
   }
 
   var text = $("f-text");
-  var topic = $("f-topic");
-  var faculty = $("f-faculty");
-  var exam = $("f-exam");
+  var topic = picker("f-topic");
+  var faculty = picker("f-faculty");
+  var exam = picker("f-exam");
+  var pickers = [topic, faculty, exam];
   var solved = $("f-solved");
   var openAll = $("f-open");
   var qonly = $("f-qonly");
@@ -167,16 +185,37 @@ document.addEventListener("DOMContentLoaded", function () {
   // ---- filters
   function criteria() {
     return {
-      topic: topic.value, faculty: faculty.value, exam: exam.value, solved: solved.checked,
+      topic: topic.get(), faculty: faculty.get(), exam: exam.get(), solved: solved.checked,
       raw: text.value.trim(), text: text.value.replace(NOISE, " ").toLowerCase().split(/\s+/).join(" ").trim()
     };
   }
-  function matches(q, c, skip) { // skip: ignore the topic or exam filter (to count what choosing it would show)
-    return (skip === "topic" || !c.topic || q.tags[c.topic]) &&
-      (skip === "exam" || !c.exam || q.exam === c.exam) &&
-      (!c.faculty || q.who[c.faculty]) &&
-      (!c.solved || q.solved) &&
-      (!c.text || !searchText || searchText[q.i].indexOf(c.text) !== -1);
+  function hit(list, test) { // nothing picked = no restriction; otherwise any one of the picks will do
+    if (!list.length) return true;
+    for (var i = 0; i < list.length; i++) if (test(list[i])) return true;
+    return false;
+  }
+  function inTopic(q) { return function (t) { return q.tags[t]; }; }
+  function inFaculty(q) { return function (w) { return q.who[w]; }; }
+  function inExam(q) { return function (e) { return q.exam === e; }; }
+  function others(q, c) { // the filters that are not teacher / exam / topic
+    return (!c.solved || q.solved) && (!c.text || !searchText || searchText[q.i].indexOf(c.text) !== -1);
+  }
+  function matches(q, c) {
+    return hit(c.topic, inTopic(q)) && hit(c.exam, inExam(q)) && hit(c.faculty, inFaculty(q)) && others(q, c);
+  }
+  // One pass: how many questions match, and, for every choice in the three lists, how many questions you would
+  // get with that choice added (the other two lists still applied). Drives the numbers next to each choice.
+  function tally(c) {
+    var t = {}, e = {}, f = {}, total = 0;
+    Q.forEach(function (q) {
+      if (!others(q, c)) return;
+      var okT = hit(c.topic, inTopic(q)), okE = hit(c.exam, inExam(q)), okF = hit(c.faculty, inFaculty(q));
+      if (okT && okE && okF) total++;
+      if (okE && okF) for (var k in q.tags) t[k] = (t[k] || 0) + 1;
+      if (okT && okF) e[q.exam] = (e[q.exam] || 0) + 1;
+      if (okT && okE) for (var w in q.who) f[w] = (f[w] || 0) + 1;
+    });
+    return { total: total, topic: t, exam: e, faculty: f };
   }
   function arranged(c) { // the matching questions in display order
     var out = Q.filter(function (q) { return matches(q, c); });
@@ -193,52 +232,64 @@ document.addEventListener("DOMContentLoaded", function () {
     var r = rootOf(p);
     return { key: p, title: p === r ? info[p].name : info[r].name + " › " + info[p].name, note: "" };
   }
-  function parts(c) { // the active filters as readable pieces
+  function nameOf(field, v) {
+    return field === "topic" ? (info[v] ? info[v].name : v) : field === "exam" ? (examInfo[v] ? examInfo[v].title : v) : v;
+  }
+  var LABEL = { topic: "Topic", exam: "Exam", faculty: "Teacher" };
+  function parts(c) { // the active filters as readable chips, one per picked value
     var out = [];
-    if (c.topic) out.push({ clear: "topic", label: "Topic: " + (info[c.topic] ? info[c.topic].name : c.topic) });
-    if (c.exam) out.push({ clear: "exam", label: "Exam: " + (examInfo[c.exam] ? examInfo[c.exam].title : c.exam) });
-    if (c.faculty) out.push({ clear: "faculty", label: "Teacher: " + c.faculty });
-    if (c.solved) out.push({ clear: "solved", label: "With solutions" });
-    if (c.raw) out.push({ clear: "text", label: "Search: “" + c.raw + "”" });
+    ["faculty", "exam", "topic"].forEach(function (f) {
+      c[f].forEach(function (v) { out.push({ field: f, value: v, label: LABEL[f] + ": " + nameOf(f, v) }); });
+    });
+    if (c.solved) out.push({ field: "solved", label: "With solutions" });
+    if (c.raw) out.push({ field: "text", label: "Search: \u201c" + c.raw + "\u201d" });
     return out;
   }
-  function titleFor(c) {
-    var p = parts(c).map(function (x) { return x.label; });
-    return "Results for " + COURSE.code + ": " + (p.length ? p.join(" · ") : "all questions");
+  function titleFor(c) { // "Results for CSE 313: Teachers: ABC, XYZ · Exams: 3 chosen · Topic: Deadlock"
+    var bits = [];
+    ["faculty", "exam", "topic"].forEach(function (f) {
+      var v = c[f];
+      if (!v.length) return;
+      var names = v.map(function (x) { return nameOf(f, x); });
+      bits.push(LABEL[f] + (v.length > 1 ? "s" : "") + ": " +
+        (v.length <= 3 && names.join(", ").length <= 60 ? names.join(", ") : v.length + " chosen"));
+    });
+    if (c.solved) bits.push("with solutions");
+    if (c.raw) bits.push("\u201c" + c.raw + "\u201d");
+    return "Results for " + COURSE.code + ": " + (bits.length ? bits.join(" \u00b7 ") : "all questions");
   }
   function key(c) { return JSON.stringify([arrangement, c.topic, c.exam, c.faculty, c.solved, c.text]); }
   function plural(n) { return n + " question" + (n === 1 ? "" : "s"); }
 
-  // ---- topic / exam overview: tap one to see its questions
-  function renderOverview(c) {
+  // ---- topic / exam overview: tap to pick (several allowed), then show
+  function renderOverview(c, tl) {
     var body = $("overview-body"), html;
+    var chosen = arrangement === "topic" ? c.topic : c.exam;
     if (arrangement === "topic") {
-      var counts = {};
-      Q.forEach(function (q) {
-        if (!matches(q, c, "topic")) return;
-        for (var t in q.tags) counts[t] = (counts[t] || 0) + 1;
-      });
       var node = function (id) {
-        if (!counts[id]) return "";
+        if (!tl.topic[id] && chosen.indexOf(id) === -1) return "";
         var sub = (kids[id] || []).map(node).join("");
-        return "<li><button type=\"button\" class=\"ov-btn\" data-topic=\"" + esc(id) + "\"" +
-          (c.topic === id ? " aria-pressed=\"true\"" : "") + ">" + esc(info[id].name) +
-          " <span class=\"n\">" + counts[id] + "</span></button>" + (sub ? "<ul>" + sub + "</ul>" : "") + "</li>";
+        return "<li><button type=\"button\" class=\"ov-btn\" data-topic=\"" + esc(id) + "\" aria-pressed=\"" +
+          (chosen.indexOf(id) !== -1) + "\">" + esc(info[id].name) +
+          " <span class=\"n\">" + (tl.topic[id] || 0) + "</span></button>" + (sub ? "<ul>" + sub + "</ul>" : "") + "</li>";
       };
       html = "<ul class=\"ov\">" + roots.map(node).join("") + "</ul>";
     } else {
-      var per = {};
-      Q.forEach(function (q) { if (matches(q, c, "exam")) per[q.exam] = (per[q.exam] || 0) + 1; });
-      html = "<ul class=\"ov flat\">" + COURSE.exams.filter(function (e) { return per[e.label]; }).map(function (e) {
-        return "<li><button type=\"button\" class=\"ov-btn\" data-exam=\"" + esc(e.label) + "\"" +
-          (c.exam === e.label ? " aria-pressed=\"true\"" : "") + ">" + esc(e.title) +
-          " <span class=\"n\">" + per[e.label] + "</span></button></li>";
+      html = "<ul class=\"ov flat\">" + COURSE.exams.filter(function (e) {
+        return tl.exam[e.label] || chosen.indexOf(e.label) !== -1;
+      }).map(function (e) {
+        return "<li><button type=\"button\" class=\"ov-btn\" data-exam=\"" + esc(e.label) + "\" aria-pressed=\"" +
+          (chosen.indexOf(e.label) !== -1) + "\">" + esc(e.title) +
+          " <span class=\"n\">" + (tl.exam[e.label] || 0) + "</span></button></li>";
       }).join("") + "</ul>";
     }
+    var noun = arrangement === "topic" ? "topic" : "exam";
+    $("overview-bar").hidden = !chosen.length;
+    $("overview-picked").textContent = chosen.length + " " + noun + (chosen.length === 1 ? "" : "s") + " picked";
     body.innerHTML = html;
     $("overview-title").textContent = arrangement === "topic" ? "Topics" : "Exams, newest first";
-    $("overview-hint").textContent = "Tap one to see its questions. To combine filters, set them on the left and press " +
-      "“Show questions”.";
+    $("overview-hint").textContent = "Tap one or more " + noun + "s to pick them, then press \u201cShow\u201d. " +
+      "Teachers, exams and topics can all be combined with the filters on the left.";
   }
 
   // ---- showing results
@@ -246,21 +297,48 @@ document.addEventListener("DOMContentLoaded", function () {
   var current = [];     // those questions, in display order
   var page = 1, token = 0;
 
+  // Each picker's button text ("All teachers", "KRV, MMI", "3 exams"), its numbers and its tick marks.
+  function syncPickers(c, tl) {
+    pickers.forEach(function (pk) {
+      var root = pk.root, field = root.id.slice(2), picked = pk.get();
+      var names = picked.map(function (v) { return nameOf(field, v); });
+      var noun = root.dataset.noun, joined = names.join(", ");
+      root.querySelector(".sum").textContent = !picked.length ? root.dataset.all :
+        picked.length === 1 || joined.length <= 26 ? joined : picked.length + " " + noun + "s"; // one name may be cut short by CSS
+      var cnt = root.querySelector(".cnt");
+      cnt.hidden = !picked.length;
+      cnt.textContent = picked.length;
+      root.classList.toggle("has", picked.length > 0);
+      root.querySelector(".hint").textContent = picked.length ? picked.length + " picked" :
+        field === "topic" ? "Includes sub-topics" : "None picked = all";
+      root.querySelectorAll("li[data-v]").forEach(function (li) {
+        var n = tl[field][li.dataset.v] || 0;
+        li.querySelector(".n").textContent = n;
+        li.classList.toggle("none", !n);
+      });
+    });
+  }
+
   function refresh() { // keep counts, overview and buttons in step with the controls; shows nothing new
     var c = criteria();
     if (needSearch(c)) loadSearch().then(refresh);
     var waiting = needSearch(c);
-    var n = waiting ? 0 : Q.filter(function (q) { return matches(q, c); }).length;
+    var tl = waiting ? { total: 0, topic: {}, exam: {}, faculty: {} } : tally(c);
+    var n = tl.total;
     var stale = !!committed && key(c) !== committed.key;
     arrangeButtons.forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.arrange === arrangement)); });
     $("arrange-now").textContent = arrangement === "topic" ? "Grouped topic by topic" : "Grouped exam by exam, newest first";
-    showBtn.textContent = waiting ? "Searching…" : n === 0 ? "No questions match" :
+    var label = waiting ? "Searching\u2026" : n === 0 ? "No questions match" :
       stale ? "Update results (" + n + ")" : "Show " + plural(n);
+    showBtn.textContent = label;
     showBtn.disabled = waiting || n === 0;
+    $("overview-show").textContent = label;
+    $("overview-show").disabled = showBtn.disabled;
     $("f-count").textContent = waiting ? "" : n + " of " + Q.length + " questions match" +
       (searchFailed && c.text ? " (search is unavailable right now)" : "");
     $("results-stale").hidden = !stale;
-    renderOverview(c);
+    syncPickers(c, tl);
+    renderOverview(c, tl);
   }
 
   function pagerHtml(pages) {
@@ -312,9 +390,9 @@ document.addEventListener("DOMContentLoaded", function () {
     var p = new URLSearchParams(), c = committed.c;
     p.set("show", "1");
     if (committed.arr === "year") p.set("arrange", "year");
-    if (c.faculty) p.set("faculty", c.faculty);
-    if (c.exam) p.set("exam", c.exam);
-    if (c.topic) p.set("topic", c.topic);
+    if (c.faculty.length) p.set("faculty", c.faculty.join(","));
+    if (c.exam.length) p.set("exam", c.exam.join(","));
+    if (c.topic.length) p.set("topic", c.topic.join(","));
     if (c.solved) p.set("solved", "1");
     if (c.raw) p.set("q", c.raw);
     if (page > 1) p.set("p", String(page));
@@ -342,8 +420,8 @@ document.addEventListener("DOMContentLoaded", function () {
       (arrangement === "topic" ? "grouped by topic" : "grouped by exam, newest first") +
       (pages > 1 ? " · page " + page + " of " + pages : "");
     $("results-chips").innerHTML = parts(c).map(function (x) {
-      return "<button type=\"button\" class=\"active-chip\" data-clear=\"" + x.clear + "\" title=\"Remove this filter\">" +
-        esc(x.label) + " <span aria-hidden=\"true\">×</span></button>";
+      return "<button type=\"button\" class=\"active-chip\" data-field=\"" + x.field + "\" data-value=\"" +
+        esc(x.value || "") + "\" title=\"Remove this filter\">" + esc(x.label) + " <span aria-hidden=\"true\">×</span></button>";
     }).join("");
     ["pager-top", "pager-bottom"].forEach(function (id) {
       $(id).hidden = pages < 2;
@@ -382,12 +460,14 @@ document.addEventListener("DOMContentLoaded", function () {
   function loadHash() {
     var p = new URLSearchParams(location.hash.slice(1));
     arrangement = p.get("arrange") === "year" ? "year" : "topic";
-    faculty.value = p.get("faculty") || "";
-    exam.value = p.get("exam") || "";
-    topic.value = p.get("topic") || "";
+    var list = function (name) { return (p.get(name) || "").split(",").filter(Boolean); };
+    faculty.set(list("faculty"));
+    exam.set(list("exam"));
+    topic.set(list("topic"));
     solved.checked = p.get("solved") === "1";
     text.value = p.get("q") || "";
-    var any = p.get("show") === "1" || faculty.value || exam.value || topic.value || solved.checked || text.value;
+    var any = p.get("show") === "1" || faculty.get().length || exam.get().length || topic.get().length ||
+      solved.checked || text.value;
     return { show: !!any, page: parseInt(p.get("p"), 10) || 1 };
   }
   window.addEventListener("popstate", function () {
@@ -399,7 +479,24 @@ document.addEventListener("DOMContentLoaded", function () {
   arrangeButtons.forEach(function (b) {
     b.addEventListener("click", function () { arrangement = b.dataset.arrange; refresh(); });
   });
-  [topic, faculty, exam, solved].forEach(function (el) { el.addEventListener("change", refresh); });
+  pickers.forEach(function (pk) {
+    pk.root.addEventListener("change", refresh);
+    pk.root.addEventListener("click", function (e) {
+      if (e.target.closest("[data-act=clear]")) { pk.set([]); refresh(); }
+    });
+    pk.root.addEventListener("toggle", function () { // opening one closes the others, so the panel stays short
+      if (!pk.root.open) return;
+      pickers.forEach(function (o) { if (o !== pk) o.root.open = false; });
+    });
+    var find = pk.root.querySelector(".pf"); // "Find a topic": hide the choices that don't contain the words
+    if (find) find.addEventListener("input", function () {
+      var w = find.value.toLowerCase().trim();
+      pk.root.querySelectorAll("li[data-v]").forEach(function (li) {
+        li.hidden = !!w && li.textContent.toLowerCase().indexOf(w) === -1;
+      });
+    });
+  });
+  solved.addEventListener("change", refresh);
   var typing = null;
   text.addEventListener("input", function () {
     clearTimeout(typing);
@@ -411,18 +508,27 @@ document.addEventListener("DOMContentLoaded", function () {
   showBtn.addEventListener("click", function () { show(1); });
   $("results-update").addEventListener("click", function () { show(1); });
 
-  $("overview-body").addEventListener("click", function (e) { // tapping a topic or exam shows it straight away
+  $("overview-body").addEventListener("click", function (e) { // tap to pick or unpick; "Show" displays them
     var b = e.target.closest(".ov-btn");
     if (!b) return;
-    if (b.dataset.topic) topic.value = b.dataset.topic;
-    if (b.dataset.exam) exam.value = b.dataset.exam;
-    show(1);
+    var attr = b.dataset.topic ? "topic" : "exam";
+    (attr === "topic" ? topic : exam).toggle(b.dataset[attr]);
+    refresh();
+    var again = $("overview-body").querySelector(".ov-btn[data-" + attr + "=\"" + b.dataset[attr] + "\"]");
+    if (again) try { again.focus({ preventScroll: true }); } catch (err) {} // the list was redrawn: keep focus here
+  });
+  $("overview-show").addEventListener("click", function () { show(1); });
+  $("overview-clear").addEventListener("click", function () {
+    (arrangement === "topic" ? topic : exam).set([]);
+    refresh();
   });
   $("results-chips").addEventListener("click", function (e) { // remove one filter and update
-    var b = e.target.closest("[data-clear]");
+    var b = e.target.closest("[data-field]");
     if (!b) return;
-    var what = b.dataset.clear;
-    if (what === "solved") solved.checked = false; else ({ topic: topic, exam: exam, faculty: faculty, text: text })[what].value = "";
+    var f = b.dataset.field;
+    if (f === "solved") solved.checked = false;
+    else if (f === "text") text.value = "";
+    else ({ topic: topic, exam: exam, faculty: faculty })[f].toggle(b.dataset.value);
     show(1);
   });
   [$("pager-top"), $("pager-bottom")].forEach(function (nav) {
@@ -433,12 +539,13 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   list.addEventListener("click", function (e) {
     var chip = e.target.closest(".chip"); // a topic chip on a question: show that topic
-    if (chip) { topic.value = chip.dataset.topic; show(1); return; }
+    if (chip) { topic.set([chip.dataset.topic]); show(1); return; }
     if (e.target.closest("[data-retry]")) show(page, { noScroll: true, replace: true });
   });
 
   $("f-clear").addEventListener("click", function () {
-    topic.value = faculty.value = exam.value = text.value = "";
+    pickers.forEach(function (pk) { pk.set([]); });
+    text.value = "";
     solved.checked = false;
     try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
     hideResults();

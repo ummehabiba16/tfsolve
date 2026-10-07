@@ -193,15 +193,18 @@ def _help():
       <li><b>By year</b>: exam by exam, newest first.</li>
     </ul>
   </li>
-  <li><b>Pick something</b>: the list of topics (or exams) shows how many questions each has. Tap one to see its
-  questions straight away.</li>
-  <li><b>Or combine filters</b>: <b>Teacher</b> (shown by initials, e.g. ABC), <b>Exam</b>, <b>Topic</b>,
-  <b>Search</b> and <i>Only questions with solutions</i>. The button shows how many questions match;
-  press <b>Show questions</b> to see them. If you change a filter later, the page tells you and waits for
-  <b>Update results</b>.</li>
+  <li><b>Pick</b>: tap topics (or exams) in the list to pick as many as you like; each shows how many questions
+  it has. Then press <b>Show</b>.</li>
+  <li><b>Or use the filters</b> on the left: <b>Teachers</b> (by initials, e.g. ABC), <b>Exams</b> and
+  <b>Topics</b> each open a checklist where you can tick several. For example, two teachers, three exams and ten
+  topics at once. A question is shown when it matches <i>one of</i> the teachers, <i>and one of</i> the exams,
+  <i>and one of</i> the topics you ticked; a filter with nothing ticked allows everything. Ticking a topic includes its
+  sub-topics. <b>Search</b> and <i>Only questions with solutions</i> narrow it further. The button shows how many
+  questions match; press <b>Show questions</b> to see them. If you change a filter later, the page tells you and
+  waits for <b>Update results</b>.</li>
   <li><b>Read</b>: the heading says what you are looking at. Questions come ten to a page; use the page numbers
-  above or below. Click a topic chip on a question to see that topic, or a filter chip under the heading to
-  remove that filter.</li>
+  above or below. Click a topic chip on a question to see just that topic, or a chip under the heading to
+  remove that one choice.</li>
   <li><b>Print / Save PDF</b> prints <i>every</i> question matching the filters (not just the page on screen),
   contents included, with all solutions opened. Tick <i>Questions only when printing</i> to leave the solutions out.
   It may take a few seconds to gather them all.</li>
@@ -398,13 +401,26 @@ def _course(bank, course, repo_root, out_dir):
     (out_dir / "search.json").write_text(json.dumps({"v": version, "t": texts}, separators=(",", ":")),
                                          encoding="utf-8")
 
-    def opt(value, text):
-        return f'<option value="{esc(value)}">{esc(text)}</option>'
+    def multi(fid, label, all_text, noun, options, find=None):
+        """A filter you can pick several values from: a button that opens a checklist (no popup, so it works the
+        same with a mouse and with a finger). options: (value, text, indent level)."""
+        items = "".join(
+            f'<li data-v="{esc(v)}" style="--lvl:{lvl}"><label><input type="checkbox" value="{esc(v)}">'
+            f'<span class="t">{esc(t)}</span><span class="n"></span></label></li>' for v, t, lvl in options)
+        finder = (f'<input type="search" class="pf" placeholder="{esc(find)}" aria-label="{esc(find)}">'
+                  if find else "")
+        return f"""<div class="field"><span class="flabel">{esc(label)}</span>
+  <details class="multi" id="{fid}" data-all="{esc(all_text)}" data-noun="{esc(noun)}">
+    <summary><span class="sum">{esc(all_text)}</span><span class="cnt" hidden></span></summary>
+    <div class="pop">{finder}
+      <div class="pact"><span class="hint"></span><button type="button" class="link" data-act="clear">Clear</button></div>
+      <ul class="opts">{items}</ul>
+    </div>
+  </details></div>"""
 
-    topic_opts = "".join(opt(t.id, "  " * len(course.ancestors(t.id)) + t.name)
-                         for t in course.topics.values() if t.id in used_topics)
-    fac_opts = "".join(opt(f, f) for f in sorted(faculty))
-    exam_opts = "".join(opt(e.label, e.title) for e in exams if e.parts)
+    topic_opts = [(t.id, t.name, len(course.ancestors(t.id))) for t in course.topics.values() if t.id in used_topics]
+    fac_opts = [(f, f, 0) for f in sorted(faculty)]
+    exam_opts = [(e.label, e.title, 0) for e in exams if e.parts]
     # Topic tree (only topics in use, in course.yaml order), the exams, and one row per question.
     index = {
         "code": course.display_code, "v": version,
@@ -432,15 +448,17 @@ def _course(bank, course, repo_root, out_dir):
     </div>
     <p class="arrange-now" id="arrange-now">Grouped topic by topic</p>
   </div>
-  <label>Teacher<select id="f-faculty"><option value="">All teachers</option>{fac_opts}</select></label>
-  <label>Exam<select id="f-exam"><option value="">All exams</option>{exam_opts}</select></label>
-  <label>Topic<select id="f-topic"><option value="">All topics</option>{topic_opts}</select></label>
+  <p class="how">Pick as many teachers, exams and topics as you like. A question is shown when it matches
+    <b>one of the teachers</b> and <b>one of the exams</b> and <b>one of the topics</b> you picked.</p>
+  {multi("f-faculty", "Teachers", "All teachers", "teacher", fac_opts)}
+  {multi("f-exam", "Exams", "All exams", "exam", exam_opts)}
+  {multi("f-topic", "Topics", "All topics", "topic", topic_opts, find="Find a topic")}
   <label>Search<input type="search" id="f-text" placeholder="e.g. deadlock, Gantt"></label>
   <label class="check"><input type="checkbox" id="f-solved"> Only questions with solutions</label>
   <label class="check"><input type="checkbox" id="f-open"> Show all solutions</label>
   <label class="check"><input type="checkbox" id="f-qonly"> Questions only when printing</label>
+  <div class="showbar"><button type="button" id="f-show" class="primary">Show questions</button></div>
   <div class="buttons">
-    <button type="button" id="f-show" class="primary">Show questions</button>
     <button type="button" id="f-clear" class="ghost">Clear filters</button>
     <button type="button" id="f-print" class="ghost">Print / Save PDF</button>
   </div>
@@ -452,6 +470,11 @@ def _course(bank, course, repo_root, out_dir):
 <details class="overview" id="overview" open>
   <summary id="overview-title">Topics</summary>
   <p class="muted" id="overview-hint"></p>
+  <div class="ov-bar" id="overview-bar" hidden>
+    <span id="overview-picked"></span>
+    <button type="button" id="overview-show" class="primary">Show</button>
+    <button type="button" id="overview-clear" class="ghost">Clear</button>
+  </div>
   <div id="overview-body"></div>
 </details>
 <section id="results" hidden>

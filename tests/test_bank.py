@@ -77,6 +77,7 @@ def test_website(tmp_path):
     assert 'id="stat-views"' in about and 'id="stat-prints"' in about and 'id="stats"' not in page
     assert "TFSPLIT" not in page and (out / "style.css").exists() and (out / "app.js").exists()
     assert 'data-arrange="topic"' in page and 'data-arrange="year"' in page and 'id="f-show"' in page
+    assert page.count('<details class="multi"') == 3 and 'id="f-faculty"' in page and 'type="checkbox" value="KRV"' in page
     assert 'id="results-title"' in page and 'id="pager-top"' in page and (out / "help.html").exists()
 
 

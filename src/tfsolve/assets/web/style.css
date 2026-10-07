@@ -266,11 +266,60 @@ code span.al, code span.er, code span.wa { color: var(--tok-err); font-weight: 6
 .switch button[aria-pressed="true"]::before { content: "\2713\00a0"; }
 .arrange-now { font-size: 0.8rem; color: var(--muted); margin: 0.4rem 0 0; }
 
+/* multi-choice filters (teachers, exams, topics): a button that opens a checklist */
+.how { font-size: 0.82rem; color: var(--muted); margin: 0 0 0.9rem; line-height: 1.45; }
+.how b { color: var(--text); font-weight: 600; }
+.field { margin-bottom: 0.8rem; }
+.flabel { display: block; font-size: 0.85rem; font-weight: 600; color: var(--title); margin-bottom: 0.3rem; }
+.multi { border: 1px solid var(--line); border-radius: 6px; background: var(--field); }
+.multi.has { border-color: var(--blue); }
+.multi > summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; padding: 0.45rem 0.5rem;
+  min-height: 40px; color: var(--text);
+}
+.multi > summary::-webkit-details-marker { display: none; }
+.multi > summary::after {
+  content: ""; margin-left: auto; flex: none; width: 0.5rem; height: 0.5rem; border: solid var(--muted);
+  border-width: 0 2px 2px 0; transform: rotate(45deg) translateY(-2px); transition: transform 0.15s;
+}
+.multi[open] > summary::after { transform: rotate(-135deg) translateY(-2px); }
+.multi .sum { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.multi .cnt {
+  flex: none; background: var(--blue); color: var(--on-blue); border-radius: 999px; font-size: 0.75rem; font-weight: 700;
+  min-width: 1.4rem; text-align: center; padding: 0.05rem 0.4rem;
+}
+.multi .pop { border-top: 1px solid var(--line); padding: 0.5rem; }
+.filters .multi input.pf {
+  display: block; width: 100%; margin: 0 0 0.4rem; padding: 0.4rem 0.5rem; font: inherit; font-weight: 400;
+  border: 1px solid var(--line); border-radius: 6px; background: var(--card); color: var(--text);
+}
+.pact { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem; }
+.pact .hint { font-size: 0.78rem; color: var(--muted); }
+button.link { background: none; border: 0; color: var(--blue); padding: 0.2rem 0.3rem; font-size: 0.85rem; text-decoration: underline; }
+button.link:hover { background: none; color: var(--title); }
+.opts { list-style: none; margin: 0; padding: 0; max-height: 15rem; overflow-y: auto; overscroll-behavior: contain; }
+.opts li { padding-left: calc(var(--lvl, 0) * 0.9rem); }
+.filters .multi label {
+  display: flex; align-items: center; gap: 0.5rem; margin: 0; padding: 0.35rem 0.3rem; border-radius: 5px;
+  font-size: 0.9rem; font-weight: 400; color: var(--text); cursor: pointer;
+}
+.filters .multi label:hover { background: var(--blue-soft); }
+.opts input { flex: none; width: 1.05rem; height: 1.05rem; margin: 0; accent-color: var(--blue); }
+.opts .t { flex: 1; min-width: 0; }
+.opts .n { flex: none; font-size: 0.78rem; color: var(--muted); }
+.opts li.none .t, .opts li.none .n { opacity: 0.5; }
+
 /* topic / exam overview above the results */
 .overview { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 0.25rem 1rem; margin-bottom: 1rem; }
 .overview > summary { cursor: pointer; font-weight: 700; font-size: 1.1rem; color: var(--title); padding: 0.6rem 0; }
 .overview[open] > summary { border-bottom: 1px solid var(--line); margin-bottom: 0.5rem; }
 .overview .muted { margin: 0.25rem 0 0.5rem; }
+.ov-bar {
+  position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem;
+  background: var(--blue-soft); border: 1px solid var(--blue); border-radius: 8px; padding: 0.5rem 0.75rem; margin: 0 0 0.75rem;
+  font-weight: 600; color: var(--title);
+}
+.ov-bar #overview-picked { margin-right: auto; }
 .ov, .ov ul { list-style: none; margin: 0; padding: 0; }
 .ov ul { padding-left: 1.1rem; }
 .ov > li { margin: 0.3rem 0 0.6rem; }
@@ -281,7 +330,9 @@ code span.al, code span.er, code span.wa { color: var(--tok-err); font-weight: 6
   background: transparent; color: var(--blue); border: 0; padding: 0.3rem 0.5rem; border-radius: 6px; text-align: left;
 }
 .ov-btn:hover { background: var(--blue-soft); color: var(--title); }
-.ov-btn[aria-pressed="true"] { background: var(--blue-soft); color: var(--title); font-weight: 700; }
+.ov-btn[aria-pressed="true"] { background: var(--blue); color: var(--on-blue); font-weight: 700; }
+.ov-btn[aria-pressed="true"] .n { color: inherit; opacity: 0.85; }
+.ov-btn[aria-pressed="true"]::before { content: "\2713\00a0"; }
 .ov > li > .ov-btn { font-weight: 600; }
 .ov.flat .ov-btn { border: 1px solid var(--line); }
 .ov .n { color: var(--muted); font-size: 0.8rem; margin-left: 0.25rem; }
@@ -315,6 +366,9 @@ code span.al, code span.er, code span.wa { color: var(--tok-err); font-weight: 6
 #results-list > .group-head:first-child { margin-top: 0.5rem; }
 .q.failed { border-left-color: var(--bad); }
 button.primary { font-weight: 600; padding: 0.65rem 0.75rem; }
+/* the main button stays at the bottom of the screen while the filter list is long, on a phone or a short laptop */
+.showbar { position: sticky; bottom: 0; z-index: 3; background: var(--card); padding: 0.6rem 0; margin-bottom: 0.2rem; box-shadow: 0 -8px 8px -8px var(--shadow); }
+.showbar button { width: 100%; }
 button:disabled { opacity: 0.55; cursor: default; }
 button:disabled:hover { background: var(--blue); border-color: var(--blue); color: var(--on-blue); }
 button.ghost:disabled:hover { background: transparent; color: var(--blue); }
@@ -327,6 +381,10 @@ picture { display: block; }
   button, .filters select, .filters input[type=search] { min-height: 44px; }
   .chip { min-height: 32px; }
   .filters input[type=checkbox] { width: 22px; height: 22px; }
+  .filters .multi label { padding: 0.6rem 0.4rem; font-size: 1rem; }
+  .opts input { width: 1.3rem; height: 1.3rem; }
+  .opts { max-height: 45vh; }
+  .ov-btn { padding: 0.55rem 0.6rem; }
 }
 
 .qexam { color: var(--blue); font-weight: 600; font-size: 0.9rem; }
