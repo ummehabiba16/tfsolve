@@ -57,7 +57,7 @@ tfsolve -c CSE313 -topicwise      # PDF lands in out/
 | `tfsolve check [-c COURSE]` | Lint, build the PDF, and name every part whose layout breaks (text off the page, missing symbols). Must end with `CHECK OK`. |
 | `tfsolve pages scan.pdf` | Turn a scanned paper into page images (used when transcribing). |
 | `tfsolve doctor` | Check that Pandoc and LaTeX are ready. |
-| `tfsolve web [-o site]` | Build the website: plain HTML you can open from `site/index.html`, filter by topic, teacher and exam, and print. No LaTeX needed. |
+| `tfsolve web [-o site]` | Build the website (plain HTML, no LaTeX needed): filter by topic, teacher and exam, page through the questions and print. Questions load on demand, so view it through a web server, e.g. `python3 -m http.server -d site`, not by opening the file. |
 
 Year options:
 - `-y 2025` (exam year);

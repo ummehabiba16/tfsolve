@@ -66,13 +66,18 @@ def test_website(tmp_path):
     home = (out / "index.html").read_text(encoding="utf-8")
     page = (out / "CSE313" / "index.html").read_text(encoding="utf-8")
     assert 'href="CSE313/index.html"' in home
-    assert 'class="q"' in page and 'class="gantt"' in page and 'class="math inline"' in page
+    assert 'id="course-index"' in page and 'class="q"' not in page  # questions are separate files, not in the page
+    qfiles = list((out / "CSE313" / "q").glob("*.html"))
+    assert qfiles and (out / "CSE313" / "search.json").exists()
+    cards = "".join(f.read_text(encoding="utf-8") for f in qfiles)
+    assert 'class="q"' in cards and 'class="gantt"' in cards and 'class="math inline"' in cards
+    assert len(page) < 200_000
     about = (out / "about.html").read_text(encoding="utf-8")
     assert 'href="about.html"' in home and 'href="../about.html"' in page
     assert 'id="stat-views"' in about and 'id="stat-prints"' in about and 'id="stats"' not in page
     assert "TFSPLIT" not in page and (out / "style.css").exists() and (out / "app.js").exists()
-    assert 'data-arrange="topic"' in page and 'data-arrange="year"' in page and 'id="topic-tree"' in page
-    assert 'id="f-year"' in page and 'data-primary=' in page and (out / "help.html").exists()
+    assert 'data-arrange="topic"' in page and 'data-arrange="year"' in page and 'id="f-show"' in page
+    assert 'id="results-title"' in page and 'id="pager-top"' in page and (out / "help.html").exists()
 
 
 def test_topicwise_yearwise_flags(tmp_path, monkeypatch):

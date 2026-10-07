@@ -17,7 +17,8 @@ dependencies = [
 
 [project.optional-dependencies]
 scan = ["pymupdf>=1.24"]          # tfsolve pages: read scanned PDFs
-dev = ["pymupdf>=1.24", "pytest>=8"]
+web = ["pillow>=10"]              # tfsolve web: smaller WebP copies of figures (optional; the site works without)
+dev = ["pymupdf>=1.24", "pillow>=10", "pytest>=8"]
 
 [project.scripts]
 tfsolve = "tfsolve.cli:main"

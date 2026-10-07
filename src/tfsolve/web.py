@@ -3,10 +3,12 @@
     site/index.html             home: every course in the bank
     site/about.html             what the project is, plus page-view and PDF-print counts
     site/help.html              how to use the site and the tfsolve command
-    site/<COURSE>/index.html    one course: all questions, filtered in the browser
+    site/<COURSE>/index.html    one course: filters and an index; questions are fetched as the reader asks
+    site/<COURSE>/q/<id>.html   one question with its solutions;  search.json: text for the search box
     site/style.css, site/app.js
 
-No server is needed: open site/index.html, or host the folder on GitHub Pages.
+Host the folder on GitHub Pages, or try it locally with `python3 -m http.server -d site`. (Opening index.html
+straight from disk does not work: browsers refuse the page's requests for the question files.)
 """
 from __future__ import annotations
 
@@ -15,6 +17,7 @@ import hashlib
 import html
 import json
 import re
+import shutil
 import subprocess
 from importlib import resources
 from pathlib import Path
@@ -92,7 +95,7 @@ def to_html(chunks):
                          input=text, capture_output=True, text=True, encoding="utf-8")
     if run.returncode != 0:
         raise BuildError(f"pandoc failed: {run.stderr.strip()}")
-    out = [s.strip() for s in run.stdout.split(SPLIT)]
+    out = [s.strip().replace("<img ", '<img loading="lazy" decoding="async" ') for s in run.stdout.split(SPLIT)]
     if len(out) != len(chunks):  # a snippet swallowed a separator (e.g. an unclosed ``` fence): go one by one
         return [to_html([c])[0] for c in chunks] if len(chunks) > 1 else ["".join(out)]
     return out
@@ -151,7 +154,7 @@ course, topic, teacher and exam. Every solution carries a badge: <b>verified</b>
 <b>not yet verified</b> (every AI solution starts here) or <b>disputed</b>.</p>
 <h2>Using it</h2>
 <ul>
-  <li><b>On this site:</b> pick a course, set the filters, then press <i>Print / Save PDF</i>.</li>
+  <li><b>On this site:</b> pick a course, pick a topic or set the filters, read the questions, then press <i>Print / Save PDF</i>.</li>
   <li><b>On your computer:</b> <code>pip install tfsolve</code>, then for example
   <code>tfsolve -c CSE313 -topicwise</code> or <code>-yearwise</code> builds a PDF of the whole course, and
   <code>-f ABC</code> keeps only faculty ABC's questions. See <a href="help.html">Help</a>.
@@ -189,15 +192,22 @@ def _help():
       <li><b>By topic</b>: every topic in turn, all its past questions together.</li>
       <li><b>By year</b>: exam by exam, newest first.</li>
     </ul>
-    The <b>Contents</b> list above the questions follows your choice and shows how many questions each topic or exam has.
   </li>
-  <li><b>Teacher</b>: only the questions a teacher set (shown by initials, e.g. ABC).</li>
-  <li><b>Exam</b>: one paper.</li>
-  <li><b>Topic</b> and <b>Search</b> narrow it further. Clicking a topic chip on a question does the same.</li>
-  <li><b>Print / Save PDF</b> prints what is on screen, contents included, with every solution opened.
-  Tick <i>Questions only when printing</i> to leave the solutions out.</li>
+  <li><b>Pick something</b>: the list of topics (or exams) shows how many questions each has. Tap one to see its
+  questions straight away.</li>
+  <li><b>Or combine filters</b>: <b>Teacher</b> (shown by initials, e.g. ABC), <b>Exam</b>, <b>Topic</b>,
+  <b>Search</b> and <i>Only questions with solutions</i>. The button shows how many questions match;
+  press <b>Show questions</b> to see them. If you change a filter later, the page tells you and waits for
+  <b>Update results</b>.</li>
+  <li><b>Read</b>: the heading says what you are looking at. Questions come ten to a page; use the page numbers
+  above or below. Click a topic chip on a question to see that topic, or a filter chip under the heading to
+  remove that filter.</li>
+  <li><b>Print / Save PDF</b> prints <i>every</i> question matching the filters (not just the page on screen),
+  contents included, with all solutions opened. Tick <i>Questions only when printing</i> to leave the solutions out.
+  It may take a few seconds to gather them all.</li>
 </ol>
-<p>Your filters are kept in the address bar, so you can bookmark or share a filtered view.</p>
+<p>Search looks through the questions, their topics and each solution's short answer. The address bar keeps what
+you are looking at, so you can bookmark or share it.</p>
 <h2>Solution badges</h2>
 <ul>
   <li><b>Verified</b>: checked by two people, or against a teacher's solution.</li>
@@ -250,8 +260,70 @@ def _home(bank):
     return _page("tfsolve: BUET term-final questions", intro + "\n".join(rows), "")
 
 
+_IMG_TAG = re.compile(r'<img ([^>]*?)src="(fig/[^"]+)"([^>]*)>')
+_NOISE = re.compile(r"[$`*#|\\{}\[\]()_>~]+")
+
+
+class _WebFigures(_Figures):
+    """Like the PDF figures, plus a lossless WebP copy of each PNG (same pixels, about half the download) and the
+    image size, so the page can reserve the space and nothing jumps while figures load. Browsers without
+    WebP simply use the PNG."""
+
+    def __init__(self, tmp):
+        super().__init__(tmp)
+        self.sizes = {}  # "fig/<name>.png" -> (width, height, has a WebP copy)
+        self._webp = {}  # source file -> its converted copy, so a figure used by many questions is converted once
+
+    def _copy(self, src, dst):
+        super()._copy(src, dst)
+        try:
+            from PIL import Image
+            with Image.open(src) as im:
+                size = im.size
+                webp = dst.with_suffix(".webp")
+                if src.suffix.lower() != ".png":
+                    ok = False
+                elif src in self._webp:
+                    ok = self._webp[src] is not None
+                    if ok:
+                        shutil.copyfile(self._webp[src], webp)
+                else:
+                    im.save(webp, "WEBP", lossless=True, quality=100, method=4)
+                    ok = webp.stat().st_size < src.stat().st_size * 0.9  # keep it only when it really is smaller
+                    if not ok:
+                        webp.unlink()
+                    self._webp[src] = webp if ok else None
+            self.sizes[f"fig/{dst.name}"] = (*size, ok)
+        except Exception:  # Pillow missing or an unreadable image: the plain copy is still there
+            pass
+
+    def tag(self, html_text):
+        """Give every <img> its width and height (and the WebP source) from what _copy recorded."""
+        def repl(m):
+            before, src, after = m.groups()
+            size = self.sizes.get(src)
+            if not size or "width=" in before + after:
+                return m.group(0)
+            w, h, webp = size
+            img = f'<img {before}src="{src}"{after.rstrip(" /")} width="{w}" height="{h}">'
+            if webp:
+                return f'<picture><source srcset="{src[:-4]}.webp" type="image/webp">{img}</picture>'
+            return img
+        return _IMG_TAG.sub(repl, html_text)
+
+
+def _plain(md):
+    """Lower-case plain text of some Markdown, for the search box."""
+    return " ".join(_NOISE.sub(" ", md).lower().split())
+
+
 def _course(bank, course, repo_root, out_dir):
-    figs = _Figures(out_dir)  # copies images into <out_dir>/fig and rewrites links (page sits in out_dir)
+    """The course page is a small shell: filters plus an index of every question. Each question (with its
+    solutions) is its own file under q/, fetched by the browser only when it is about to be shown."""
+    for sub in ("fig", "q"):
+        shutil.rmtree(out_dir / sub, ignore_errors=True)
+    (out_dir / "q").mkdir(parents=True, exist_ok=True)
+    figs = _WebFigures(out_dir)  # copies images into <out_dir>/fig and rewrites links (page sits in out_dir)
     exams = sorted(course.exams, key=lambda e: e.label, reverse=True)
 
     # Markdown for every question body, shared setup and solution, converted in one go.
@@ -265,48 +337,45 @@ def _course(bank, course, repo_root, out_dir):
             for s in sols:
                 summary = f"**Answer.** {s.meta['summary']}\n\n" if s.meta.get("summary") else ""
                 chunks.append(summary + figs.fix(s.body, s.path.parent))
-    converted = iter(to_html(chunks))
+    converted = iter(figs.tag(h) for h in to_html(chunks))
 
-    used_topics, faculty, groups = set(), set(), []
-    for exam in exams:
-        cards = []
-        for part, stems, sols in (it for it in items if it[0].exam is exam):
-            stem_html = [next(converted) for _ in stems]
-            body_html = next(converted)
-            who, how = bank.setters(part)
-            faculty.update(who)
-            tids = [t for t in part.topics if t in course.topics]
-            tags = set()
-            for t in tids:
-                tags.add(t)
-                tags.update(course.ancestors(t))
-            used_topics.update(tags)
+    used_topics, faculty, rows, texts, digest = set(), set(), [], [], hashlib.sha1()
+    for part, stems, sols in items:
+        exam = part.exam
+        stem_html = [next(converted) for _ in stems]
+        body_html = next(converted)
+        who, how = bank.setters(part)
+        faculty.update(who)
+        tids = [t for t in part.topics if t in course.topics]
+        tags = set()
+        for t in tids:
+            tags.add(t)
+            tags.update(course.ancestors(t))
+        used_topics.update(tags)
 
-            facts = [f"{part.marks:g} marks" if isinstance(part.marks, (int, float)) else None,
-                     f"Section {part.section}" if part.section else None,
-                     (("Set by " if how == "set" else "Taught by ") + ", ".join(who)) if who else None]
-            chips = "".join(f'<button type="button" class="chip" data-topic="{esc(t)}">{esc(course.topics[t].name)}</button>'
-                            for t in tids)
-            setup = "".join(f'<div class="stem"><div class="label">Shared setup</div>{h}</div>' for h in stem_html)
-            note = f'<p class="note">Transcription note: {esc(str(part.meta["note"]))}</p>' if part.meta.get("note") else ""
+        facts = [f"{part.marks:g} marks" if isinstance(part.marks, (int, float)) else None,
+                 f"Section {part.section}" if part.section else None,
+                 (("Set by " if how == "set" else "Taught by ") + ", ".join(who)) if who else None]
+        chips = "".join(f'<button type="button" class="chip" data-topic="{esc(t)}">{esc(course.topics[t].name)}</button>'
+                        for t in tids)
+        setup = "".join(f'<div class="stem"><div class="label">Shared setup</div>{h}</div>' for h in stem_html)
+        note = f'<p class="note">Transcription note: {esc(str(part.meta["note"]))}</p>' if part.meta.get("note") else ""
 
-            sol_html = []
-            for s in sols:
-                by = "AI" if s.is_ai else s.author
-                src = as_list(s.meta.get("sources"))
-                sources = f'<p class="note">Sources: {esc("; ".join(src))}</p>' if src else ""
-                sol_html.append(f"""<details class="solution">
+        sol_html = []
+        for s in sols:
+            by = "AI" if s.is_ai else s.author
+            src = as_list(s.meta.get("sources"))
+            sources = f'<p class="note">Sources: {esc("; ".join(src))}</p>' if src else ""
+            sol_html.append(f"""<details class="solution">
   <summary>Solution by {esc(by)} <span class="badge {esc(s.status)}">{esc(STATUS_TEXT.get(s.status, s.status))}</span></summary>
   <div class="body">{next(converted)}{sources}</div>
 </details>""")
-            if not sols:
-                sol_html.append('<p class="note nosol">No solution yet.</p>')
-            add = _github(part.path.parent / "solutions" / part.pid, repo_root, new=True)
+        if not sols:
+            sol_html.append('<p class="note nosol">No solution yet.</p>')
+        add = _github(part.path.parent / "solutions" / part.pid, repo_root, new=True)
 
-            primary = tids[0] if tids else ""
-            cards.append(f"""<article class="q" id="{esc(exam.label)}-{esc(part.pid)}" data-exam="{esc(exam.label)}"
-  data-topics="{esc(' '.join(sorted(tags)))}" data-primary="{esc(primary)}" data-faculty="{esc(' '.join(who))}"
-  data-solved="{'yes' if sols else 'no'}">
+        qid = f"{exam.label}-{part.pid}"
+        card = f"""<article class="q" id="{esc(qid)}">
   <div class="qhead"><span class="qexam">{esc(exam.title)}</span><span class="qlabel">{esc(part.label)}</span>
     <span class="facts">{' · '.join(esc(f) for f in facts if f)}</span></div>
   <div class="chips">{chips}</div>
@@ -314,26 +383,42 @@ def _course(bank, course, repo_root, out_dir):
   {''.join(sol_html)}
   <div class="links"><a href="{_github(part.path, repo_root)}">Edit question</a>
     <a href="{add}">Add a solution</a></div>
-</article>""")
-        if cards:
-            rules = " ".join(f"Section {s.name}: {s.rule}" for s in exam.sections.values() if s.rule)
-            groups.append(f"""<section class="exam group" id="y-{esc(exam.label)}" data-exam="{esc(exam.label)}">
-  <h2>{esc(exam.title)}</h2>{f'<p class="note">{esc(rules)}</p>' if rules else ''}
-  {''.join(cards)}
-</section>""")
+</article>"""
+        (out_dir / "q" / f"{qid}.html").write_text(card, encoding="utf-8")
+        digest.update(card.encode("utf-8"))
+        rows.append([qid, exam.label, tids[0] if tids else "", sorted(tags), who, 1 if sols else 0])
 
-    def opt(value, text, extra=""):
-        return f'<option value="{esc(value)}"{extra}>{esc(text)}</option>'
+        # Search covers the question, its topics and each solution's short answer; full solutions would make the
+        # file several times bigger for little gain.
+        words = [exam.title, part.label, *(course.topics[t].name for t in tids),
+                 *(s.body for s in stems), part.body, *(str(s.meta.get("summary") or "") for s in sols)]
+        texts.append(_plain(" ".join(words)))
 
-    topic_opts = "".join(opt(t.id, " " * len(course.ancestors(t.id)) + t.name)
+    version = digest.hexdigest()[:8]
+    (out_dir / "search.json").write_text(json.dumps({"v": version, "t": texts}, separators=(",", ":")),
+                                         encoding="utf-8")
+
+    def opt(value, text):
+        return f'<option value="{esc(value)}">{esc(text)}</option>'
+
+    topic_opts = "".join(opt(t.id, "  " * len(course.ancestors(t.id)) + t.name)
                          for t in course.topics.values() if t.id in used_topics)
     fac_opts = "".join(opt(f, f) for f in sorted(faculty))
     exam_opts = "".join(opt(e.label, e.title) for e in exams if e.parts)
-    # Topic tree (only topics in use, in course.yaml order) for the "By topic" arrangement.
-    tree = [{"id": t.id, "name": t.name, "parent": t.parent} for t in course.topics.values() if t.id in used_topics]
-    tree_json = json.dumps(tree).replace("</", "<\\/")
+    # Topic tree (only topics in use, in course.yaml order), the exams, and one row per question.
+    index = {
+        "code": course.display_code, "v": version,
+        "topics": [{"id": t.id, "name": t.name, "parent": t.parent}
+                   for t in course.topics.values() if t.id in used_topics],
+        "exams": [{"label": e.label, "title": e.title,
+                   "rules": " ".join(f"Section {s.name}: {s.rule}" for s in e.sections.values() if s.rule)}
+                  for e in exams if e.parts],
+        "q": rows,  # [id, exam, first topic, topics with their parents, teachers, has solution]
+    }
+    index_json = json.dumps(index, separators=(",", ":")).replace("</", "<\\/")
 
     body = f"""<h1>{esc(course.display_code)}: {esc(course.title)}</h1>
+<noscript><p class="empty">This page needs JavaScript to show the questions.</p></noscript>
 <div class="layout">
 <aside class="filters" id="filters">
   <button type="button" id="f-collapse" class="collapse" aria-expanded="true" aria-controls="filters"
@@ -355,23 +440,37 @@ def _course(bank, course, repo_root, out_dir):
   <label class="check"><input type="checkbox" id="f-open"> Show all solutions</label>
   <label class="check"><input type="checkbox" id="f-qonly"> Questions only when printing</label>
   <div class="buttons">
+    <button type="button" id="f-show" class="primary">Show questions</button>
     <button type="button" id="f-clear" class="ghost">Clear filters</button>
-    <button type="button" id="f-print">Print / Save PDF</button>
+    <button type="button" id="f-print" class="ghost">Print / Save PDF</button>
   </div>
   <p class="count" id="f-count"></p>
   <p class="muted"><a href="../help.html">How to use this page</a></p>
   </div>
 </aside>
 <div class="questions">
-<nav class="contents" id="contents" aria-label="Contents"><h2 id="contents-title">Contents</h2><ol id="toc"></ol></nav>
-<div id="by-year" data-view="year">
-{''.join(groups)}
+<details class="overview" id="overview" open>
+  <summary id="overview-title">Topics</summary>
+  <p class="muted" id="overview-hint"></p>
+  <div id="overview-body"></div>
+</details>
+<section id="results" hidden>
+  <div class="results-head">
+    <h2 id="results-title" tabindex="-1">Results</h2>
+    <p class="muted" id="results-sub"></p>
+    <div class="active" id="results-chips"></div>
+    <p class="stale" id="results-stale" role="status" hidden>Your filters changed.
+      <button type="button" id="results-update">Update results</button></p>
+  </div>
+  <nav class="pager" id="pager-top" aria-label="Pages" hidden></nav>
+  <div id="results-list" aria-live="polite"></div>
+  <p class="empty" id="f-empty" hidden>No questions match these filters.</p>
+  <nav class="pager" id="pager-bottom" aria-label="Pages" hidden></nav>
+</section>
 </div>
-<div id="by-topic" data-view="topic" hidden></div>
-<p class="empty" id="f-empty" hidden>No questions match these filters.</p>
 </div>
-</div>
-<script type="application/json" id="topic-tree">{tree_json}</script>"""
+<div id="print-area" aria-hidden="true"></div>
+<script type="application/json" id="course-index">{index_json}</script>"""
     return _page(f"{course.display_code} {course.title} · tfsolve", body, "../", [(course.display_code, None)])
 
 

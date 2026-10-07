@@ -111,9 +111,12 @@ class _Figures:
             self.dir.mkdir(exist_ok=True)
             self.n += 1
             dst = self.dir / f"{self.n}-{src.name}"
-            shutil.copyfile(src, dst)
+            self._copy(src, dst)
             return f"{m.group(1)}fig/{dst.name}{m.group(3)}"
         return _IMG.sub(repl, text)
+
+    def _copy(self, src, dst):
+        shutil.copyfile(src, dst)
 
 
 def _question_md(bank, part, figs, printed_stems, toc=None):

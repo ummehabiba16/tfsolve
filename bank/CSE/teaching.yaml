@@ -72,7 +72,7 @@ CSE317:
   "2006-07": [UNKNOWN]
 CSE301:
   # Setters not identified yet: every session is [UNKNOWN] until the faculty sheet is known.
-  "2023-24": [A: [HT], B: [UNKNOWN]]
+  "2023-24": {A: [HT], B: [UNKNOWN]}
   "2022-23": [UNKNOWN]
   "2021-22": [UNKNOWN]
   "2020-21": [UNKNOWN]
