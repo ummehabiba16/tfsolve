@@ -193,9 +193,7 @@ def _help():
       <li><b>By year</b>: exam by exam, newest first.</li>
     </ul>
   </li>
-  <li><b>Pick</b>: tap topics (or exams) in the list to pick as many as you like; each shows how many questions
-  it has. Then press <b>Show</b>.</li>
-  <li><b>Or use the filters</b> on the left: <b>Teachers</b> (by initials, e.g. ABC), <b>Exams</b> and
+  <li><b>Choose what to see</b> with the filters on the left: <b>Teachers</b> (by initials, e.g. ABC), <b>Exams</b> and
   <b>Topics</b> each open a checklist where you can tick several. For example, two teachers, three exams and ten
   topics at once. A question is shown when it matches <i>one of</i> the teachers, <i>and one of</i> the exams,
   <i>and one of</i> the topics you ticked; a filter with nothing ticked allows everything. Ticking a topic includes its
@@ -203,7 +201,9 @@ def _help():
   questions match; press <b>Show questions</b> to see them. If you change a filter later, the page tells you and
   waits for <b>Update results</b>.</li>
   <li><b>Read</b>: the heading says what you are looking at. Questions come ten to a page; use the page numbers
-  above or below. Click a topic chip on a question to see just that topic, or a chip under the heading to
+  above or below, or <b>Show all</b> to put every selected question on one page (long lists load in parts). The <b>Jump to a topic</b> box (or <b>Jump to a year</b>, when arranged by year) lists the topics (or years)
+  of the questions on screen, with counts. Tap one to go to its first question, on whichever page it is; your
+  filters are not changed. Click a topic chip on a question to see just that topic, or a chip under the heading to
   remove that one choice.</li>
   <li><b>Print / Save PDF</b> prints <i>every</i> question matching the filters (not just the page on screen),
   contents included, with all solutions opened. Tick <i>Questions only when printing</i> to leave the solutions out.
@@ -468,13 +468,8 @@ def _course(bank, course, repo_root, out_dir):
 </aside>
 <div class="questions">
 <details class="overview" id="overview" open>
-  <summary id="overview-title">Topics</summary>
+  <summary id="overview-title">Jump to a topic</summary>
   <p class="muted" id="overview-hint"></p>
-  <div class="ov-bar" id="overview-bar" hidden>
-    <span id="overview-picked"></span>
-    <button type="button" id="overview-show" class="primary">Show</button>
-    <button type="button" id="overview-clear" class="ghost">Clear</button>
-  </div>
   <div id="overview-body"></div>
 </details>
 <section id="results" hidden>
@@ -487,6 +482,7 @@ def _course(bank, course, repo_root, out_dir):
   </div>
   <nav class="pager" id="pager-top" aria-label="Pages" hidden></nav>
   <div id="results-list" aria-live="polite"></div>
+  <p class="status" id="results-progress" role="status" hidden></p>
   <p class="empty" id="f-empty" hidden>No questions match these filters.</p>
   <nav class="pager" id="pager-bottom" aria-label="Pages" hidden></nav>
 </section>

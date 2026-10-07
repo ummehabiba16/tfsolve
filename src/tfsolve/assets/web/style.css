@@ -314,12 +314,6 @@ button.link:hover { background: none; color: var(--title); }
 .overview > summary { cursor: pointer; font-weight: 700; font-size: 1.1rem; color: var(--title); padding: 0.6rem 0; }
 .overview[open] > summary { border-bottom: 1px solid var(--line); margin-bottom: 0.5rem; }
 .overview .muted { margin: 0.25rem 0 0.5rem; }
-.ov-bar {
-  position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem;
-  background: var(--blue-soft); border: 1px solid var(--blue); border-radius: 8px; padding: 0.5rem 0.75rem; margin: 0 0 0.75rem;
-  font-weight: 600; color: var(--title);
-}
-.ov-bar #overview-picked { margin-right: auto; }
 .ov, .ov ul { list-style: none; margin: 0; padding: 0; }
 .ov ul { padding-left: 1.1rem; }
 .ov > li { margin: 0.3rem 0 0.6rem; }
@@ -330,9 +324,6 @@ button.link:hover { background: none; color: var(--title); }
   background: transparent; color: var(--blue); border: 0; padding: 0.3rem 0.5rem; border-radius: 6px; text-align: left;
 }
 .ov-btn:hover { background: var(--blue-soft); color: var(--title); }
-.ov-btn[aria-pressed="true"] { background: var(--blue); color: var(--on-blue); font-weight: 700; }
-.ov-btn[aria-pressed="true"] .n { color: inherit; opacity: 0.85; }
-.ov-btn[aria-pressed="true"]::before { content: "\2713\00a0"; }
 .ov > li > .ov-btn { font-weight: 600; }
 .ov.flat .ov-btn { border: 1px solid var(--line); }
 .ov .n { color: var(--muted); font-size: 0.8rem; margin-left: 0.25rem; }
@@ -359,11 +350,17 @@ button.link:hover { background: none; color: var(--title); }
 .pager button.cur { background: var(--blue); color: var(--on-blue); border-color: var(--blue); cursor: default; }
 .pager button:disabled { opacity: 0.45; cursor: default; }
 .pager .gap { color: var(--muted); }
+.pager .ask { flex-basis: 100%; text-align: center; color: var(--warn); background: var(--warn-bg); border-radius: 8px; padding: 0.4rem 0.75rem; }
+.pager button.ghost { background: transparent; color: var(--blue); }
+.pager button.all { margin-left: 0.6rem; background: transparent; border-color: var(--blue); }
 #results-list { transition: opacity 0.15s; }
 #results-list.loading { opacity: 0.45; pointer-events: none; }
 .status { color: var(--muted); text-align: center; padding: 2rem; }
 .group-head { color: var(--title); font-size: 1.1rem; margin: 1.5rem 0 0.6rem; padding-bottom: 0.3rem; border-bottom: 2px solid var(--title); break-after: avoid; }
-#results-list > .group-head:first-child { margin-top: 0.5rem; }
+.batch { display: contents; }
+.batch:first-child > .group-head:first-child { margin-top: 0.5rem; }
+.q, .group-head { scroll-margin-top: 12px; }
+.q:focus { outline: none; }
 .q.failed { border-left-color: var(--bad); }
 button.primary { font-weight: 600; padding: 0.65rem 0.75rem; }
 /* the main button stays at the bottom of the screen while the filter list is long, on a phone or a short laptop */

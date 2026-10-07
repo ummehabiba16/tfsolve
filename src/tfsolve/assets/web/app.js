@@ -217,13 +217,13 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     return { total: total, topic: t, exam: e, faculty: f };
   }
-  function arranged(c) { // the matching questions in display order
+  function arranged(c, arr) { // the matching questions in display order (arr: "topic" or "year", default the controls')
     var out = Q.filter(function (q) { return matches(q, c); });
-    if (arrangement === "topic") out.sort(function (a, b) { return a.tk - b.tk || a.i - b.i; });
+    if ((arr || arrangement) === "topic") out.sort(function (a, b) { return a.tk - b.tk || a.i - b.i; });
     return out; // by year: already newest exam first
   }
-  function groupOf(q) {
-    if (arrangement === "year") {
+  function groupOf(q, arr) { // arr: how the shown list is arranged (not necessarily what the controls say now)
+    if (arr === "year") {
       var e = examInfo[q.exam];
       return { key: q.exam, title: e ? e.title : q.exam, note: e ? e.rules : "" };
     }
@@ -258,38 +258,47 @@ document.addEventListener("DOMContentLoaded", function () {
     if (c.raw) bits.push("\u201c" + c.raw + "\u201d");
     return "Results for " + COURSE.code + ": " + (bits.length ? bits.join(" \u00b7 ") : "all questions");
   }
-  function key(c) { return JSON.stringify([arrangement, c.topic, c.exam, c.faculty, c.solved, c.text]); }
+  function key(c, arr) { return JSON.stringify([arr || arrangement, c.topic, c.exam, c.faculty, c.solved, c.text]); }
   function plural(n) { return n + " question" + (n === 1 ? "" : "s"); }
 
-  // ---- topic / exam overview: tap to pick (several allowed), then show
-  function renderOverview(c, tl) {
-    var body = $("overview-body"), html;
-    var chosen = arrangement === "topic" ? c.topic : c.exam;
-    if (arrangement === "topic") {
+  // ---- the map: topics (or exams) of the questions the filters match; tapping one jumps to its first question
+  // With results on screen the map lists exactly those (so a jump can never change what is shown); before the first
+  // "Show" it lists what the filters match, and tapping a topic shows them and goes there.
+  var mapList = []; // the questions the map was drawn from, in display order
+  function renderOverview(c) {
+    var arr = committed ? committed.arr : arrangement;
+    var list = committed ? current : arranged(c);
+    mapList = list;
+    var count = {}, first = {};
+    var note = function (id, i) { count[id] = (count[id] || 0) + 1; if (!(id in first)) first[id] = i; };
+    list.forEach(function (q, i) {
+      // by topic: each question sits under its first topic's heading (and that topic's parents), as in the list
+      if (arr === "topic") { for (var t = q.primary; t; t = info[t].parent) note(t, i); if (!q.primary) note("", i); }
+      else note(q.exam, i);
+    });
+    var btn = function (attr, id, label) {
+      return "<button type=\"button\" class=\"ov-btn\" data-" + attr + "=\"" + esc(id) + "\" data-i=\"" + first[id] + "\">" +
+        esc(label) + " <span class=\"n\">" + count[id] + "</span></button>";
+    };
+    var html;
+    if (!list.length) {
+      html = "<p class=\"muted\">No questions match the filters.</p>";
+    } else if (arr === "topic") {
       var node = function (id) {
-        if (!tl.topic[id] && chosen.indexOf(id) === -1) return "";
+        if (!count[id]) return "";
         var sub = (kids[id] || []).map(node).join("");
-        return "<li><button type=\"button\" class=\"ov-btn\" data-topic=\"" + esc(id) + "\" aria-pressed=\"" +
-          (chosen.indexOf(id) !== -1) + "\">" + esc(info[id].name) +
-          " <span class=\"n\">" + (tl.topic[id] || 0) + "</span></button>" + (sub ? "<ul>" + sub + "</ul>" : "") + "</li>";
+        return "<li>" + btn("topic", id, info[id].name) + (sub ? "<ul>" + sub + "</ul>" : "") + "</li>";
       };
-      html = "<ul class=\"ov\">" + roots.map(node).join("") + "</ul>";
+      html = "<ul class=\"ov\">" + roots.map(node).join("") + (count[""] ? "<li>" + btn("topic", "", "Untagged") + "</li>" : "") + "</ul>";
     } else {
-      html = "<ul class=\"ov flat\">" + COURSE.exams.filter(function (e) {
-        return tl.exam[e.label] || chosen.indexOf(e.label) !== -1;
-      }).map(function (e) {
-        return "<li><button type=\"button\" class=\"ov-btn\" data-exam=\"" + esc(e.label) + "\" aria-pressed=\"" +
-          (chosen.indexOf(e.label) !== -1) + "\">" + esc(e.title) +
-          " <span class=\"n\">" + (tl.exam[e.label] || 0) + "</span></button></li>";
+      html = "<ul class=\"ov flat\">" + COURSE.exams.filter(function (e) { return count[e.label]; }).map(function (e) {
+        return "<li>" + btn("exam", e.label, e.title) + "</li>";
       }).join("") + "</ul>";
     }
-    var noun = arrangement === "topic" ? "topic" : "exam";
-    $("overview-bar").hidden = !chosen.length;
-    $("overview-picked").textContent = chosen.length + " " + noun + (chosen.length === 1 ? "" : "s") + " picked";
-    body.innerHTML = html;
-    $("overview-title").textContent = arrangement === "topic" ? "Topics" : "Exams, newest first";
-    $("overview-hint").textContent = "Tap one or more " + noun + "s to pick them, then press \u201cShow\u201d. " +
-      "Teachers, exams and topics can all be combined with the filters on the left.";
+    $("overview-body").innerHTML = html;
+    $("overview-title").textContent = arr === "topic" ? "Jump to a topic" : "Jump to a year";
+    $("overview-hint").textContent = "The " + (arr === "topic" ? "topics" : "years") + " of the " + plural(list.length) +
+      (committed ? " shown below" : " your filters match") + ". Tap one to go to its first question; your filters stay as they are.";
   }
 
   // ---- showing results
@@ -332,16 +341,25 @@ document.addEventListener("DOMContentLoaded", function () {
       stale ? "Update results (" + n + ")" : "Show " + plural(n);
     showBtn.textContent = label;
     showBtn.disabled = waiting || n === 0;
-    $("overview-show").textContent = label;
-    $("overview-show").disabled = showBtn.disabled;
     $("f-count").textContent = waiting ? "" : n + " of " + Q.length + " questions match" +
       (searchFailed && c.text ? " (search is unavailable right now)" : "");
     $("results-stale").hidden = !stale;
     syncPickers(c, tl);
-    renderOverview(c, tl);
+    renderOverview(c);
   }
 
-  function pagerHtml(pages) {
+  var allMode = false;  // true: every question on one page, drawn in batches
+  var BATCH = 15, BIG = 60;
+  function pagerHtml(pages, asking) {
+    if (asking) { // "Show all" on a long list: confirm here (a browser pop-up can be blocked)
+      return "<span class=\"ask\">Show all " + current.length + " questions on one page? A long page can be slow on a " +
+        "phone or tablet.</span><button type=\"button\" data-all=\"yes\">Yes, show all</button>" +
+        "<button type=\"button\" class=\"ghost\" data-all=\"cancel\">Cancel</button>";
+    }
+    if (allMode) {
+      return "<span class=\"gap\">All " + current.length + " questions on one page</span>" +
+        "<button type=\"button\" data-all=\"0\">Show in pages</button>";
+    }
     var btn = function (p, label, extra) {
       return "<button type=\"button\" data-page=\"" + p + "\"" + (extra || "") + ">" + label + "</button>";
     };
@@ -353,13 +371,15 @@ document.addEventListener("DOMContentLoaded", function () {
       html += btn(p, p, p === page ? " class=\"cur\" aria-current=\"page\"" : "");
       last = p;
     }
-    return html + btn(page + 1, "Next ›", page === pages ? " disabled" : "");
+    return html + btn(page + 1, "Next ›", page === pages ? " disabled" : "") +
+      "<button type=\"button\" class=\"all\" data-all=\"1\" title=\"Show every selected question on one page\">Show all " +
+      current.length + "</button>";
   }
 
-  function cardsHtml(qs, htmls) { // group headings between the cards, wherever the group changes
-    var out = [], last = null;
+  function cardsHtml(qs, htmls, arr, before) { // group headings between the cards, wherever the group changes
+    var out = [], last = before ? groupOf(before, arr).key : null; // before: the question just above, if any
     qs.forEach(function (q, k) {
-      var g = groupOf(q);
+      var g = groupOf(q, arr);
       if (g.key !== last) {
         last = g.key;
         out.push("<h3 class=\"group-head\">" + esc(g.title) + "</h3>" + (g.note ? "<p class=\"note\">" + esc(g.note) + "</p>" : ""));
@@ -395,54 +415,117 @@ document.addEventListener("DOMContentLoaded", function () {
     if (c.topic.length) p.set("topic", c.topic.join(","));
     if (c.solved) p.set("solved", "1");
     if (c.raw) p.set("q", c.raw);
-    if (page > 1) p.set("p", String(page));
+    if (allMode) p.set("p", "all"); else if (page > 1) p.set("p", String(page));
     try { history[push ? "pushState" : "replaceState"](null, "", "#" + p.toString()); } catch (e) {}
   }
 
-  // Show the questions matching the controls, page pg. opts: noScroll, replace (don't add a history entry).
+  // Show the questions matching the controls, page pg. opts: noScroll, replace (don't add a history entry),
+  // keep (stay with the results on screen: change page only, even if the controls have changed since),
+  // focusId (after drawing the page, scroll to that question).
   function show(pg, opts) {
     opts = opts || {};
-    var c = criteria();
-    if (needSearch(c)) { loadSearch().then(function () { show(pg, opts); }); return; }
-    clearPrint();
-    committed = { c: c, arr: arrangement, key: key(c) };
-    current = arranged(c);
-    var pages = Math.max(1, Math.ceil(current.length / PAGE));
+    var keep = opts.keep && committed;
+    if (keep && opts.rearrange) { // "By topic" / "By year" pressed: same questions, grouped the other way
+      committed.arr = arrangement;
+      committed.key = key(committed.c, arrangement);
+      current = arranged(committed.c, arrangement);
+    }
+    var c = keep ? committed.c : criteria();
+    if (!keep && needSearch(c)) { loadSearch().then(function () { show(pg, opts); }); return; }
+    if (!keep) {
+      clearPrint();
+      committed = { c: c, arr: arrangement, key: key(c) };
+      current = arranged(c);
+    }
+    var arr = committed.arr;
+    if (opts.all !== undefined) allMode = opts.all; else if (!keep) allMode = false;
+    var pages = allMode ? 1 : Math.max(1, Math.ceil(current.length / PAGE));
     page = Math.min(Math.max(pg || 1, 1), pages);
-    var slice = current.slice((page - 1) * PAGE, page * PAGE);
+    var slice = allMode ? current : current.slice((page - 1) * PAGE, page * PAGE);
     var mine = ++token;
 
     resultsBox.hidden = false;
     overview.open = false;
-    list.className = arrangement === "year" ? "arr-year" : "arr-topic";
+    list.className = arr === "year" ? "arr-year" : "arr-topic";
     $("results-title").textContent = titleFor(c);
     $("results-sub").textContent = plural(current.length) + " · " +
-      (arrangement === "topic" ? "grouped by topic" : "grouped by exam, newest first") +
-      (pages > 1 ? " · page " + page + " of " + pages : "");
+      (arr === "topic" ? "grouped by topic" : "grouped by exam, newest first") +
+      (allMode ? " · all on one page" : pages > 1 ? " · page " + page + " of " + pages : "");
     $("results-chips").innerHTML = parts(c).map(function (x) {
       return "<button type=\"button\" class=\"active-chip\" data-field=\"" + x.field + "\" data-value=\"" +
         esc(x.value || "") + "\" title=\"Remove this filter\">" + esc(x.label) + " <span aria-hidden=\"true\">×</span></button>";
     }).join("");
     ["pager-top", "pager-bottom"].forEach(function (id) {
-      $(id).hidden = pages < 2;
-      $(id).innerHTML = pages < 2 ? "" : pagerHtml(pages);
+      var on = pages > 1 || (allMode && current.length > PAGE);
+      $(id).hidden = !on;
+      $(id).innerHTML = on ? pagerHtml(pages) : "";
     });
     $("f-empty").hidden = current.length > 0;
     writeHash(!opts.replace);
     refresh();
-    if (!opts.noScroll) scrollToResults();
+    if (!opts.noScroll && !opts.focusId) scrollToResults();
 
+    pendingFocus = opts.focusId || null;
+    var progress = $("results-progress");
+    progress.hidden = true;
     if (!slice.length) { list.innerHTML = ""; return; }
     list.setAttribute("aria-busy", "true");
     list.classList.add("loading");
     if (!list.firstChild) list.innerHTML = "<p class=\"status\">Loading questions…</p>";
-    fetchCards(slice.map(function (q) { return q.id; })).then(function (htmls) {
-      if (mine !== token) return; // a newer request replaced this one
-      list.innerHTML = cardsHtml(slice, htmls);
-      list.classList.remove("loading");
-      list.removeAttribute("aria-busy");
-      afterInsert(list);
-    });
+    // Questions are fetched and drawn in batches, so a long list starts to appear at once.
+    var step = allMode ? BATCH : PAGE;
+    (function batch(from) {
+      var part = slice.slice(from, from + step);
+      fetchCards(part.map(function (q) { return q.id; })).then(function (htmls) {
+        if (mine !== token) return; // a newer request replaced this one
+        var html = "<div class=\"batch\">" + cardsHtml(part, htmls, arr, from ? slice[from - 1] : null) + "</div>";
+        var box = document.createElement("div");
+        box.innerHTML = html;
+        var node = box.firstChild;
+        if (!from) { list.innerHTML = ""; list.classList.remove("loading"); list.removeAttribute("aria-busy"); }
+        list.appendChild(node);
+        afterInsert(node);
+        if (pendingFocus && list.querySelector("[id=\"" + pendingFocus + "\"]")) { scrollToCard(pendingFocus); pendingFocus = null; }
+        if (from + step < slice.length) {
+          progress.hidden = false;
+          progress.textContent = "Loaded " + (from + step) + " of " + slice.length + " questions…";
+          batch(from + step);
+        } else {
+          progress.hidden = true;
+        }
+      });
+    })(0);
+  }
+  function drawPagers(asking) {
+    var pages = allMode ? 1 : Math.max(1, Math.ceil(current.length / PAGE));
+    ["pager-top", "pager-bottom"].forEach(function (id) { $(id).innerHTML = pagerHtml(pages, asking); });
+  }
+  var pendingFocus = null; // a question to scroll to as soon as it has been drawn
+
+  // Scroll to a question, or to the topic / exam heading just above it when it is the first of its group.
+  function scrollToCard(id) {
+    var card = document.getElementById(id);
+    if (!card) return;
+    var at = card.previousElementSibling;
+    if (at && at.classList.contains("note")) at = at.previousElementSibling;
+    var target = at && at.classList.contains("group-head") ? at : card;
+    var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    target.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "start" });
+    try { card.setAttribute("tabindex", "-1"); card.focus({ preventScroll: true }); } catch (e) {}
+  }
+
+  // The map: go to question number i of the list. Filters are never touched: with results on screen only the page
+  // changes; before the first "Show", the filters are applied once (as if Show was pressed) and then we go there.
+  function jumpTo(i) {
+    var q = mapList[i];
+    if (!q) return;
+    overview.open = false;
+    var pg = allMode ? 1 : Math.floor(i / PAGE) + 1;
+    if (committed && pg === page) {
+      if (list.querySelector("[id=\"" + q.id + "\"]")) { scrollToCard(q.id); return; }
+      if (allMode) { pendingFocus = q.id; return; } // still being drawn: scroll there when it arrives
+    }
+    show(pg, { focusId: q.id, keep: !!committed });
   }
 
   function hideResults() {
@@ -468,16 +551,21 @@ document.addEventListener("DOMContentLoaded", function () {
     text.value = p.get("q") || "";
     var any = p.get("show") === "1" || faculty.get().length || exam.get().length || topic.get().length ||
       solved.checked || text.value;
-    return { show: !!any, page: parseInt(p.get("p"), 10) || 1 };
+    return { show: !!any, page: parseInt(p.get("p"), 10) || 1, all: p.get("p") === "all" };
   }
   window.addEventListener("popstate", function () {
     var h = loadHash();
-    if (h.show) show(h.page, { noScroll: true, replace: true }); else hideResults();
+    if (h.show) show(h.page, { noScroll: true, replace: true, all: h.all }); else hideResults();
   });
 
   // ---- controls
   arrangeButtons.forEach(function (b) {
-    b.addEventListener("click", function () { arrangement = b.dataset.arrange; refresh(); });
+    b.addEventListener("click", function () {
+      if (arrangement === b.dataset.arrange) return;
+      arrangement = b.dataset.arrange;
+      // results on screen are regrouped at once (the filters, changed or not, are left alone)
+      if (committed) show(1, { keep: true, rearrange: true, noScroll: true }); else refresh();
+    });
   });
   pickers.forEach(function (pk) {
     pk.root.addEventListener("change", refresh);
@@ -508,19 +596,9 @@ document.addEventListener("DOMContentLoaded", function () {
   showBtn.addEventListener("click", function () { show(1); });
   $("results-update").addEventListener("click", function () { show(1); });
 
-  $("overview-body").addEventListener("click", function (e) { // tap to pick or unpick; "Show" displays them
+  $("overview-body").addEventListener("click", function (e) {
     var b = e.target.closest(".ov-btn");
-    if (!b) return;
-    var attr = b.dataset.topic ? "topic" : "exam";
-    (attr === "topic" ? topic : exam).toggle(b.dataset[attr]);
-    refresh();
-    var again = $("overview-body").querySelector(".ov-btn[data-" + attr + "=\"" + b.dataset[attr] + "\"]");
-    if (again) try { again.focus({ preventScroll: true }); } catch (err) {} // the list was redrawn: keep focus here
-  });
-  $("overview-show").addEventListener("click", function () { show(1); });
-  $("overview-clear").addEventListener("click", function () {
-    (arrangement === "topic" ? topic : exam).set([]);
-    refresh();
+    if (b) jumpTo(parseInt(b.dataset.i, 10));
   });
   $("results-chips").addEventListener("click", function (e) { // remove one filter and update
     var b = e.target.closest("[data-field]");
@@ -533,14 +611,22 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   [$("pager-top"), $("pager-bottom")].forEach(function (nav) {
     nav.addEventListener("click", function (e) {
+      var all = e.target.closest("[data-all]");
+      if (all) {
+        var what = all.dataset.all;
+        if (what === "1" && current.length > BIG) { drawPagers(true); return; } // ask first, on the page itself
+        if (what === "cancel") { drawPagers(false); return; }
+        show(1, { keep: true, all: what === "1" || what === "yes" });
+        return;
+      }
       var b = e.target.closest("[data-page]");
-      if (b && !b.disabled) show(parseInt(b.dataset.page, 10));
+      if (b && !b.disabled) show(parseInt(b.dataset.page, 10), { keep: true, all: false });
     });
   });
   list.addEventListener("click", function (e) {
     var chip = e.target.closest(".chip"); // a topic chip on a question: show that topic
     if (chip) { topic.set([chip.dataset.topic]); show(1); return; }
-    if (e.target.closest("[data-retry]")) show(page, { noScroll: true, replace: true });
+    if (e.target.closest("[data-retry]")) show(page, { noScroll: true, replace: true, keep: true });
   });
 
   $("f-clear").addEventListener("click", function () {
@@ -609,7 +695,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }).then(function (htmls) {
       var order = [], per = {};
       qs.forEach(function (q) {
-        var g = groupOf(q);
+        var g = groupOf(q, arrangement);
         if (!per[g.key]) { per[g.key] = 0; order.push(g); }
         per[g.key]++;
       });
@@ -617,7 +703,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "<p class=\"muted\">" + plural(qs.length) + "</p>" +
         "<nav class=\"contents\"><h2>Contents: " + (arrangement === "topic" ? "topic by topic" : "exam by exam") + "</h2><ol>" +
         order.map(function (g) { return "<li>" + esc(g.title) + " <span class=\"n\">" + per[g.key] + "</span></li>"; }).join("") +
-        "</ol></nav>" + cardsHtml(qs, htmls);
+        "</ol></nav>" + cardsHtml(qs, htmls, arrangement);
       printArea.querySelectorAll("[id]").forEach(function (el) { el.removeAttribute("id"); });
       if (!qonly.checked) printArea.querySelectorAll(".solution").forEach(function (d) { d.open = true; });
       renderMath(printArea);
@@ -655,5 +741,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var start = loadHash();
   refresh();
-  if (start.show) show(start.page, { noScroll: true, replace: true });
+  if (start.show) show(start.page, { noScroll: true, replace: true, all: start.all });
 });
