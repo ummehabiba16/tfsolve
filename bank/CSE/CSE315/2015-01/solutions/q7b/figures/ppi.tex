@@ -1,0 +1,33 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[american]{circuitikz}
+\usetikzlibrary{calc}
+\begin{document}
+\begin{circuitikz}[font=\small,>=latex]
+% 8255 block
+\node[draw,thick,fill=blue!5,minimum width=2.6cm,minimum height=6.0cm] (ppi) at (6,0.9) {};
+\node[font=\bfseries,anchor=south] at (ppi.north) {8255 PPI};
+\foreach \n/\y in {D7--D0/3.4,A1/0.9,A0/0.3} \node[font=\footnotesize,anchor=west] at (4.75,\y) {\n};
+\node[font=\footnotesize,anchor=west] at (4.75,-1.95) {$\overline{\mathrm{CS}}$};
+\node[font=\scriptsize,align=left,anchor=north west] at (7.4,1.0) {A8H: Port A\\AAH: Port B\\ACH: Port C\\AEH: control};
+% CPU side signals
+\node[font=\footnotesize\bfseries] at (-3.6,4.4) {8086 side};
+\draw[<->,thick] (-3.4,3.4) node[left,font=\footnotesize]{D7--D0} -- (4.7,3.4) node[midway,above,font=\scriptsize]{8 (low bank)};
+\draw[->] (-3.4,0.9) node[left,font=\footnotesize]{A2} -- (4.7,0.9);
+\draw[->] (-3.4,0.3) node[left,font=\footnotesize]{A1} -- (4.7,0.3);
+% decoder: 7-input NAND
+\def\gy{-0.75}\def\gd{0.4}
+\draw[thick] (1.0,{\gy+0.25}) -- (1.9,{\gy+0.25}) arc[start angle=90,end angle=-90,x radius=1.2cm,y radius={(6*\gd+0.5)/2*1cm}] -- (1.0,{\gy-6*\gd-0.25}) -- cycle;
+\draw[thick] (3.18,{\gy-3*\gd}) circle (0.08);
+\foreach \i/\a/\inv in {0/A7/0,1/A6/1,2/A5/0,3/A4/1,4/A3/0,5/A0/1,6/M\slash$\overline{\mathrm{IO}}$/1} {
+  \pgfmathsetmacro{\y}{\gy-\i*\gd}
+  \draw (-3.4,\y) node[left,font=\scriptsize]{\a} -- (1.0,\y);
+  \ifnum\inv=1
+    \draw[fill=white] (-0.3,\y+0.12) -- (-0.3,\y-0.12) -- (-0.05,\y) -- cycle;
+    \draw[fill=white] (0.0,\y) circle (0.05);
+  \fi
+}
+\draw[->] (3.26,{\gy-3*\gd}) -- (4.7,{\gy-3*\gd});
+\node[font=\scriptsize] at (2.0,{\gy-3*\gd}) {NAND};
+\node[font=\scriptsize,align=left,anchor=north west] at (-3.9,-4.2) {$\overline{\mathrm{CS}}$ = 0 only for A7 A6 A5 A4 A3 = 10101, A0 = 0 and M/$\overline{\mathrm{IO}}$ = 0 (I/O cycle)};
+\end{circuitikz}
+\end{document}

@@ -1,0 +1,34 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,calc,shapes.geometric}
+\begin{document}
+\begin{tikzpicture}[>=Stealth,font=\small,
+ r/.style={draw,thick,minimum width=1.0cm,minimum height=0.5cm,font=\footnotesize,inner sep=1pt},
+ w/.style={draw,thick,minimum width=2.0cm,minimum height=0.5cm,font=\footnotesize,inner sep=1pt}]
+% BIU
+\foreach \n/\y in {CS/0,DS/-0.5,SS/-1.0,ES/-1.5,IP/-2.2} \node[r,fill=blue!8] at (0,\y) {\n};
+\node[draw,thick,circle,inner sep=1pt,fill=white] (add) at (2.0,-0.6) {$\Sigma$};
+\node[font=\scriptsize,align=center,anchor=north] at (2.0,-0.9) {address adder\\seg $\times$ 10H + off};
+\draw[->] (0.5,-0.6) -- (add.west);
+\node[draw,thick,fill=gray!10,minimum width=2.4cm,minimum height=0.9cm,font=\footnotesize,align=center] (bc) at (4.6,-0.6) {bus control\\logic};
+\draw[->] (add.east) -- (bc.west);
+\foreach \i in {1,...,6} \node[draw,minimum width=0.45cm,minimum height=0.5cm,fill=yellow!25,font=\tiny] at (2.6+0.45*\i,-2.2) {\i};
+\node[font=\scriptsize,anchor=north] at (4.18,-2.5) {6-byte instruction queue};
+\node[draw,thick,rounded corners=3pt,fit={(-0.6,0.5) (6.2,-3.1)},label={[font=\footnotesize\bfseries]above:BIU (bus interface unit)}] (biu) {};
+\draw[<->,very thick] (bc.east) -- (7.6,-0.6) node[right,font=\footnotesize,align=left]{A19--A0, D15--D0\\(multiplexed), control};
+% EU
+\begin{scope}[yshift=-4.6cm]
+\foreach \n/\y in {AX/0,BX/-0.5,CX/-1.0,DX/-1.5} {
+  \pgfmathsetmacro{\yy}{\y}
+}
+\foreach \h/\l/\y in {AH/AL/0,BH/BL/-0.5,CH/CL/-1.0,DH/DL/-1.5} { \node[r,fill=green!10] at (-0.25,\y) {\h}; \node[r,fill=green!10] at (0.75,\y) {\l}; }
+\foreach \n/\y in {SP/-2.2,BP/-2.7,SI/-3.2,DI/-3.7} \node[w,fill=green!10] at (0.25,\y) {\n};
+\node[draw,thick,fill=orange!15,shape=trapezium,trapezium angle=65,minimum width=2.4cm,minimum height=0.9cm,font=\footnotesize,shape border rotate=180] (alu) at (3.4,-1.0) {ALU (16-bit)};
+\node[w,fill=orange!10] (fl) at (3.4,-2.4) {FLAGS};
+\node[draw,thick,fill=gray!10,minimum width=2.0cm,minimum height=0.9cm,font=\footnotesize,align=center] (cu) at (5.6,-2.7) {EU control\\(decoder)};
+\node[draw,thick,rounded corners=3pt,fit={(-0.9,0.5) (6.8,-4.1)},label={[font=\footnotesize\bfseries]below:EU (execution unit)}] (eu) {};
+\end{scope}
+\draw[->,thick] (4.18,-2.75) -- (4.18,-3.6) -| (5.6,-6.85) node[pos=0.1,above,font=\scriptsize]{instruction bytes};
+\draw[<->,thick] (1.2,-3.1) -- (1.2,-4.1) node[midway,left,font=\scriptsize]{operands};
+\end{tikzpicture}
+\end{document}

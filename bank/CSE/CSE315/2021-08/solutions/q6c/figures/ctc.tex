@@ -1,0 +1,36 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,positioning}
+\begin{document}
+\begin{tikzpicture}[>=Stealth,font=\small,x=0.095cm,y=1cm]
+% 1 unit = 1 ms; 1 tick = 1 us; cycle = 32769 ticks = 32.769 ms
+% OC1B toggles at 7.812 + k*32.769 ms, OC1A at 32.768 + k*32.769 ms
+\def\H{2.6}\def\B{0.6198}% 7812 -> 2.6*7812/32768
+\def\T{32.769}
+\foreach \t in {7.812,32.768,40.581,65.537,73.350,98.306,106.119,131.075} \draw[gray!45,densely dotted] (\t,-3.5) -- (\t,\H+0.2);
+\draw[->] (0,0) -- (0,\H+0.6) node[above,font=\footnotesize]{TCNT1};
+\draw[->] (0,0) -- (140,0) node[right,font=\footnotesize]{$t$ (ms)};
+\node[anchor=east,font=\scriptsize] at (0,\H) {32768 = OCR1A (TOP)};
+\node[anchor=east,font=\scriptsize] at (0,\B) {7812 = OCR1B};
+\node[anchor=east,font=\scriptsize] at (0,0) {0};
+\draw[red!60!black,dashed] (0,\H) -- (136,\H);
+\draw[blue!60!black,dashed] (0,\B) -- (136,\B);
+\draw[thick] (0,0) \foreach \k in {1,2,3,4} { -- (\k*\T,\H) -- (\k*\T,0) } -- (136,{\H*(136-4*\T)/\T});
+\foreach \k in {0,1,2,3} {
+  \fill[blue!60!black] (\k*\T+7.812,\B) circle (1.6pt);
+  \fill[red!60!black] (\k*\T+\T,\H) circle (1.6pt);
+}
+\foreach \t/\l in {0/0,7.812/7.812,40.581/40.581,73.350/73.350,106.119/106.119} \node[below,font=\scriptsize,blue!60!black] at (\t,0) {\l};
+\foreach \t/\l in {32.768/32.768,65.537/65.537,98.306/98.306,131.075/131.075} \node[below,font=\scriptsize,red!60!black] at (\t,-0.3) {\l};
+\begin{scope}[yshift=-1.6cm]
+\node[anchor=east,font=\footnotesize,blue!60!black] at (-1,0.3) {OC1B};
+\draw[very thick,blue!60!black] (0,0) -- (7.812,0) -- (7.812,0.6) -- (40.581,0.6) -- (40.581,0) -- (73.350,0) -- (73.350,0.6) -- (106.119,0.6) -- (106.119,0) -- (136,0);
+\end{scope}
+\begin{scope}[yshift=-2.8cm]
+\node[anchor=east,font=\footnotesize,red!60!black] at (-1,0.3) {OC1A};
+\draw[very thick,red!60!black] (0,0) -- (32.768,0) -- (32.768,0.6) -- (65.537,0.6) -- (65.537,0) -- (98.306,0) -- (98.306,0.6) -- (131.075,0.6) -- (131.075,0) -- (136,0);
+\draw[<->] (7.812,-0.3) -- (32.768,-0.3) node[midway,below,font=\scriptsize]{24.956 ms};
+\draw[<->] (32.768,-0.95) -- (98.306,-0.95) node[midway,below,font=\scriptsize]{period $2\times32769\,\mu$s = 65.538 ms (15.26 Hz), 50\% duty};
+\end{scope}
+\end{tikzpicture}
+\end{document}

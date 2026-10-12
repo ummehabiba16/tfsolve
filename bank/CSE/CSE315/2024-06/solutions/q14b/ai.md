@@ -7,6 +7,8 @@ created: 2026-10-01
 status: unverified
 summary: "Frame: start 0, data LSB first 1 0 1 0 1 1 0 1 1, odd parity 1 (six 1s), stop 1. With the receive buffer and shift register full, the new start bit causes a Data OverRun (DOR) only; no FE (stop bit = 1) and no PE (parity correct)."
 sources: ["EHP Serial Communication slides 17-19 (parity, frame format)", "EHP Serial Communication slides 57, 62-63 (FE, DOR, PE)"]
+changes:
+  - "2026-10-12: replaced the ASCII waveform by a TikZ frame diagram (answer unchanged)"
 ---
 **i. Data framing.** Character = 1 1011 0101 (D8 ... D0), so D0 = 1, D1 = 0, D2 = 1, D3 = 0, D4 = 1, D5 = 1, D6 = 0, D7 = 1, D8 = 1.
 
@@ -16,12 +18,7 @@ Number of 1s in the data = 6 (even). For **odd parity** the parity bit must make
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 | 1 | 0 | 1 | 0 | 1 | 0 | 1 | 1 | 0 | 1 | 1 | 1 | 1 | 1 |
 
-```text
-     St D0 D1 D2 D3 D4 D5 D6 D7 D8 P  Sp
-1 --+  +--+  +--+  +-----+  +--------------- idle
-    |  |  |  |  |  |     |  |
-0   +--+  +--+  +--+     +--+
-```
+![UART frame: start, 9 data bits LSB first, odd parity 1, one stop bit](figures/frame.png)
 
 **ii. Errors at the receiver (Y).**
 

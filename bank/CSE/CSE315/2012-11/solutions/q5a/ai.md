@@ -7,22 +7,10 @@ created: 2026-10-05
 status: unverified
 summary: "With TI = 0 the selector's 13-bit index picks the descriptor at GDTR.base + 8 x index (checked against GDTR.limit). The descriptor (base, limit, access rights) is checked (present, type, max(CPL, RPL) <= DPL) and loaded into the segment register's hidden cache. For each access the offset is checked against the limit and linear address = base + offset; with paging off this is the physical address, otherwise paging translates it."
 sources: ["MHE 80386-updated slides 16-20 (segmentation, descriptors)", "MHE 80286 slides (selector, GDTR, descriptor cache)", "Brey, The Intel Microprocessors, Sec. 2-3"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ figure (answer unchanged)"
 ---
-```text
- segment register (visible)          hidden descriptor cache
- +------------------+--+---+         +-----------+-----------+--------+
- |   index (13)     |TI|RPL|         | base (32) | limit (20)| rights |
- +--------+---------+--+---+         +-----+-----+-----+-----+---+----+
-          |        TI = 0                  ^           |         |
-          v                                | loaded    |         |
-  GDTR: | base | limit |                   | once      |         |
-          |                                |           v         v
-          +--> GDT base + 8 x index ---> descriptor   offset <= limit?  rights ok?
-                                         (8 bytes)        |  no: #GP
-  instruction: offset (EA) -----------------------------> (+) <--- base
-                                                           |
-                                                    LINEAR address --> paging --> physical
-```
+![Segmentation with TI = 0: GDTR base + 8 x index gives the descriptor; base + offset gives the linear address after the checks](figures/segmentation.png)
 
 **Steps**
 

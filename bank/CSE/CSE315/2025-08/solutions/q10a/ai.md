@@ -7,6 +7,8 @@ created: 2026-10-01
 status: unverified
 summary: "Frame (in time order): idle 1, start 0, data LSB first 1 0 1 1 1 0 0 1, stop 1, stop 1, idle 1."
 sources: ["EHP Serial Communication slides 17-20 (frame: start bit, LSB first, stop bits)"]
+changes:
+  - "2026-10-12: replaced the ASCII waveform by a TikZ frame diagram (answer unchanged)"
 ---
 Data = 1001 1101 (D7 ... D0). Sent **LSB first**, so the order on the line is D0, D1, ..., D7 = 1, 0, 1, 1, 1, 0, 0, 1.
 
@@ -16,11 +18,6 @@ A frame starts with the start bit (always 0), followed by the least significant 
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 | 1 | 0 | 1 | 0 | 1 | 1 | 1 | 0 | 0 | 1 | 1 | 1 | 1 |
 
-```text
-       St  D0  D1  D2  D3  D4  D5  D6  D7  Sp1 Sp2
- 1 ---+   +---+   +-----------+       +-----------------  idle
-      |   |   |   |           |       |
- 0    +---+   +---+           +-------+
-```
+![UART frame for 10011101: start bit, data LSB first, two stop bits](figures/frame.png)
 
 The frame is 11 bits long: 1 start + 8 data + 2 stop.

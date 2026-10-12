@@ -7,31 +7,12 @@ created: 2026-10-05
 status: unverified
 summary: "80386 = CPU (execution unit: control, data unit with ALU/registers/barrel shifter, protection test unit; instruction unit: prefetcher with 16-byte code queue and decoder with 3-instruction decoded queue), MMU (segmentation unit: descriptor caches, limit/rights checks, linear address; paging unit: page directory/tables, 32-entry TLB, physical address), and BIU (address drivers, pipelined bus control, BE0-BE3, data transceivers, request prioritizer)."
 sources: ["MHE 80386-updated slides 5-7 (architecture: CPU with EU and IU, MMU with SU and PU, BIU; 15/16-byte queue, 3 decoded instructions)", "Brey, The Intel Microprocessors, Ch. 17 (80386 internal architecture)"]
+changes:
+  - "2026-10-12: replaced the ASCII block diagram by a TikZ block diagram (answer unchanged)"
 ---
 **Block diagram**
 
-```text
- +---------------------- CPU -----------------------+
- |  Instruction unit                                |
- |   prefetcher (16-byte code queue) -> decoder     |
- |   (3 decoded instructions)                       |
- |  Execution unit                                  |
- |   control unit | data unit (ALU, 32-bit regs,    |
- |   barrel shifter) | protection test unit         |
- +----------+----------------------------+----------+
-            | effective address          ^ code / data
-            v                            |
- +---------------- MMU ---------------+  |
- | segmentation unit -> linear addr   |  |
- | paging unit (TLB) -> physical addr |  |
- +-----------------+------------------+  |
-                   v                     |
- +---------------- Bus Interface Unit ---+----------+
- | request prioritizer, address drivers, pipelined  |
- | bus control, data transceivers                   |
- +--------------------------------------------------+
-     A31-A2, BE3'-BE0'   D31-D0   control signals
-```
+![80386 functional units: bus interface unit, instruction unit, execution unit and memory management unit](figures/i386.png)
 
 **Units**
 

@@ -7,6 +7,8 @@ created: 2026-10-05
 status: unverified
 summary: "RxD is sampled at 16x the baud rate (normal) or 8x (double speed); idle samples are 0-labelled. On a high-to-low transition the start-bit detection starts; the receiver checks samples 8, 9, 10 (normal) or 4, 5, 6 (double speed): if at least two are low the start bit is valid and the internal clock is synchronized to the frame, otherwise the edge is treated as a spike and the search restarts. This repeats for every frame."
 sources: ["EHP Serial Communication slides 71-75 (asynchronous clock recovery, start bit sampling, samples 8-9-10 and 4-5-6)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ figure of the start-bit samples in both modes (answer unchanged)"
 ---
 The clock recovery logic synchronizes the receiver's internal baud clock to each incoming frame by detecting the **start bit**.
 
@@ -18,18 +20,6 @@ The clock recovery logic synchronizes the receiver's internal baud clock to each
    - Two or more **high**: the low level was a **noise spike**. The start bit is rejected and the receiver waits for the next high-to-low transition.
 5. The process is repeated for **every frame**, so small baud-rate differences do not accumulate.
 
-```text
- Normal mode (U2X = 0): 16 samples per bit
- RxD   idle ---------+                                         +---
-                     |_______________ START bit _______________| (bit 0)
- sample  0  0  0  0  1  2  3  4  5  6  7 [8  9 10] 11 12 13 14 15 16
-                                           majority vote
-
- Double speed (U2X = 1): 8 samples per bit
- RxD   idle ---------+                         +---
-                     |_______ START bit _______| (bit 0)
- sample  0  0  0  0  1  2  3 [4  5  6] 7  8
-                              majority vote
-```
+![Start-bit sampling: 16 samples per bit with a vote on samples 8-10 (normal), 8 samples per bit with a vote on samples 4-6 (double speed)](figures/startbit.png)
 
 In double-speed mode there are half as many samples, so the receiver tolerates less baud-rate error and noise.

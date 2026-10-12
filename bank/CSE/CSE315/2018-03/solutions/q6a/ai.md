@@ -7,6 +7,8 @@ created: 2026-10-05
 status: unverified
 summary: "1 us per tick; OC1A is high while TCNT1 < 100, i.e. 200 us around each BOTTOM. ICR1 is not double-buffered, so each new TOP acts at once: in steady state the counter peaks at 200, 300 and 500 (400 and 600 are written while it is counting down) and the waveform repeats every 2000 us with three 200 us pulses: cycles of 400, 600 and 1000 us (duty 50%, 33.3%, 20%); repetition 500 Hz, average pulse rate 1.5 kHz, overall duty 30%."
 sources: ["EHP Timer_Part_2 slides 39-47 (phase correct PWM, frequency and duty cycle)", "ATmega32 datasheet, Timer/Counter1 Phase Correct PWM mode (ICR1 not double buffered; f = fclk / (2 N TOP))"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ timing diagram from a tick-by-tick simulation, drawn to scale; it starts from reset, so OC1A is 0 until the first down-count match at 300 us (answer unchanged)"
 ---
 **Basic relations** (1 MHz, no prescaler: 1 tick = 1 µs; phase correct, non-inverting, OCR1A = 100)
 
@@ -29,23 +31,7 @@ sources: ["EHP Timer_Part_2 slides 39-47 (phase correct PWM, frequency and duty 
 | 400-1000 µs | 300 (peak at 700 µs) | 600 µs | 200 µs | 33.3% |
 | 1000-2000 µs | 500 (peak at 1500 µs; 400 is passed while counting up, 600 is written while counting down) | 1000 µs | 200 µs | 20% |
 
-```text
-TCNT1                (1 column = 50 us)
-    500|                              *                                       *
-       |                             * *                                     * *
-       |                            *   *                                   *   *
-       |                           *     *                                 *     *
-    300|              *           *       *                   *           *       *
-       |             * *         *         *                 * *         *         *
-    200|    *       *   *       *           *       *       *   *       *           *
-       |   * *     *     *     *             *     * *     *     *     *             *
-OCR 100|  *   *   *       *   *               *   *   *   *       *   *               *
-       | *     * *         * *                 * *     * *         * *                 *
-      0|*       *           *                   *       *           *                   *
- OC1A 1|--     ---         ---                 ---     ---         ---                 --
-      0|  -----   ---------   -----------------   -----   ---------   -----------------
-        0       400         1000                2000    2400        3000                4000 us
-```
+![Phase correct PWM with ICR1 changed every 400 us: ICR1 in force, TCNT1 and OC1A over two 2000 us patterns](figures/pwm.png)
 
 **Result**
 

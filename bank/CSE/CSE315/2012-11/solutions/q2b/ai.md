@@ -7,24 +7,12 @@ created: 2026-10-05
 status: unverified
 summary: "ICP1 (PD6) -> optional noise canceller (ICNC1: 4 equal samples) -> edge detector (ICES1: rising or falling) -> on the selected edge the current TCNT1 is copied into ICR1 and ICF1 is set (interrupt TIMER1_CAPT_vect if TICIE1 = 1); the analog comparator output can be selected as the source instead (ACIC). Software takes the difference of two ICR1 values (plus overflows) to get period or pulse width."
 sources: ["EHP Timer_Part_1 slides 11, 33-37 (input capture: ICP1, ICR1, period measurement)", "ATmega32 datasheet, Timer/Counter1 Input Capture Unit (block diagram)"]
+changes:
+  - "2026-10-12: replaced the ASCII block diagram by a TikZ block diagram (answer unchanged)"
 ---
 **Block diagram**
 
-```text
- ICP1 (PD6) ------------+
-                        +--> [ MUX ]  (ACIC selects the source)
- analog comparator ACO -+       |
-                                v
-                     [ noise canceller ]   (enabled by ICNC1)
-                                |
-                                v
-                     [ edge detector ]     (ICES1: 1 = rising, 0 = falling)
-                                |
-              +-----------------+------------------+
-              v                                    v
-   copy TCNT1 --> ICR1 (16-bit)          set ICF1 in TIFR --> TIMER1_CAPT
-   (read ICR1L, then ICR1H)                                   interrupt if TICIE1 = 1
-```
+![Timer1 input capture unit: source MUX, noise canceller, edge detector, ICR1 capture of TCNT1, ICF1 and interrupt](figures/icp.png)
 
 **Operation (external input on ICP1)**
 

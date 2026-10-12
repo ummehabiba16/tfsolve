@@ -7,6 +7,8 @@ created: 2026-10-04
 status: unverified
 summary: "Data 1 0001 0100 sent LSB first: start 0 | 0 0 1 0 1 0 0 0 1 | odd parity 0 (three 1s) | stop 1 1."
 sources: ["EHP Serial Communication slides 17-19 (frame, parity), 56 (9-bit data)"]
+changes:
+  - "2026-10-12: replaced the ASCII waveform by a TikZ frame diagram (answer unchanged)"
 ---
 Frame format (from Q.12): 1 start bit, **9 data bits** sent LSB first, **odd parity**, **2 stop bits**.
 
@@ -18,9 +20,4 @@ Odd parity: the data has **three** 1s (D2, D4, D8), already odd, so **P = 0**.
 |:--|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 | Bit | 0 | 0 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 1 | 1 |
 
-```text
-      St  D0  D1  D2  D3  D4  D5  D6  D7  D8  P   Sp  Sp
- ----+           +---+   +---+           +---+   +-----------
-     |___________|   |___|   |___________|   |___|
-       0   0   0   1   0   1   0   0   0   1   0   1   1
-```
+![UART frame: start, 9 data bits LSB first, odd parity 0, two stop bits](figures/frame.png)

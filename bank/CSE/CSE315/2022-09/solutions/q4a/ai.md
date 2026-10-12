@@ -7,6 +7,8 @@ created: 2026-10-04
 status: unverified
 summary: "After the data (and parity) bits the receiver samples the stop bit 16 times (8 in double speed) and takes a majority vote of the three middle samples (8, 9, 10); a 0 sets FE. Only the first stop bit is checked; a new start bit can be detected right after the voting samples."
 sources: ["EHP Serial Communication slides 60-62, 71-77 (reception, frame error, clock and data recovery, majority voting on the stop bit)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ figure of the stop-bit sampling (answer unchanged)"
 ---
 **Stop bit detection in the USART receiver**
 
@@ -18,8 +20,4 @@ sources: ["EHP Serial Communication slides 60-62, 71-77 (reception, frame error,
 4. Only the **first stop bit** is checked. If two stop bits are used, the receiver ignores the second one.
 5. For quick resynchronization, the receiver can detect the **start bit of the next frame** right after the samples used for the stop-bit vote, without waiting for the end of the stop bit.
 
-```text
- RxD  ... | D7 | (P) |  stop bit (should be 1)  | next start
- samples          1 2 3 4 5 6 7 [8 9 10] ...
-                              majority -> 1: OK, 0: FE = 1
-```
+![Stop bit sampled 16 times; the majority of samples 8, 9 and 10 decides between a valid stop bit and a frame error](figures/stopbit.png)

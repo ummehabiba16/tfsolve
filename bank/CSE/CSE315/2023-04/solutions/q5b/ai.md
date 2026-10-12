@@ -7,6 +7,8 @@ created: 2026-10-04
 status: unverified
 summary: "Bytes 00223h-00226h need 3 bus cycles = 12 clock cycles (no wait states): 00223h odd byte (BHE' = 0, A0 = 1), 00224h-00225h aligned word (BHE' = 0, A0 = 0), 00226h even byte (BHE' = 1, A0 = 0)."
 sources: ["MHE 8086-Memory_Organization slides 3-7 (odd/even banks, BHE and A0 table, odd-address word needs two cycles)", "Brey, The Intel Microprocessors, Sec. 10-3 (8086 memory interface, BHE)"]
+changes:
+  - "2026-10-12: replaced the ASCII table by a TikZ timing diagram of CLK, BHE'/S7, A0 and ALE over the 12 T-states (answer unchanged)"
 ---
 *Note:* the table printed with the question swaps two rows. The correct table (slides, Intel data sheet) is: $\overline{BHE}$ = 0, A0 = 1: **odd (high) bank**, D8-D15; $\overline{BHE}$ = 1, A0 = 0: **even (low) bank**, D0-D7. The answer uses the correct table.
 
@@ -28,18 +30,7 @@ $$3 \times 4 = \mathbf{12\ clock\ cycles}$$
 
 $\overline{BHE}$ (pin 34) and A0 (multiplexed on AD0) are put out in **T1** of each bus cycle together with the address and latched by ALE. (In T2-T4 the pins carry status S7 and data.)
 
-```text
-         | cycle 1: 00223h | cycle 2: 00224h | cycle 3: 00226h |
-CLK      | T1  T2  T3  T4  | T1  T2  T3  T4  | T1  T2  T3  T4  |
-         |                 |                 |                 |
-BHE'     |____             |____             |_____            |
-(valid   |    0            |    0            |  1              |
- in T1)  |                 |                 |                 |
-A0       |----             |____             |____             |
-(valid   |    1            |    0            |    0            |
- in T1)  |                 |                 |                 |
-Banks    |  odd only       |  both (word)    |  even only      |
-```
+![BHE' and A0 in the three bus cycles: valid in T1 of each cycle](figures/bhe.png)
 
 As levels: cycle 1: $\overline{BHE}$ = 0, A0 = 1; cycle 2: $\overline{BHE}$ = 0, A0 = 0; cycle 3: $\overline{BHE}$ = 1, A0 = 0.
 

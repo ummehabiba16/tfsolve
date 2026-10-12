@@ -7,6 +7,8 @@ created: 2026-10-04
 status: unverified
 summary: "Mode 1 strobed output (e.g. printer interface). Inputs: WR' (from CPU) and ACK' (from device); outputs: OBF', INTR and port data. WR' falling clears INTR; WR' rising sets OBF' low and puts data on the port; ACK' falling returns OBF' high; ACK' rising sets INTR (if INTE = 1)."
 sources: ["Brey, The Intel Microprocessors, Sec. 11-3 (82C55 mode 1 strobed output, timing diagram, printer interface)", "Rafiquzzaman, Microprocessors and Microcomputer-Based System Design, Ch. 5 (8255 handshake modes)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ timing diagram with the four cause-effect arrows (answer unchanged)"
 ---
 **i. Mode and application**
 
@@ -26,25 +28,6 @@ The signals $\overline{OBF}$ (output buffer full), $\overline{ACK}$ (acknowledge
 | 3 | $\overline{ACK}$ goes **low** (device takes the data) | $\to$ | **$\overline{OBF}$ goes high** (buffer empty, data removed from port) |
 | 4 | $\overline{ACK}$ goes **high** (end of acknowledge) | $\to$ | **INTR goes high** (interrupt requested, if INTE = 1) |
 
-```text
-          (1)  (2)                  (3)   (4)
-WR'   -----+    +---------------------------------------
-           |____|
-                |
-OBF'  ----------+                   +-------------------
-                |___________________|
-           |                        |
-INTR  -----+                              +-------------
-           |______________________________|
-                                    |     |
-ACK'  ------------------------------+     +-------------
-                                    |_____|
-Port  ==== old ==X=== new data ==========================
-                 data sent to port   data removed
-
-(1) WR' falls  -> INTR falls        (3) ACK' falls -> OBF' rises
-(2) WR' rises  -> OBF' falls,       (4) ACK' rises -> INTR rises
-                  data on port
-```
+![8255 mode 1 output: WR', OBF', INTR, ACK' and the port, with arrows from each input change to the output change it causes](figures/mode1.png)
 
 The arrows are: $\overline{WR}\downarrow \to$ INTR$\downarrow$; $\overline{WR}\uparrow \to \overline{OBF}\downarrow$ and data valid; $\overline{ACK}\downarrow \to \overline{OBF}\uparrow$; $\overline{ACK}\uparrow \to$ INTR$\uparrow$.

@@ -7,16 +7,12 @@ created: 2026-10-04
 status: unverified
 summary: "A membrane key switch is two flexible conductive layers separated by a perforated spacer; pressing pushes the top layer through the hole to touch the bottom one. Cheap, thin, sealed against dust and liquids (microwave ovens, remotes), but little tactile feedback, shorter life and contact bounce, so it needs debouncing and matrix scanning like other contact switches."
 sources: ["Hall, Microprocessors and Interfacing, Ch. 9 (keyboard types: mechanical, membrane, capacitive, Hall-effect)", "Brey, The Intel Microprocessors, Sec. 11-4 (keyboard interfacing, debouncing)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ cross-section of a released and a pressed key (answer unchanged)"
 ---
 **Construction.** A membrane key switch is a special kind of contact switch made of thin layers:
 
-```text
-   finger press
-        v
- ================  top flexible layer (conductive ink underneath)
- ====   ====   ==  spacer layer with a hole under each key
- ================  bottom layer (conductive ink on top)
-```
+![Membrane key switch: layers when released and when pressed](figures/membrane.png)
 
 Pressing the key pushes the top conductive layer **through the hole in the spacer** onto the bottom layer, which closes the circuit. Releasing it lets the top layer spring back and open the contact. Many keys are printed on the same sheets, usually as a row/column matrix.
 

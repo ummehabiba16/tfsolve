@@ -1,0 +1,15 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[american]{circuitikz}
+\begin{document}
+\begin{circuitikz}[font=\small]
+\ctikzset{resistors/scale=0.6}
+\draw (0,2.2) -- (8.4,2.2);
+\node[vcc] at (4.2,2.2) {+5 V};
+\foreach \i in {0,...,7} {
+  \pgfmathtruncatemacro{\b}{7-\i}
+  \draw (\i*1.2,2.2) to[R] (\i*1.2,0.6) -- (\i*1.2,0) node[below]{D\b};
+  \fill (\i*1.2,2.2) circle (1.4pt);
+}
+\node[font=\scriptsize,align=center] at (4.2,-1.0) {4.7 k$\Omega$ pull-ups on D7--D0: during $\overline{\mathrm{INTA}}$ nobody drives the bus, so the CPU reads 1111\,1111 = FFH};
+\end{circuitikz}
+\end{document}

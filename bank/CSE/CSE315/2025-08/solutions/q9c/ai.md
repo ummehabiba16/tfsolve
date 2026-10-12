@@ -7,6 +7,8 @@ created: 2026-10-01
 status: unverified
 summary: "Mode 10 (phase-correct PWM, TOP = ICR1 = 9999), clk/8 at 4 MHz: f = 4e6/(2 x 8 x 9999) = 25.0 Hz (period 39.996 ms); OC1A is high while TCNT1 < 1999, so duty = 1999/9999 = about 20%."
 sources: ["EHP Timer_Part_2 slides 25, 39-43, 47 (mode table, phase correct PWM, COM1A1:0 = 10)", "EHP Timer_Part_2 slides 49-52 (producing a custom waveform)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ timing diagram drawn to scale; noted that OC1A is 0 until the first down-count match at 36 ms (answer unchanged)"
 ---
 **Decode the registers**
 
@@ -23,23 +25,9 @@ $$f_{timer} = \frac{4\text{ MHz}}{8} = 500\text{ kHz},\quad 1\text{ tick} = 2\,\
 
 **Waveform.** TCNT1 counts 0 up to 9999 and back down to 0 (a triangle). OC1A is high while TCNT1 < OCR1A = 1999 and low while TCNT1 > 1999.
 
-```text
-TCNT1
- 9999 |        /\                  /\
-      |       /  \                /  \
-      |      /    \              /    \
- 1999 |----*/------\*----------*/------\*-------  OCR1A
-      |   /          \        /          \
-    0 |  /            \      /            \
-      +--+---+--------+---+--+---+--------+---+--> t
-         0  4ms       36  40 44           76  80 ms
+![Phase correct PWM, TOP = ICR1 = 9999: TCNT1 triangle and OC1A](figures/pwm.png)
 
-OC1A
-    1 |--+                   +-+                 +-
-      |  |                   | |                 |
-    0 |  +-------------------+ +-----------------+
-         ^ clear (up-count)  ^ set (down-count)
-```
+OC1A starts at 0 (its reset value; writing PORTD5 = 1 does not reach the pin once COM1A1:0 = 10), so the first up-count match at about 4 ms leaves it at 0, and the first high pulse begins at the down-count match at about 36 ms. From then on the wave repeats every 39.996 ms.
 
 Up-count from 0 to 1999 takes $1999\times2\,\mu s \approx 4$ ms. Down-count from 1999 to 0 at the end of each period also takes about 4 ms. So the high pulse ($\approx 8$ ms) is centred on BOTTOM.
 

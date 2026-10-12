@@ -7,6 +7,8 @@ created: 2026-10-04
 status: unverified
 summary: "Bytes 00111H-00114H need 3 bus cycles = 12 clocks (no wait states): 00111H odd byte (BHE' = 0, A0 = 1), 00112H-00113H aligned word (BHE' = 0, A0 = 0), 00114H even byte (BHE' = 1, A0 = 0)."
 sources: ["MHE 8086-Memory_Organization slides 3-7 (odd/even banks, BHE and A0, odd-address word needs two cycles)", "Brey, The Intel Microprocessors, Sec. 10-3 (8086 memory interface)"]
+changes:
+  - "2026-10-12: replaced the ASCII table by a TikZ timing diagram of CLK, BHE'/S7, A0 and ALE over the 12 T-states (answer unchanged)"
 ---
 **Minimum number of clocks**
 
@@ -24,14 +26,6 @@ $$3 \times 4 = \mathbf{12\ clock\ cycles}$$
 
 **$\overline{BHE}$ and A0 timing** (both are output in T1 of each bus cycle and latched by ALE)
 
-```text
-         | cycle 1: 00111H | cycle 2: 00112H | cycle 3: 00114H |
-CLK      | T1  T2  T3  T4  | T1  T2  T3  T4  | T1  T2  T3  T4  |
-BHE'     |____             |____             |-----            |
-(in T1)  |  0              |  0              |  1              |
-A0       |----             |____             |____             |
-(in T1)  |  1              |  0              |  0              |
-Banks    |  odd only       |  both (word)    |  even only      |
-```
+![BHE' and A0 in the three bus cycles: valid in T1 of each cycle](figures/bhe.png)
 
 *Note:* "clock" is read as clock period (T-state); the answer in bus cycles is 3.

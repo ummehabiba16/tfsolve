@@ -7,6 +7,8 @@ created: 2026-10-01
 status: unverified
 summary: "CTC mode with OCR1A as TOP (WGM = 0100) and both OC1A/OC1B toggling (COM = 01): with 1 MHz, no prescaler, OCR1A = 39999 and OCR1B = 29999 give 12.5 Hz, 50% duty, OC1A lagging OC1B by 45 degrees."
 sources: ["EHP Timer_Part_2 slides 22-30 (CTC modes; OCR1A = 15625, OCR1B = 7812 toggle example)", "EHP Timer_Part_2 slides 31-38, 47 (fast PWM / phase correct)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ timing diagram of TCNT1, OC1B and OC1A drawn to scale (answer unchanged)"
 ---
 **Which mode?** Use **CTC mode (WGM13:10 = 0100, TOP = OCR1A) with both OC1A and OC1B in toggle mode** (COM1A1:0 = COM1B1:0 = 01), as in the slide example with OCR1A = 15625 and OCR1B = 7812.
 
@@ -28,13 +30,6 @@ sources: ["EHP Timer_Part_2 slides 22-30 (CTC modes; OCR1A = 15625, OCR1B = 7812
 | OCR1B | 29999 | toggles 10 ms (45 degrees) earlier |
 | DDRD | PD5, PD4 = 1 | OC1A (PD5) and OC1B (PD4) as outputs |
 
-```text
-TCNT1 39999 |    /|    /|    /|    /|        (40 ms per ramp)
-      29999 |  */ | */  | */  | */  |        * = OCR1B match
-          0 | /   |/    |/    |/    |
-OC1B        |__+     +-----+     +-----     toggles at 29999
-            |  |_____|     |_____|
-OC1A        |_____+     +-----+     +--     toggles at 39999 (TOP)
-            |     |_____|     |_____|
-               <-> 10 ms = 1/8 of 80 ms
-```
+![CTC mode, TOP = OCR1A = 39999: TCNT1 sawtooth and the two toggled outputs](figures/waves.png)
+
+Both outputs start at 0. OC1B toggles at 30, 70, 110, 150 ms and OC1A at 40, 80, 120, 160 ms, so each wave is high for 40 ms and low for 40 ms (period 80 ms, 50% duty), and OC1A lags OC1B by 10 ms = 45 degrees.

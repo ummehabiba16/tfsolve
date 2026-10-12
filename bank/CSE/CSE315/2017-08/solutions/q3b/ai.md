@@ -7,6 +7,8 @@ created: 2026-10-05
 status: unverified
 summary: "The TLB is a small cache inside the 80386 paging unit holding the 32 most recently used page translations (linear page number -> page frame, with attributes). On each access it is checked first: a hit gives the physical frame at once; a miss makes the processor read the page directory and page table and store the new entry. It avoids two extra memory reads per access; loading CR3 flushes it."
 sources: ["MHE 80386-updated slide 24 (Translation Look-aside Buffer)", "Brey, The Intel Microprocessors, Sec. 2-4 (TLB)"]
+changes:
+  - "2026-10-12: replaced the ASCII line by a TikZ flow figure (answer unchanged)"
 ---
 **What it is.** The **Translation Look-aside Buffer (TLB)** is a small, fast, special cache inside the 80386 paging unit. It stores the **page addresses of the 32 most recently accessed pages**: for each, the upper 20 bits of the linear address (page number) and the matching page-frame address with its attribute bits (on the 80386: 4-way set associative, 32 entries, covering 128 KB).
 
@@ -19,9 +21,4 @@ sources: ["MHE 80386-updated slide 24 (Translation Look-aside Buffer)", "Brey, T
 3. **Miss:** the processor reads the PDE (via CR3) and the PTE, forms the physical address, and stores the new translation in the TLB, replacing an old entry.
 4. When the page tables change, the OS must **flush** the TLB (loading CR3 flushes it), otherwise stale translations would be used.
 
-```text
-linear page no. --> [ TLB: 32 entries ] --hit--> frame address --> + offset --> physical
-                          | miss
-                          v
-               read PDE (CR3 + 4 x dir), read PTE --> frame; store in TLB
-```
+![TLB lookup: a hit gives the frame address at once; a miss reads PDE and PTE and refills the TLB](figures/tlb.png)

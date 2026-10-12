@@ -7,6 +7,8 @@ created: 2026-10-04
 status: unverified
 summary: "(i) INTR is level-sensitive: it is sampled only at the end of each instruction (and only if IF = 1) and must stay high until INTA; a short edge/pulse from the alarm can disappear before it is sampled, and the alarm gives no vector. (ii) Latch the edge in a D flip-flop (D = 1, CLK = alarm, Q -> INTR) that is cleared by INTA' (and RESET); put a vector on the data bus during INTA."
 sources: ["Brey, The Intel Microprocessors, Sec. 12-2 (INTR is level-sensitive; converting INTR to an edge-triggered input with a D flip-flop)", "MHE 8086 Hardware Specifications slide 12 (INTR held high, INTA)"]
+changes:
+  - "2026-10-12: replaced the ASCII drawing by a circuit diagram (answer unchanged)"
 ---
 **i. The problem**
 
@@ -18,21 +20,7 @@ sources: ["Brey, The Intel Microprocessors, Sec. 12-2 (INTR is level-sensitive; 
 
 Store the edge in a **D flip-flop** (e.g. 74ALS74) and use its Q output as INTR:
 
-```text
-                 +5 V
-                  |
-                +-+---------+
-                | D       Q |----------------> INTR (8086)
-  Alarm ------->|> CLK      |
-  (edge)        |    CLR'   |
-                +-----+-----+
-                      |
-   INTA' ----+        |
-             AND -----+      (CLR' = 0 when INTA' = 0 or RESET' = 0)
-  RESET' ----+
-
-   During INTA': data bus D7-D0 pulled up (or a 74ALS244) -> vector, e.g. FFh
-```
+![Alarm edge latched by a D flip-flop whose Q drives INTR; INTA' or RESET' clears it](figures/latch.png)
 
 1. The rising edge from the alarm clocks a 1 into the flip-flop, so **Q = INTR = 1 and stays 1**, even after the alarm pulse ends.
 2. When the 8086 accepts the interrupt it pulses $\overline{INTA}$. This **clears** the flip-flop, so INTR returns to 0 and the request is not taken twice. RESET also clears it at power-up.

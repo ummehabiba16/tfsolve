@@ -1,0 +1,18 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[american]{circuitikz}
+\begin{document}
+\begin{circuitikz}[font=\small]
+\draw[thick,fill=gray!8] (0,0) rectangle (9.2,1.4);
+\node[font=\footnotesize\bfseries] at (4.6,0.7) {74ALS244};
+\draw (0,0.7) -- (-0.8,0.7) node[left]{$\overline{\mathrm{INTA}}$ $\to$ $\overline{\mathrm{1G}}$, $\overline{\mathrm{2G}}$};
+\foreach \i in {0,...,7} {
+  \pgfmathtruncatemacro{\b}{7-\i}
+  \pgfmathsetmacro{\x}{0.8+\i*1.1}
+  \draw (\x,1.4) -- (\x,1.9);
+  \draw[->] (\x,0) -- (\x,-0.6) node[below]{D\b};
+  \ifnum\i=0 \draw (\x,1.9) node[vcc]{+5 V}; \node[font=\scriptsize,anchor=west] at (\x,1.6) {1};
+  \else \draw (\x,1.9) node[ground,rotate=180]{}; \node[font=\scriptsize,anchor=west] at (\x,1.6) {0}; \fi
+}
+\node[font=\scriptsize,align=center] at (4.6,-1.6) {inputs wired to 1000\,0000 = 80H; outputs drive D7--D0 only while $\overline{\mathrm{INTA}}$ = 0, high impedance otherwise};
+\end{circuitikz}
+\end{document}

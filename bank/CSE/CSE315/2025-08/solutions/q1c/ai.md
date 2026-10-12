@@ -7,6 +7,8 @@ created: 2026-10-01
 status: unverified
 summary: "Virtual memory of 80386 = 16K segments x 4GB = 64TB. Paging is needed because swapping whole segments of up to 4GB is too slow. The linear address is split 10/10/12 into directory/table/offset, starting from CR3."
 sources: ["MHE 80386-updated slides 4, 21-26 (virtual memory, paging, worked example)"]
+changes:
+  - "2026-10-12: replaced the ASCII address format by a TikZ figure that also shows the two-level translation (answer unchanged)"
 ---
 **Total virtual memory of the 80386**
 
@@ -24,13 +26,7 @@ $$\text{Virtual memory} = 2^{14}\times 2^{32} = 2^{46}\text{ B} = \mathbf{64\,TB
 
 The segmentation unit first gives the 32-bit linear address: base from the descriptor plus offset. It is split into 3 fields:
 
-```text
- 31            22 21            12 11             0
-+----------------+----------------+----------------+
-|   Directory    |   Page table   |     Offset     |
-|   (10 bits)    |   (10 bits)    |   (12 bits)    |
-+----------------+----------------+----------------+
-```
+![Linear address fields and the two-level page translation starting from CR3](figures/paging.png)
 
 1. **CR3** holds the starting address of the single page directory (1K entries of 4 bytes).
 2. Page directory entry address $= CR3 + \text{Directory}\times4$. Its upper 20 bits give the start of a page table.

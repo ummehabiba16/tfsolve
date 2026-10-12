@@ -7,6 +7,8 @@ created: 2026-10-05
 status: unverified
 summary: "Problems: data is put on the lines before A knows B is ready, and A removes/changes it while STB' is still low, before signalling 'data valid' with STB' rising, so B may latch wrong data; ACK falls (B says 'received') before STB' rises. Correct order: (1) A: STB' low = request; (2) B: ACK high = ready; (3) A: data valid; (4) A: STB' high = data valid, latch it; (5) B: ACK low = data received; (6) A: remove/change data."
 sources: ["Hall, Microprocessors and Interfacing, Ch. 9 (double handshake data transfer)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ timing diagram with circled transitions 1-6 (answer unchanged)"
 ---
 **Correct double handshake (Hall).** (1) A asks "are you ready?" by lowering $\overline{STB}$. (2) B answers "ready" by raising ACK. (3) A puts the data on the lines and (4) raises $\overline{STB}$ to say "data valid, take it". (5) B reads the data and lowers ACK to say "data received". (6) Only then may A remove or change the data.
 
@@ -18,16 +20,7 @@ sources: ["Hall, Microprocessors and Interfacing, Ch. 9 (double handshake data t
 
 **(ii) Corrected timing diagram**
 
-```text
-           (1)                   (4)
-STB'   -----+                     +----------------------
-            |_____________________|
-                 (2)                   (5)
-ACK               +---------------------+
-       ___________|                     |________________
-Data   ----------------X====================X------------
-                      (3)                  (6)
-```
+![Corrected double handshake with transitions 1-6 circled](figures/double.png)
 
 | No. | Transition | Initiated by | Meaning |
 |:-:|:--|:-:|:--|

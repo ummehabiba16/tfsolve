@@ -7,6 +7,8 @@ created: 2026-10-04
 status: unverified
 summary: "3 = data becomes valid; 1 = STB_B' falls (data latched); 4 = IBF_B rises; 7 = STB_B' rises (transfer into the 8255 complete); 8 = INTR rises; 2 = data invalid; 6 = RD' falls; 5 = INTR falls; 9 = RD' rises (IBF then falls)."
 sources: ["Brey, The Intel Microprocessors, Sec. 11-3 (82C55 mode 1 strobed input: STB, IBF, INTR, INTE)", "Hall, Microprocessors and Interfacing, Ch. 9 (8255 handshake input timing)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ timing diagram; the circled event IDs now sit on the edges listed in the table (the ASCII placed several of them on the wrong edges)"
 ---
 **Mode 1 strobed input sequence** (Port B)
 
@@ -15,23 +17,9 @@ sources: ["Brey, The Intel Microprocessors, Sec. 11-3 (82C55 mode 1 strobed inpu
 3. When $\overline{STB_B}$ returns high (with IBF = 1 and INTE_B = 1), the 8255 raises **INTR**.
 4. The CPU runs the ISR and reads the port: $\overline{RD}$ falling clears INTR; $\overline{RD}$ rising clears IBF_B, so the typewriter may send the next byte.
 
-**Timing diagram with event IDs** (circled numbers shown as (n))
+**Timing diagram with event IDs** (circled)
 
-```text
-                     (1)       (7)               (6)        (9)
-STB'   ---------------+         +--------------------------------------
-                      |_________|
-                     (4)
-IBF                   +---------------------------------------+
-       _______________|                                       |________
-                                  (8)             (5)
-INTR                              +----------------+
-       ___________________________|                |___________________
-RD'    -------------------------------------------+          +---------
-                                                  |__________|
-DATA   ----------<=====================>-------------------------------
-                (3)                   (2)
-```
+![8255 mode 1 input on port B with the event IDs 1-9 circled at their first occurrence](figures/events.png)
 
 | ID | Event | Where on the diagram |
 |:-:|:--|:--|

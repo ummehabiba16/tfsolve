@@ -7,6 +7,8 @@ created: 2026-10-04
 status: unverified
 summary: "With a 16-bit data bus the 512 KB becomes 8 pairs of 62256 (even bank on D0-D7, odd bank on D8-D15). RAM A0-A14 move to CPU A1-A15; both 74LS138s decode A18-A16 (one pair = 64 KB), U3 becomes the even-bank decoder enabled by A0 = 0 and U9 the odd-bank decoder enabled by BHE' = 0, both also need A19 = 0 and a memory cycle; add a second 74LS245 for D8-D15 and buffer A16-A19 and BHE'."
 sources: ["Brey, The Intel Microprocessors, Sec. 10-3 and 10-4 (8088 and 8086 memory interface, 62256 SRAM, separate bank decoders, BHE and A0)", "MHE 8086-Memory_Organization slides 2-6 (two banks, BHE/A0)"]
+changes:
+  - "2026-10-12: replaced the ASCII summary by a TikZ diagram of the two bank decoders, RAM pairs and transceivers (answer unchanged)"
 ---
 **What changes with a 16-bit data bus**
 
@@ -31,15 +33,7 @@ The memory size (16 $\times$ 32K $\times$ 8 = 512 KB) and the address range **00
 3. **Data bus.** Add a **second 74LS245** for **D8-D15**, with the same G (board select from the 74LS20/74LS00 logic, now: A19 = 0 and memory cycle) and the same DIR ($\overline{RD}$) as the existing D0-D7 transceiver. The odd-bank RAMs connect their D0-D7 pins to the buffered D8-D15.
 4. **Address/control buffers.** The third 74LS244 now buffers $\overline{RD}$, $\overline{WR}$, **A16-A19** and **$\overline{BHE}$** (A15 moves to the second '244 together with A8-A14). $\overline{WR}$ and $\overline{RD}$ still go to $\overline{WE}$ and $\overline{OE}$ of every RAM.
 
-```text
- CPU A1-A15  ------------------------> A0-A14 of all 16 RAMs
- CPU A16-A18 --> C B A of U3 and U9
-            U3 (even): G2A' = A0,   G2B' = A19, G1 = mem -> CS' of 8 RAMs, D0-D7
-            U9 (odd):  G2A' = BHE', G2B' = A19, G1 = mem -> CS' of 8 RAMs, D8-D15
- D0-D7   <=> 74LS245 (existing) <=> even-bank RAM data
- D8-D15  <=> 74LS245 (new)      <=> odd-bank RAM data
-             both: G = board select (A19 = 0, memory), DIR = RD'
-```
+![Modified board: U3 (even bank, enabled by A0) and U9 (odd bank, enabled by BHE') decode A16-A18; each Y output selects one RAM of a pair; a new 74LS245 serves D8-D15](figures/banks.png)
 
 **Address map after the change**
 

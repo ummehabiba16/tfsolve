@@ -7,27 +7,14 @@ created: 2026-10-05
 status: unverified
 summary: "4 = STB_A' falling (data latched); 2 = IBF_A rising (buffer full: no next byte); 1 = end of valid data on PA0-PA7; 5 = INTR rising (after STB_A' rises); 6 = RD' falling (8086 starts reading; INTR then falls); 3 = IBF_A falling after RD' rises (safe to send the next byte)."
 sources: ["Brey, The Intel Microprocessors, Sec. 11-3 (82C55 mode 1 strobed input timing: STB, IBF, INTR, RD)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ timing diagram with the circled event IDs (answer unchanged)"
 ---
 **Mode 1 strobed input (Port A).** The tape reader puts a byte on PA0-PA7 and pulses $\overline{STB_A}$ low; the 8255 latches the byte and sets IBF_A; when $\overline{STB_A}$ returns high it raises INTR; the 8086's read ($\overline{RD}$) clears INTR (falling edge) and then IBF_A (rising edge).
 
-**Redrawn timing diagram with event IDs** ((n) = circled number)
+**Redrawn timing diagram with event IDs** (circled)
 
-```text
-               (4)
-STB_A' ---------+     +--------------------------------------------
-                |_____|
-                (2)                                  (3)
-IBF_A            +------------------------------------+
-       __________|                                    |____________
-                               (5)
-INTR                            +--------+
-       _________________________|        |_________________________
-                                       (6)
-RD'    ---------------------------------+           +--------------
-                                        |___________|
-PA0-7  .....<===============>......................................
-                            (1)
-```
+![8255 mode 1 input on port A with event IDs 1-6 circled at their first occurrence](figures/events.png)
 
 | ID | Event | Point on the diagram |
 |:-:|:--|:--|

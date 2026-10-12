@@ -7,26 +7,12 @@ created: 2026-10-01
 status: unverified
 summary: "Share MOSI (PB5), MISO (PB6) and SCK (PB7) among P, Q and R; P drives Q's SS (PB4) from its PB4 and R's SS from its PB3; Q and R are slaves."
 sources: ["EHP Serial Communication slides 79-89, 108 (SPI pins, multiple slaves, SS)"]
+changes:
+  - "2026-10-12: replaced the ASCII drawing by a TikZ connection diagram (answer unchanged)"
 ---
 Assumptions: P uses PB4 ($\overline{SS}$, configured as output) to select Q and PB3 (any free pin) to select R. All three share a common ground and supply.
 
-```text
-          P (Master)                        Q (Slave)
-     +----------------+               +----------------+
-     | PB5 (MOSI) o---+------+------->| PB5 (MOSI)     |
-     | PB6 (MISO) <---+---+--|--------| PB6 (MISO)     |
-     | PB7 (SCK)  o---+-+-|--|------->| PB7 (SCK)      |
-     | PB4 (SS)   o---+-|-|--|------->| PB4 (SS)       |
-     | PB3        o-+ | | |  |        +----------------+
-     +--------------|-+ | |  |
-                    |   | |  |              R (Slave)
-                    |   | |  |        +----------------+
-                    |   | |  +------->| PB5 (MOSI)     |
-                    |   | +-----------| PB6 (MISO)     |
-                    |   +------------>| PB7 (SCK)      |
-                    +---------------->| PB4 (SS)       |
-                                      +----------------+
-```
+![SPI connections: master P and slaves Q and R share MOSI, MISO and SCK; one select line per slave](figures/spi.png)
 
 - **MOSI** (PB5): master out, slave in. Shared by all.
 - **MISO** (PB6): slave out, master in. Shared; only the selected slave drives it.

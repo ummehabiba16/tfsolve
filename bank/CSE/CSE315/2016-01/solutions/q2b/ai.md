@@ -7,6 +7,8 @@ created: 2026-10-05
 status: unverified
 summary: "Real mode (8086, and 286/386 in real mode): the interrupt vector table at 00000H-003FFH has 256 four-byte vectors; type n is at 4n: IP = [4n], CS = [4n + 2]. Protected mode (286/386): the IDT, located by IDTR (base, limit), has 8-byte gate descriptors; entry n at IDTR.base + 8n is an interrupt, trap or task gate giving the selector and offset of the ISR (the selector is then looked up in the GDT/LDT)."
 sources: ["MHE INTR slides 13-15 (interrupt vector table)", "Brey, The Intel Microprocessors, Sec. 12-1 and 17-3 (vector table; IDT and interrupt descriptors)"]
+changes:
+  - "2026-10-12: replaced the ASCII lines by a TikZ figure of the vector table and IDT lookups (answer unchanged)"
 ---
 Every interrupt has a **type number** $n$ (0-255). The processor uses $n$ to find the ISR address in a table.
 
@@ -25,8 +27,4 @@ Every interrupt has a **type number** $n$ (0-255). The processor uses $n$ to fin
 - The gate (interrupt gate, trap gate or task gate) contains a **code-segment selector** and an **offset** (16-bit on the 286, 32-bit on the 386) of the ISR, plus DPL and type.
 - The selector is looked up in the GDT/LDT to get the segment base; ISR address = base + offset. A task gate instead names a TSS, and the processor switches to that task.
 
-```text
- real mode:       n --> 4n --> [IP][CS] --> ISR = CS x 10H + IP
- protected mode:  n --> IDTR.base + 8n --> gate {selector, offset}
-                    --> GDT/LDT descriptor base + offset = ISR
-```
+![Real mode: vector n at 4n holds IP and CS. Protected mode: IDT entry at IDTR base + 8n holds a gate whose selector and offset give the ISR](figures/vectors.png)

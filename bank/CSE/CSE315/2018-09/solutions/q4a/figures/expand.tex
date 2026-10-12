@@ -1,0 +1,32 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[american]{circuitikz}
+\begin{document}
+\begin{circuitikz}[font=\small]
+\draw[thick,fill=gray!8] (0,0) rectangle (9.2,1.4);
+\node[font=\footnotesize\bfseries] at (4.6,0.7) {74ALS244};
+\draw (9.2,0.7) -- (9.8,0.7) node[right]{$\overline{\mathrm{1G}}$, $\overline{\mathrm{2G}}$ $\leftarrow$ $\overline{\mathrm{INTA}}$};
+\foreach \i in {0,...,7} {
+  \pgfmathtruncatemacro{\b}{7-\i}
+  \pgfmathsetmacro{\x}{0.8+\i*1.1}
+  \draw[->] (\x,0) -- (\x,-0.5) node[below]{D\b};
+  \ifnum\i=0 \draw (\x,1.4) -- (\x,1.9) node[vcc]{+5 V};
+  \else
+    \pgfmathtruncatemacro{\r}{7-\i}
+    \draw (\x,1.4) -- (\x,2.6) node[above,font=\scriptsize]{$\overline{\mathrm{IR\r}}$};
+    \fill (\x,2.2) circle (1.4pt);
+    \draw (\x,2.2) -- (\x+0.25,2.2);
+  \fi
+}
+% NAND of the IR lines
+\draw[thick] (-1.4,3.6) rectangle (-0.2,2.8);
+\node[font=\scriptsize,align=center] at (-0.8,3.2) {7-input\\NAND};
+\draw[->] (-1.4,3.2) -- (-2.2,3.2) node[left]{INTR};
+\draw (-0.2,3.2) -- (9.1,3.2);
+\foreach \i in {1,...,7} {
+  \pgfmathsetmacro{\x}{0.8+\i*1.1}
+  \draw (\x+0.25,2.2) -- (\x+0.25,3.2);
+  \fill (\x+0.25,3.2) circle (1.4pt);
+}
+\node[font=\scriptsize,align=left,anchor=north west] at (-2.6,-1.3) {each $\overline{\mathrm{IR}n}$ has a pull-up; any request low $\to$ INTR = 1; during $\overline{\mathrm{INTA}}$ the vector is 1 followed by the request lines:\\IR0 $\to$ FEH, IR1 $\to$ FDH, \dots, IR6 $\to$ BFH};
+\end{circuitikz}
+\end{document}

@@ -7,24 +7,12 @@ created: 2026-10-04
 status: unverified
 summary: "RDY1 gated by AEN1' and RDY2 gated by AEN2' are ORed and synchronized to CLK by one (ASYNC' = 1) or two (ASYNC' = 0) flip-flops; the output READY goes to the 8086, which inserts wait states (Tw) while READY = 0 at the end of T2/T3."
 sources: ["MHE 8086 Hardware Specifications slides 11, 16-17 (8284A, READY)", "Brey, The Intel Microprocessors, Sec. 9-3 and 9-5 (8284A clock generator, READY and wait states)"]
+changes:
+  - "2026-10-12: replaced the ASCII drawing by a TikZ block diagram of the READY and CLK logic (answer unchanged)"
 ---
 **Part of the 8284A block diagram used for READY**
 
-```text
- RDY1 ---------+
-               AND --+
- AEN1' --o-----+     |
-                     OR ---+--> [FF1  D Q] ---> [FF2  D Q] ---> READY
- RDY2 ---------+     |     |     clock:          clock:          (to 8086
-               AND --+     |     CLK rising      CLK falling      pin 22)
- AEN2' --o-----+           |                       ^
-                           +-----------------------+
-                           ASYNC' = 1: FF1 bypassed (one stage)
-                           ASYNC' = 0: FF1 and FF2 (two stages)
-
- Crystal X1/X2 -> oscillator -> divide by 3 -> CLK (33% duty, 8086 pin 19)
-                                               (also clocks FF1, FF2)
-```
+![8284A READY logic: gated RDY inputs, two synchronizing flip-flops selected by ASYNC', and the clock section](figures/ready.png)
 
 **How READY is generated**
 

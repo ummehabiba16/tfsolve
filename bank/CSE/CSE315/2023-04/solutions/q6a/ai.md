@@ -7,6 +7,8 @@ created: 2026-10-04
 status: unverified
 summary: "(i) A memory chip has fewer address pins than the CPU; decoding the extra upper address lines into a chip-select gives each chip its own unique address range, so it does not respond at every address or clash with other chips on the data bus. (ii) 32-bit address, word addressable: addresses 0 to 2^32 - 1, so the maximum address is FFFFFFFFh."
 sources: ["Brey, The Intel Microprocessors, Sec. 10-2 (address decoding, NAND and 74LS138 decoders)", "Rafiquzzaman, Microprocessors and Microcomputer-Based System Design, Ch. 5 (memory interfacing)"]
+changes:
+  - "2026-10-12: replaced the ASCII gate by a circuit diagram (answer unchanged)"
 ---
 **(i) Why address decoding is essential**
 
@@ -16,11 +18,7 @@ sources: ["Brey, The Intel Microprocessors, Sec. 10-2 (address decoding, NAND an
 
 *Example 1 (NAND decoder):* a 2K $\times$ 8 EPROM at **FF800H-FFFFFH** on an 8086. A10-A0 go to the EPROM. A19-A11 are all 1 in this range, so a 9-input NAND gate of A19-A11 gives $\overline{CE}$ = 0 only for FF800H-FFFFFH.
 
-```text
-A19 --+
- ...  |NAND o---- CE'  (EPROM 2K x 8, A10-A0 from bus)
-A11 --+
-```
+![9-input NAND of A19-A11 drives CE' of the 2K x 8 EPROM](figures/decoder.png)
 
 *Example 2 (74LS138):* A19-A17 drive the select inputs of a 3-to-8 decoder; each of the 8 outputs selects one 128 KB block (Y0: 00000H-1FFFFH, ..., Y7: E0000H-FFFFFH), so 8 memory chips can share the bus without conflict.
 

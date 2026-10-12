@@ -7,6 +7,8 @@ created: 2026-10-04
 status: unverified
 summary: "(i) 4 GB / 16 KB = 2^18 = 262144 pages. (ii) 14-bit offset; the other 18 bits split as 5 + 6 + 7 (each level twice the entries of the previous): bits 31-27 level 1, 26-21 level 2, 20-14 level 3, 13-0 offset. (iii) Level 1: 32 entries, level 2: 64, level 3: 128."
 sources: ["MHE 80386-updated slides 21-26 (paging: page directory, page tables, splitting the linear address 10+10+12)"]
+changes:
+  - "2026-10-12: replaced the ASCII address format by a TikZ figure (answer unchanged)"
 ---
 **(i) Total number of pages**
 
@@ -19,16 +21,7 @@ $$\text{Pages} = \frac{4\ \text{GB}}{16\ \text{KB}} = \frac{2^{32}}{2^{14}} = 2^
 
 $$x + (x+1) + (x+2) = 18 \ \Rightarrow\ x = 5$$
 
-```text
- 31        27 26          21 20            14 13                      0
-+------------+--------------+----------------+-------------------------+
-|  Level 1   |   Level 2    |    Level 3     |         Offset          |
-|  5 bits    |   6 bits     |    7 bits      |         14 bits         |
-+------------+--------------+----------------+-------------------------+
-  index into   index into     index into       byte within the
-  level-1      level-2        level-3          16 KB page
-  table        table          table (-> page frame)
-```
+![32-bit linear address: Level 1 (5), Level 2 (6), Level 3 (7), Offset (14)](figures/fields.png)
 
 **(iii) Entries per table**
 

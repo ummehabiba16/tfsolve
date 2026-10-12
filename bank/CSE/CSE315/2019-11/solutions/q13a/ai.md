@@ -7,16 +7,12 @@ created: 2026-10-04
 status: unverified
 summary: "Daisy-chain the four slaves: ATmega32 MOSI -> A, A MISO -> B MOSI, B -> C, C -> D; SCK and one SS' line shared by all. Only 3 ATmega32 pins (MOSI PB5, SCK PB7, SS PB4) are used; the master shifts 4 bytes (D's first) per update. (With independent slaves, a 2-to-4 decoder on two pins for the SS' lines needs 4 pins.)"
 sources: ["EHP Serial Communication slides 79-84, 108 (SPI pins, multiple slaves with separate SS)", "2023-04 Q2(c) of this course (SPI daisy chain)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ block diagram (answer unchanged)"
 ---
 Since data only goes **from** the ATmega32 **to** the devices, the fewest master pins are used by a **daisy chain**: the slaves' shift registers are connected in series, and all share SCK and one slave-select line.
 
-```text
- ATmega32        device A        device B        device C        device D
- MOSI (PB5) --> MOSI  MISO --> MOSI  MISO --> MOSI  MISO --> MOSI  MISO (open)
- SCK  (PB7) --> SCK  ------->  SCK  ------->  SCK  ------->  SCK
- SS   (PB4) --> SS'  ------->  SS'  ------->  SS'  ------->  SS'
-                 (SCK and SS' are common lines to all four devices)
-```
+![SPI daisy chain: MOSI through A, B, C, D; SCK and SS' shared](figures/daisy.png)
 
 **Connections**
 

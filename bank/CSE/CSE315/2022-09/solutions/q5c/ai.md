@@ -7,6 +7,8 @@ created: 2026-10-04
 status: unverified
 summary: "256K x 1 DRAM with 9 multiplexed address pins (A0-A8): RAS' latches the 9-bit row address (8 bits to the 8-to-256 row decoder of all four 64K arrays, 1 bit to the final MUX), CAS' latches the 9-bit column address (8 bits to each 256-to-1 column multiplexer, 1 bit to the 4-to-1 MUX); WE' chooses read (Dout) or write (Din). Activating a row also refreshes it."
 sources: ["Brey, The Intel Microprocessors, Sec. 10-1 (DRAM: multiplexed address, RAS and CAS, 256K x 1 organization, refresh)", "Rafiquzzaman, Microprocessors and Microcomputer-Based System Design, Ch. 5 (DRAM)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ block diagram (answer unchanged)"
 ---
 **Organisation.** The chip is a **256K $\times$ 1 DRAM** ($2^{18}$ bits) built from **four 64K arrays**, each $256 \times 256$ cells. It needs 18 address bits but has only **9 address pins (A0-A8)**. The address is sent in two halves on the same pins (**address multiplexing**), latched by $\overline{RAS}$ and $\overline{CAS}$.
 
@@ -18,14 +20,7 @@ sources: ["Brey, The Intel Microprocessors, Sec. 10-1 (DRAM: multiplexed address
 4. **Read or write.** If $\overline{WE}$ = 1 (read), the selected bit appears on **Dout**. If $\overline{WE}$ = 0 (write), the bit on **Din** is written into the selected cell.
 5. **End of cycle.** $\overline{RAS}$ and $\overline{CAS}$ return high. The sense amplifiers write the whole row back, which **refreshes** it (DRAM cells are capacitors that leak). A periodic $\overline{RAS}$-only cycle for each of the 256 rows refreshes all four arrays.
 
-```text
- A0-A8 --+--> [Row latch]  --8--> [8:256 row decoder] --> row in all 4 arrays
-         |         (RAS')  --1--------------------------------+
-         |                                                    v
-         +--> [Column latch] --8--> 4 x [256:1 column mux] --> [4:1 MUX] --> Dout
-                   (CAS')  --1------------------------------->     ^  Din
-                                                       WE' = read/write
-```
+![DRAM access: row latch and decoder open one row in all four arrays, column latch drives each 256:1 MUX, the 4:1 MUX selects the array](figures/dram.png)
 
 Multiplexing halves the number of address pins (9 instead of 18), which keeps the package small, at the cost of needing $\overline{RAS}$/$\overline{CAS}$ timing from the controller.
 

@@ -7,17 +7,14 @@ created: 2026-10-05
 status: unverified
 summary: "80386 descriptor (8 bytes): 32-bit base (bytes 2-4, 7), 20-bit limit (bytes 0-1 and low nibble of byte 6), G (byte or 4 KB granularity), D (16/32-bit default), AV, and the access rights byte (P, DPL, S, E, ED/C, W/R, A). Versus 80286: 24-bit base and 16-bit limit (64 KB), bytes 6-7 reserved; the 386 uses those bytes for base 31-24, limit 19-16, G, D and AV, so segments can be 4 GB."
 sources: ["MHE 80386-updated slides 17-20 (descriptor, G, AV, D bits)", "MHE 80286 slides (80286 descriptor)", "Brey, The Intel Microprocessors, Sec. 2-3"]
+changes:
+  - "2026-10-12: replaced the ASCII layout by a TikZ figure (answer unchanged)"
 ---
 **80386 descriptors**
 
 An 80386 segment descriptor is **8 bytes** and describes a segment's base, size and access rights.
 
-```text
- byte 7          byte 6                  byte 5           bytes 4-2       bytes 1-0
-+-----------+---+---+---+----+---------+---------------+---------------+-------------+
-| base 31-24| G | D | 0 | AV | lim19-16| access rights | base 23-0     | limit 15-0  |
-+-----------+---+---+---+----+---------+---------------+---------------+-------------+
-```
+![80386 segment descriptor bytes 7-0 with G, D, 0, AV and limit 19-16 in byte 6](figures/descriptor.png)
 
 **Fields**
 

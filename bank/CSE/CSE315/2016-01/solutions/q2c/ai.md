@@ -7,6 +7,8 @@ created: 2026-10-05
 status: unverified
 summary: "In protected mode a segment register holds a selector (13-bit index, TI, RPL) instead of a segment address. The index selects an 8-byte descriptor in the GDT (TI = 0, base in GDTR) or LDT (TI = 1, via LDTR); the descriptor gives a 24-bit base, 16-bit limit and access rights, cached in the register's hidden part. Physical address = base + offset (offset <= limit), anywhere in 16 MB; 8192 x 2 descriptors x 64 KB = 1 GB virtual per task."
 sources: ["MHE 80286 slides (protected mode addressing, selector, descriptor, GDT/LDT, shadow registers)", "Brey, The Intel Microprocessors, Sec. 2-3 (protected-mode memory addressing)"]
+changes:
+  - "2026-10-12: replaced the ASCII lines by a TikZ figure of the selector, descriptor table and address calculation (answer unchanged)"
 ---
 In real mode a segment register holds the segment address itself (address = segment $\times$ 16 + offset). In **protected mode** it holds a **selector** that points to a **descriptor**, which describes the segment.
 
@@ -26,12 +28,7 @@ In real mode a segment register holds the segment address itself (address = segm
 
 **Address translation**
 
-```text
- DS = selector --> index x 8 + (GDTR or LDTR base) --> descriptor
-                                                       base (24 bits)
-                                                       limit, access rights
- physical address = descriptor base + offset   (offset <= limit, rights checked)
-```
+![80286 protected-mode addressing: selector index and TI pick a descriptor; its 24-bit base plus the offset gives the physical address](figures/segmentation.png)
 
 1. When a selector is loaded into a segment register, the processor reads the descriptor and stores base, limit and rights in the register's hidden **descriptor cache** (shadow register).
 2. On each access: check offset $\le$ limit and the access rights; then **physical address = base + offset** (24 bits, up to 16 MB).

@@ -7,19 +7,10 @@ created: 2026-10-05
 status: unverified
 summary: "Non-pipelined read: T1: ADS' low, valid A31-A3, BE7'-BE0', M/IO' and W/R' = 0; T2: the Pentium samples BRDY' at the end of each T2 (extra T2s are wait states); when BRDY' is low the 64-bit data on D63-D0 is latched and the cycle ends. Minimum 2 clocks."
 sources: ["Brey, The Intel Microprocessors, Ch. 18 (Pentium memory read cycle, ADS, BRDY, NA)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ timing diagram (answer unchanged)"
 ---
-```text
-         T1      T2      T2      T1 (next cycle)
-CLK     +---+   +---+   +---+   +---+   +---+
-        |   |___|   |___|   |___|   |___|   |___
-ADS'    +       +-------------------------------
-        |_______|
-A31-A3  X=======================X---------------  also BE7-BE0, M/IO, W/R = 0
-BRDY'   ------------------+     +---------------
-                          |_____|
-D63-D0  ..................<====>
-                               ^ data latched (end of T2, BRDY' low)
-```
+![Pentium non-pipelined read with one wait state: CLK, ADS', address, BRDY', data](figures/read.png)
 
 1. **T1:** the Pentium drives the address **A31-A3** and byte enables **$\overline{BE7}$-$\overline{BE0}$**, M/$\overline{IO}$ = 1 (memory) and **W/$\overline{R}$ = 0** (read), and pulses **$\overline{ADS}$** (address status) low for one clock to say a new valid bus cycle has started.
 2. **T2:** the memory system works; the Pentium samples **$\overline{BRDY}$** (burst ready) at the **end of each T2**. If $\overline{BRDY}$ is high, another T2 (a wait state) follows.

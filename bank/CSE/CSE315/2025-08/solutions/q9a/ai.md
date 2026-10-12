@@ -7,23 +7,12 @@ created: 2026-10-01
 status: unverified
 summary: "Wrong ISRs/pins (button 1 is INT2 on PB2, button 2 is INT0 on PD2), INT1 enabled instead of INT2, MCUCR unchanged so INT0 is low-level, ISC2 not set, no sei(), count not volatile, no pull-up for the active-low button."
 sources: ["EHP ATmega32 Interrupt slides 13-23 (steps, MCUCR/MCUCSR/GICR, example)", "EHP ATmega32 Interrupt slides 27-29 (volatile)", "EHP ATMega32 Basic IO slides 28-36 (push buttons, pull-up/pull-down)"]
+changes:
+  - "2026-10-12: replaced the ASCII drawing by a circuit diagram (answer unchanged)"
 ---
 **Circuit**
 
-```text
-               +5V                          ATmega32
-                |                     +----------------------+
-              [Rpu]  (or internal     |                      |
-                |     pull-up)        |                      |
- GND --o  o-----+-------------------->| PD2 (INT0)  PA0 .. PA7|---[R]--|>|-- GND  (x8 LEDs,
-     button 2 (active-low)            |                      |                 LED0..LED7)
-                                      |                      |
- +5V --o  o-----+-------------------->| PB2 (INT2)           |
-     button 1   |                     |                      |
-   (active-high)[Rpd]                 +----------------------+
-                |
-               GND
-```
+![Circuit: active-low button 2 on PD2 with pull-up, active-high button 1 on PB2 with pull-down, 8 LEDs on PORTA](figures/circuit.png)
 
 - Button 1 (active-high) on PB2 = INT2, with a pull-down resistor: the pin reads 0 normally and 1 when pressed. *Pressed* is a **rising edge**.
 - Button 2 (active-low) on PD2 = INT0, with a pull-up resistor (or the internal pull-up, PORTD2 = 1): the pin reads 1 normally and 0 when pressed. *Released* is a **rising edge**.

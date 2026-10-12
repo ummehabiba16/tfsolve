@@ -1,0 +1,14 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[american]{circuitikz}
+\usetikzlibrary{calc}
+\begin{document}
+\begin{circuitikz}[font=\small]
+\draw (0,0) node[buffer port] (b) {};
+\draw (b.in) -- ++(-0.8,0) node[left,align=right]{device\\output};
+\draw (b.out) -- ++(1.6,0) coordinate (bus);
+\draw[ultra thick] ($(bus)+(0,1.0)$) -- ($(bus)+(0,-1.0)$) node[below,font=\footnotesize]{bus line};
+\draw (b.center) ++(0,0.42) -- ++(0,0.7) node[above,align=center,font=\footnotesize]{enable (from address\\decoder / $\overline{\mathrm{RD}}$)};
+\node[font=\footnotesize,align=left,anchor=west] at ($(bus)+(0.5,0.25)$) {enable = 1: output = input (0 or 1)};
+\node[font=\footnotesize,align=left,anchor=west] at ($(bus)+(0.5,-0.35)$) {enable = 0: output = Z (disconnected)};
+\end{circuitikz}
+\end{document}

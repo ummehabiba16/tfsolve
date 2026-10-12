@@ -1,0 +1,41 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[american]{circuitikz}
+\usetikzlibrary{calc}
+\begin{document}
+\begin{circuitikz}[font=\small]
+% rails: name/x
+\def\yt{1.4}\def\yb{-8.6}
+\foreach \x/\n in {0.4/HLDA,1.9/{M/$\overline{\mathrm{IO}}$},3.4/{W/$\overline{\mathrm{R}}$}} {
+  \draw (\x,\yt+0.6) node[above]{\n} -- (\x,\yb);
+  \fill (\x,\yt) circle (1.5pt);
+  \draw (\x,\yt) -- (\x+0.6,\yt) node[not port,anchor=in,scale=0.5,rotate=-90] (n) {};
+  \draw (n.out) -- (\x+0.6,\yb);
+}
+\node[font=\scriptsize,anchor=south west] at (0.95,\yt-0.95) {$\overline{\mathrm{HLDA}}$};
+\node[font=\scriptsize,anchor=south west] at (2.45,\yt-0.95) {$\overline{\mathrm{M}}$};
+\node[font=\scriptsize,anchor=south west] at (3.95,\yt-0.95) {$\overline{\mathrm{W}}$};
+% rail x: HLDA 0.4, HLDA' 1.0, M 1.9, M' 2.5, W 3.4, W' 4.0
+% gates: name, y, inputs (rail x list)
+\foreach \g/\y/\ins in {c1/0/{1.0,1.9,3.4},a1/-1.5/{0.4,3.4},c2/-3.0/{1.0,2.5,4.0},c3/-4.8/{1.0,1.9,4.0},a2/-6.3/{0.4,4.0},c4/-7.8/{1.0,2.5,3.4}} {
+  \def\n{0}\foreach \r in \ins {\pgfmathtruncatemacro{\n}{\n+1}\xdef\n{\n}}
+  \ifnum\n=3 \draw (6.4,\y) node[and port,number inputs=3] (\g) {};
+  \else \draw (6.4,\y) node[and port,number inputs=2] (\g) {}; \fi
+  \def\k{0}
+  \foreach \r in \ins {
+    \pgfmathtruncatemacro{\k}{\k+1}\xdef\k{\k}
+    \draw (\r,0 |- \g.in \k) -- (\g.in \k);
+    \fill (\r,0 |- \g.in \k) circle (1.5pt);
+  }
+}
+% OR gates
+\foreach \o/\y/\a/\b/\lab in {o1/-0.75/c1/a1/{WD = MEMW (memory write)},o2/-2.25/a1/c2/{WS = IOR (I/O read)},o3/-5.55/c3/a2/{RS = MEMR (memory read)},o4/-7.05/a2/c4/{RD = IOW (I/O write)}} {
+  \draw (9.4,\y) node[or port] (\o) {};
+  \draw (\a.out) -- ++(0.4,0) |- (\o.in 1);
+  \draw (\b.out) -- ++(0.25,0) |- (\o.in 2);
+  \draw (\o.out) -- ++(0.4,0) node[right]{\lab};
+}
+\fill ($(a1.out)+(0.25,0)$) circle (1.5pt);
+\fill ($(a2.out)+(0.25,0)$) circle (1.5pt);
+\node[font=\scriptsize,align=left,anchor=north west] at (5.2,-8.4) {AND terms, top to bottom: $\overline{\mathrm{HLDA}}$MW,\enspace HLDA$\cdot$W,\enspace $\overline{\mathrm{HLDA}}\,\overline{\mathrm{M}}\,\overline{\mathrm{W}}$,\enspace $\overline{\mathrm{HLDA}}$M$\overline{\mathrm{W}}$,\enspace HLDA$\cdot\overline{\mathrm{W}}$,\enspace $\overline{\mathrm{HLDA}}\,\overline{\mathrm{M}}$W};
+\end{circuitikz}
+\end{document}

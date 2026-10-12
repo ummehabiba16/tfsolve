@@ -7,6 +7,8 @@ created: 2026-10-05
 status: unverified
 summary: "Mode 2 (bidirectional bus on Port A), e.g. linking two computers or a processor to a disk/GPIB controller. Inputs: WR', RD' (CPU) and ACK', STB' (peripheral); outputs: OBF', IBF, INTR and Port A. WR' falling -> INTR low; WR' rising -> OBF' low; ACK' low -> OBF' high and Port A drives the data; STB' low -> IBF high (data latched); STB' rising -> INTR high; RD' falling -> INTR low; RD' rising -> IBF low."
 sources: ["Brey, The Intel Microprocessors, Sec. 11-3 (82C55 mode 2 bidirectional operation and timing)", "Hall, Microprocessors and Interfacing, Ch. 9 (8255 mode 2)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ timing diagram with the numbered cause-effect arrows 1-8 of the table (answer unchanged)"
 ---
 **(i) Mode and application**
 
@@ -30,24 +32,7 @@ The diagram has both output handshake signals ($\overline{WR}$, $\overline{OBF}$
 | 7 | $\overline{RD}\downarrow$ (CPU reads Port A) | $\to$ | INTR $\downarrow$ |
 | 8 | $\overline{RD}\uparrow$ | $\to$ | IBF $\downarrow$ (input buffer empty) |
 
-```text
-WR'    ----+    +--------------------------------------------------
-           |____|
-OBF'   ----------+                      +--------------------------
-                 |______________________|
-INTR   -----+               +-------------------------+
-            |_______________|                         |____________
-ACK'   --------------------------------+     +---------------------
-                                       |_____|
-STB'   --------------+     +---------------------------------------
-                     |_____|
-IBF                   +-------------------------------------+
-       _______________|                                     |______
-PortA  ............<=========>.........<=====>.....................
-                     in                  out
-RD'    ----------------------------------------------+     +-------
-                                                     |_____|
-```
+![82C55 mode 2 timing with arrows from each input change to the output change it causes, numbered as in the table](figures/mode2.png)
 
 Arrows (cause $\to$ effect): $\overline{WR}\downarrow \to$ INTR$\downarrow$; $\overline{WR}\uparrow \to \overline{OBF}\downarrow$; $\overline{STB}\downarrow \to$ IBF$\uparrow$; $\overline{STB}\uparrow \to$ INTR$\uparrow$; $\overline{ACK}\downarrow \to \overline{OBF}\uparrow$ and output data on Port A; $\overline{RD}\downarrow \to$ INTR$\downarrow$; $\overline{RD}\uparrow \to$ IBF$\downarrow$.
 

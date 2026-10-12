@@ -7,6 +7,8 @@ created: 2026-10-04
 status: unverified
 summary: "Fast PWM WGM = 1110 (TOP = ICR1), no prescaler at 1 MHz: ICR1 = 1999 (2000 us period), OCR1A = 299 (300 us high), COM1A1:0 = 10 (clear on match, set at BOTTOM); TCCR1A = 0b10000010, TCCR1B = 0b00011001, PD5 output."
 sources: ["EHP Timer_Part_2 slides 49-52 (period 1000 us, high time 200 us with Fast PWM WGM = 1110)", "EHP Timer_Part_2 slide 57 (ICR1 = period - 1, OCR1A = high_time - 1)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ timing diagram drawn to scale; it shows that OC1A stays 0 until the first BOTTOM at 2000 us (answer unchanged)"
 ---
 **Choice of values** (assumption: system clock 1 MHz, the paper's default)
 
@@ -41,14 +43,8 @@ int main(void)
 }
 ```
 
-```text
-TCNT1 1999 |      /|      /|      /|
-       299 |  *  / |  *  / |  *  / |     * = compare match: OC1A cleared
-         0 | /  /  | /  /  | /  /  |
-OC1A       |__     |__     |__
-           |  |____|  |____|  |____      set at BOTTOM
-           |<-2000us->|
-           300us high, duty = 15%
-```
+![Fast PWM, TOP = ICR1 = 1999, OCR1A = 299: TCNT1 and OC1A](figures/pwm.png)
+
+OC1A is 0 after reset and is first set at the first BOTTOM (t = 2000 µs). From then on it is high for 300 µs at the start of every 2000 µs period.
 
 *Note:* the slide example writes ICR1 = period and OCR1A = high time (1000 and 200); with that convention the values would be 2000 and 300, which gives a 2001 µs period. The $-1$ values give exactly 2000 µs and 300 µs.

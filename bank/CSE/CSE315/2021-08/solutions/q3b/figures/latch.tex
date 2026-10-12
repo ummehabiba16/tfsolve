@@ -1,0 +1,30 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[american]{circuitikz}
+\usetikzlibrary{calc}
+\begin{document}
+\begin{circuitikz}[font=\small,>=latex]
+\node[draw,thick,minimum width=2.2cm,minimum height=2.4cm] (ff) at (0,0) {};
+\node[font=\footnotesize\bfseries,anchor=north east] at (ff.south east) {74ALS74};
+\node[font=\footnotesize,anchor=west] at ($(ff.west)+(0,0.6)$) {D};
+\node[font=\footnotesize,anchor=west] at ($(ff.west)+(0.2,-0.5)$) {CLK};
+\draw ($(ff.west)+(0,-0.35)$) -- ++(0.18,-0.15) -- ++(-0.18,-0.15);
+\node[font=\footnotesize,anchor=east] at ($(ff.east)+(0,0.6)$) {Q};
+\node[font=\footnotesize,anchor=east] at ($(ff.east)+(0,-0.6)$) {$\overline{\mathrm{Q}}$};
+\node[font=\footnotesize,anchor=south] at ($(ff.south)+(-0.5,0.15)$) {$\overline{\mathrm{CLR}}$};
+\node[font=\footnotesize,anchor=north] at ($(ff.north)+(0.3,-0.3)$) {$\overline{\mathrm{PRE}}$};
+\draw ($(ff.south)+(-0.5,-0.1)$) circle (0.1);
+\draw ($(ff.north)+(0.3,0.1)$) circle (0.1);
+\draw ($(ff.north)+(0.3,0.2)$) -- ++(0,0.5) node[vcc]{$V_{CC}$};
+\draw ($(ff.west)+(0,0.6)$) -- ++(-0.8,0) -- ++(0,0.9) node[vcc]{$V_{CC}$};
+\draw[<-] ($(ff.west)+(0,-0.5)$) -- ++(-2.4,0) node[left,align=right]{device INTR\\(rising edge)};
+\draw ($(ff.east)+(0,0.6)$) -- ++(0.5,0) node[right,font=\scriptsize]{not used};
+\draw[->] ($(ff.east)+(0,-0.6)$) -- ++(2.4,0) node[right,align=left]{$\overline{\mathrm{INTR}}$ (processor,\\active-low level)};
+% clear logic: CLR' = RESET' AND NOT(INTA)
+\draw (-2.2,-2.6) node[and port] (g) {};
+\draw (g.out) -| ($(ff.south)+(-0.5,-0.2)$);
+\draw (g.in 2) -- ++(-0.5,0) node[left]{$\overline{\mathrm{RESET}}$};
+\draw (g.in 1) -- ++(-0.3,0) node[not port,anchor=out,scale=0.6] (n) {};
+\draw (n.in) -- ++(-0.3,0) node[left]{INTA (active high)};
+\node[font=\scriptsize,align=left,anchor=north west] at (-0.3,-2.2) {$\overline{\mathrm{CLR}}$ = 0 while INTA = 1\\or $\overline{\mathrm{RESET}}$ = 0};
+\end{circuitikz}
+\end{document}

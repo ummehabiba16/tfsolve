@@ -7,6 +7,8 @@ created: 2026-10-05
 status: unverified
 summary: "80286 memory management = segmentation with descriptors (no paging). Real mode: 1 MB, segment x 16 + offset. Protected mode: segment registers hold selectors (index, TI, RPL) pointing to 8-byte descriptors in the GDT or LDT (GDTR, LDTR) with 24-bit base, 16-bit limit and access rights, cached in hidden registers; physical = base + offset (16 MB). Provides relocation, protection (limits, types, privilege levels), task isolation via LDTs, and virtual memory of 1 GB per task via the present bit and segment swapping."
 sources: ["MHE 80286 slides (real and protected mode, selectors, GDT/LDT, descriptors, shadow registers, privilege levels)", "Brey, The Intel Microprocessors, Sec. 2-3 and Ch. 17"]
+changes:
+  - "2026-10-12: replaced the ASCII line by a TikZ figure of 80286 protected-mode address translation (answer unchanged)"
 ---
 **Real address mode:** the 80286 behaves like an 8086: 20-bit address = segment $\times$ 10H + offset, 1 MB, no protection.
 
@@ -21,9 +23,7 @@ sources: ["MHE 80286 slides (real and protected mode, selectors, GDT/LDT, descri
 4. **Descriptor cache (shadow registers).** When a selector is loaded, the descriptor is copied into the segment register's hidden part, so translation is fast.
 5. **Address translation:** physical address = descriptor base + offset (offset $\le$ limit), anywhere in **16 MB** (24-bit address bus).
 
-```text
- selector --> GDT/LDT[index] --> {base, limit, rights} --> base + offset = physical (24-bit)
-```
+![80286 protected mode: selector index and TI pick a descriptor; its 24-bit base plus the offset gives the physical address](figures/segmentation.png)
 
 **Features provided**
 

@@ -7,6 +7,8 @@ created: 2026-10-05
 status: unverified
 summary: "A task switch is triggered by JMP/CALL to a TSS descriptor or task gate, an interrupt/exception through a task gate, or IRET with NT = 1. The processor checks privilege and the new TSS (present, not busy, limit >= 67h), saves all registers of the current task into its TSS (via TR), loads TR with the new selector, marks the new TSS busy, loads all registers (CR3, LDTR, EFLAGS, EIP, general and segment registers) from the new TSS, sets the back link and NT for CALL/interrupt, sets TS in CR0, and continues at the new task's CS:EIP."
 sources: ["Brey, The Intel Microprocessors, Sec. 17-6 (task switching)", "Intel 80386 Programmer's Reference Manual, Sec. 7.5-7.6 (task switching, task linking)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ figure with the numbered steps (answer unchanged)"
 ---
 **What triggers a task switch**
 
@@ -16,16 +18,7 @@ sources: ["Brey, The Intel Microprocessors, Sec. 17-6 (task switching)", "Intel 
 
 **Steps performed by the processor**
 
-```text
-   current task                                  new task
-  +-------------+                              +-------------+
-  | TSS (old)   | <-- (2) save all registers   | TSS (new)   |
-  +-------------+                              +-------------+
-         ^                                            |
-   TR (old selector)  -- (3) TR <- new selector --> (4) load all registers
-                                                      |
-                                       (5) continue at new CS:EIP
-```
+![Task switch: (1) checks, (2) save state in the old TSS, (3) load TR, (4) load state from the new TSS, (5) back link, NT, TS and continue](figures/switch.png)
 
 1. **Checks.** For JMP/CALL the CPL and selector RPL must be $\le$ the DPL of the TSS descriptor or task gate. The new TSS descriptor must be present, **not busy** (no recursion), and its limit at least 67h (104 bytes).
 2. **Save the old state.** All general registers, segment selectors, EFLAGS and EIP (pointing to the next instruction) of the current task are stored in the **current TSS** (found through TR).

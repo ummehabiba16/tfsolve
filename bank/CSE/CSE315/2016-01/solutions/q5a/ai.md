@@ -7,17 +7,12 @@ created: 2026-10-05
 status: unverified
 summary: "Single handshake: sender puts data on the lines (1) and pulses STB' (2); receiver latches it and answers with an ACK pulse (3, 4) meaning 'got it, send the next'. Double handshake: sender lowers STB' to ask 'ready?' (1); receiver raises ACK 'ready' (2); sender puts data (3) and raises STB' 'data valid' (4); receiver lowers ACK 'data received' (5), then the data may be removed."
 sources: ["Hall, Microprocessors and Interfacing, Ch. 9 (single and double handshake data transfer)", "Brey, The Intel Microprocessors, Sec. 11-3 (8255 handshake modes)"]
+changes:
+  - "2026-10-12: replaced the two ASCII sketches by TikZ timing diagrams with the numbered steps (answer unchanged)"
 ---
 **(i) Single handshake I/O**
 
-```text
-DATA   ......<======================>
-STB'   ----------+     +-----------------------------
-                 |_____|
-ACK                      +-------+
-       __________________|       |___________________
-            (1)  (2)     (3)     (4)
-```
+![Single handshake: data, STB' pulse, ACK pulse, steps 1-4](figures/single.png)
 
 1. The sender puts a byte on the data lines.
 2. It pulses $\overline{STB}$ low to tell the receiver that valid data is present; the receiver latches the data.
@@ -28,14 +23,7 @@ The sender knows each byte was received, so a slow receiver (e.g. a printer) doe
 
 **(ii) Double handshake I/O**
 
-```text
-STB'   ----+                       +-----------------
-           |_______________________|
-ACK             +-----------------------+
-       _________|                       |____________
-DATA   ..............<=====================>
-           (1)  (2)  (3)           (4)  (5)
-```
+![Double handshake: STB' and ACK each change twice, steps 1-5](figures/double.png)
 
 1. The sender lowers $\overline{STB}$: "I have data, are you ready?"
 2. The receiver raises **ACK**: "I am ready."

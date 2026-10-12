@@ -7,6 +7,8 @@ created: 2026-10-04
 status: unverified
 summary: "Not enough. It is an 8088-style circuit: on the 8086, AD15-AD8 carry address in T1 and data later, so the '244 must be replaced by a '373 latch (G = ALE, OE' = GND) for A15-A8, and a second '245 (G = DEN', DIR = DT/R') is needed for D15-D8. The BHE/A19-A16 '373, the AD7-AD0 '373 and '245, and the control '244 are correct."
 sources: ["Brey, The Intel Microprocessors, Sec. 9-1 and 9-2 (demultiplexing and fully buffered 8088 and 8086 systems: three 74LS373 latches, two 74LS245 transceivers)", "MHE 8086 Hardware Specifications slides (multiplexed AD15-AD0, ALE, DT/R, DEN)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ block diagram of the corrected buffered system (answer unchanged)"
 ---
 **Verdict: the circuit is not enough for a fully buffered 8086.**
 
@@ -26,13 +28,6 @@ sources: ["Brey, The Intel Microprocessors, Sec. 9-1 and 9-2 (demultiplexing and
 - Replace the '244 on AD15-AD8 with a **74LS373 latch**: inputs AD15-AD8, **G = ALE**, $\overline{OE}$ = GND, outputs A15-A8.
 - Add a second **74LS245 transceiver** between AD15-AD8 and the buffered **D15-D8**, with its **G = $\overline{DEN}$** and **DIR = DT/$\overline{R}$**, the same as the first '245.
 
-```text
- AD15-AD8 --+--> [ '373 ] --> A15-A8   (G = ALE, OE' = GND)     replaces '244
-            +--> [ '245 ] <-> D15-D8   (G = DEN', DIR = DT/R')  new
- AD7-AD0  --+--> [ '373 ] --> A7-A0    (G = ALE)                as drawn
-            +--> [ '245 ] <-> D7-D0    (G = DEN', DIR = DT/R')  as drawn
- BHE/S7, A19-A16 -> [ '373 ] --> BHE', A19-A16 (G = ALE)        as drawn
- M/IO', RD', WR' -> [ '244 ] --> buffered control bus           as drawn
-```
+![Fully buffered 8086: three '373 latches, two '245 transceivers and a '244; the changed and new parts are green](figures/buffered.png)
 
 The fully buffered 8086 then has **three '373 latches** (A19-A16 with $\overline{BHE}$, A15-A8, A7-A0), **two '245 transceivers** (D15-D8, D7-D0) and a '244 for the control signals. If DMA is used, the '244 and '373 output enables are driven by HLDA so the buses can be released, instead of being grounded.

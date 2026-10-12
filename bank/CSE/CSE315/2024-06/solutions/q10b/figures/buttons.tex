@@ -1,0 +1,19 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[american]{circuitikz}
+\begin{document}
+\begin{circuitikz}[font=\small]
+\ctikzset{resistors/scale=0.7}
+% active-low
+\node[font=\bfseries] at (0.6,4.9) {Active-low (pull-up)};
+\draw (0,0) node[ground]{} to[push button,l={button}] (0,1.8) to[short,-*] (0,1.8) to[R,l={$R$ pull-up (or internal)}] (0,3.6) node[vcc]{+5 V};
+\draw (0,1.8) -- (1.4,1.8) node[right,align=left,font=\footnotesize]{to MCU pin\\(e.g. PD2)};
+\node[font=\scriptsize,align=center] at (0.6,-0.9) {open: pin = 1;\enspace pressed: pin = 0};
+% active-high
+\begin{scope}[xshift=6.5cm]
+\node[font=\bfseries] at (0.6,4.9) {Active-high (pull-down)};
+\draw (0,3.6) node[vcc]{+5 V} to[push button,l={button}] (0,1.8) to[short,-*] (0,1.8) to[R,l={$R$ pull-down (4.7 k$\Omega$)}] (0,0) node[ground]{};
+\draw (0,1.8) -- (1.4,1.8) node[right,align=left,font=\footnotesize]{to MCU pin\\(e.g. PD3)};
+\node[font=\scriptsize,align=center] at (0.6,-0.9) {open: pin = 0;\enspace pressed: pin = 1};
+\end{scope}
+\end{circuitikz}
+\end{document}

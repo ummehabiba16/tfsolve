@@ -7,26 +7,14 @@ created: 2026-10-05
 status: unverified
 summary: "Use a 74LS257 (quad 2-to-1 MUX with three-state outputs): select = IO/M' (8088) or M/IO' (8086); inputs RD', WR' and +5 V make MEMR', MEMW', IOR', IOW'; its output enable is driven by HLDA so the lines float during DMA and the DMA controller (8237) drives them. HOLD from the DMA controller, HLDA back to it; HLDA also floats the address/data buffers."
 sources: ["Brey, The Intel Microprocessors, Sec. 13-1 (HOLD and HLDA, generating MEMR, MEMW, IOR, IOW with a 74LS257 in a DMA system)"]
+changes:
+  - "2026-10-12: replaced the ASCII drawing by a TikZ figure of the 74LS257 connections (answer unchanged)"
 ---
 In a DMA system the bus control lines must be driven by the **processor** normally and by the **DMA controller** (e.g. 8237) during DMA. The 8088 gives only $\overline{RD}$, $\overline{WR}$ and IO/$\overline{M}$, so a circuit is needed to make the four system commands $\overline{MEMR}$, $\overline{MEMW}$, $\overline{IOR}$, $\overline{IOW}$, and to release them when HLDA = 1.
 
 **Circuit: 74LS257 (quad 2-to-1 multiplexer with three-state outputs)**
 
-```text
-                 74LS257
-            +-----------------+
-  RD'  ---->| 1A          1Y  |----> MEMR'
-  +5V  ---->| 1B              |
-  WR'  ---->| 2A          2Y  |----> MEMW'
-  +5V  ---->| 2B              |
-  +5V  ---->| 3A          3Y  |----> IOR'
-  RD'  ---->| 3B              |
-  +5V  ---->| 4A          4Y  |----> IOW'
-  WR'  ---->| 4B              |
-  IO/M' --->| S (select)      |      S = 0: A inputs, S = 1: B inputs
-  HLDA ---->| OE' (G)         |      HLDA = 1: outputs float
-            +-----------------+
-```
+![74LS257 makes MEMR', MEMW', IOR', IOW' from RD', WR' and IO/M'; HLDA floats its outputs](figures/mux257.png)
 
 **Operation**
 

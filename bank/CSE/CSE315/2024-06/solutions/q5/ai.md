@@ -7,6 +7,8 @@ created: 2026-10-01
 status: unverified
 summary: "(i) 2^32 / 2^14 = 2^18 = 262144 pages; (ii) 32-bit linear address = L1 5 bits (31-27) | L2 6 bits (26-21) | L3 7 bits (20-14) | offset 14 bits (13-0); (iii) 32, 64 and 128 entries."
 sources: ["MHE 80386-updated slides 21-23 (paging: directory / page table / offset split)"]
+changes:
+  - "2026-10-12: replaced the ASCII address format by a TikZ figure (answer unchanged)"
 ---
 **(i) Total number of pages**
 
@@ -21,13 +23,7 @@ $$a + (a+1) + (a+2) = 18 \Rightarrow 3a = 15 \Rightarrow a = 5$$
 
 So Level 1 has 5 bits, Level 2 has 6 bits and Level 3 has 7 bits.
 
-```text
- 31         27 26          21 20          14 13                 0
-+-------------+--------------+--------------+--------------------+
-|   Level 1   |   Level 2    |   Level 3    |       Offset       |
-|   5 bits    |   6 bits     |   7 bits     |      14 bits       |
-+-------------+--------------+--------------+--------------------+
-```
+![32-bit linear address: Level 1 (5), Level 2 (6), Level 3 (7), Offset (14)](figures/fields.png)
 
 **(iii) Entries per table**
 

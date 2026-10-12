@@ -7,6 +7,8 @@ created: 2026-10-04
 status: unverified
 summary: "During DMA (HLDA = 1) both ends are driven at once: a DMA write (I/O -> memory, W/R' = 1) needs WS = I/O read and WD = memory write; a DMA read (memory -> I/O, W/R' = 0) needs RS = memory read and RD = I/O write. So WS = WD = HLDA AND W/R', RS = RD = HLDA AND (W/R')'; when HLDA = 0 the normal MEMR/MEMW/IOR/IOW come from M/IO' and W/R'."
 sources: ["Brey, The Intel Microprocessors, Sec. 13-1 (DMA read and DMA write, HOLD/HLDA, control-signal generation in a DMA system)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a logic diagram (answer unchanged)"
 ---
 **Definitions (Brey):** a **DMA write** moves data **from I/O to memory**; a **DMA read** moves data **from memory to I/O**. In a DMA cycle both the source and the destination are active in the **same** bus cycle (the data goes straight from one to the other), so the usual one-command-at-a-time decoding of M/$\overline{IO}$ cannot be used.
 
@@ -46,21 +48,6 @@ $$IOW\ (RD) = \overline{HLDA}\cdot \overline{M} \cdot W + HLDA \cdot \overline{W
 
 **Circuit**
 
-```text
- W/R' ----+--------------------------+-----------------+
-          |                          |                 |
-         [>o] W'                     |                 |
-          |                          |                 |
- HLDA ----+--[AND]-- HLDA.W ---------+--> to OR of WD and WS
-          +--[AND]-- HLDA.W' -----------> to OR of RS and RD
-         [>o] HLDA'
-          |
- M/IO' ---+--[AND3: HLDA', M,  W ]--+
-             [AND3: HLDA', M', W']--|  each AND3 output is ORed with
-             [AND3: HLDA', M,  W']--|  the matching DMA term:
-             [AND3: HLDA', M', W ]--+
-   WD = OR(HLDA'.M.W,   HLDA.W)     WS = OR(HLDA'.M'.W', HLDA.W)
-   RS = OR(HLDA'.M.W',  HLDA.W')    RD = OR(HLDA'.M'.W,  HLDA.W')
-```
+![Command logic: six AND terms from HLDA, M/IO', W/R' and their complements, ORed into WD, WS, RS and RD](figures/logic.png)
 
 Real buses use active-low commands ($\overline{MWTC}$, $\overline{IORC}$, $\overline{MRDC}$, $\overline{IOWC}$): invert each output (use NOR gates instead of OR). During DMA, M/$\overline{IO}$ from the floating processor is ignored because HLDA = 1 removes the CPU terms.

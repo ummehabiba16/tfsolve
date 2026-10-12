@@ -7,18 +7,14 @@ created: 2026-10-05
 status: unverified
 summary: "An 80286 descriptor is 8 bytes: bytes 0-1 limit (16 bits, up to 64 KB), bytes 2-4 base (24 bits, anywhere in 16 MB), byte 5 access rights (P, DPL, S, E, ED/C, W/R, A), bytes 6-7 reserved (0, used by the 80386). It is selected by a selector (index, TI, RPL) from the GDT or LDT and cached in the segment register's hidden part."
 sources: ["MHE 80286 slides (descriptor: base, limit, access rights byte P, DPL, S, E, ED, C, W, R, A)", "Brey, The Intel Microprocessors, Sec. 2-3 (80286 descriptor format)"]
+changes:
+  - "2026-10-12: replaced the ASCII layout by a TikZ figure of the descriptor bytes and the access rights byte (answer unchanged)"
 ---
 In protected mode a segment register holds a **selector**, which points to an 8-byte **segment descriptor** in the GDT or LDT. The descriptor describes the segment's **location, length and access rights**.
 
 **Format**
 
-```text
- byte   7      6    |    5          |    4        |  3     2  |  1     0
-      +-------------+---------------+-------------+-----------+-----------+
-      | reserved    | access rights | base 23-16  | base 15-0 | limit 15-0|
-      | (0000)      |               |             |           |           |
-      +-------------+---------------+-------------+-----------+-----------+
-```
+![80286 segment descriptor: limit, 24-bit base, access rights, reserved; access rights bits P, DPL, S, E, ED/C, W/R, A](figures/descriptor.png)
 
 - **Limit (bytes 0-1, 16 bits):** last valid offset; segments are 1 byte to 64 KB.
 - **Base (bytes 2-4, 24 bits):** starting physical address anywhere in the 16 MB space; the paragraph restriction of real mode is gone.

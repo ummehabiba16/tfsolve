@@ -7,20 +7,12 @@ created: 2026-10-05
 status: unverified
 summary: "F/C' is grounded, so the 15 MHz crystal is the source and the 30 MHz on EFI is ignored. (i) Yes: CLK = 15/3 = 5 MHz (33% duty) to the processor. (ii) No: the peripheral clock PCLK = CLK/2 = 2.5 MHz, not 5 MHz; feed the peripheral from CLK (if 33% duty is acceptable) or divide OSC (15 MHz) by 3 externally."
 sources: ["MHE 8086 Hardware Specifications slides 10-11 (clock, 8284A on CLK pin 19)", "Brey, The Intel Microprocessors, Sec. 9-3 (8284A: F/C', EFI, divide-by-3 CLK, PCLK = CLK/2, OSC; 15 MHz crystal gives 5 MHz)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ block diagram of the 8284A clock section with this circuit's frequencies (answer unchanged)"
 ---
 **How the 8284A produces its clocks**
 
-```text
- X1/X2 crystal --> [oscillator] --+--> OSC (crystal frequency)
-                                  |
- EFI ----------------------------|---+
-                                 v   v
-              F/C' = 0: crystal [ MUX ] F/C' = 1: EFI
-                                   |
-                             [ divide by 3 ] --> CLK  = f/3 (33% duty)
-                                   |
-                             [ divide by 2 ] --> PCLK = f/6 (50% duty)
-```
+![8284A clock section: F/C' = 0 selects the 15 MHz crystal; CLK = 5 MHz, PCLK = 2.5 MHz, OSC = 15 MHz](figures/clock.png)
 
 F/$\overline{C}$ selects the source: **0 = crystal**, 1 = EFI. In the figure **F/$\overline{C}$ (and CSYNC) are grounded**, so the **15 MHz crystal** is used and the **30 MHz on EFI is ignored**.
 

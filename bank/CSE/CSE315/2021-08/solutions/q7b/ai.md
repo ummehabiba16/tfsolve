@@ -7,6 +7,8 @@ created: 2026-10-04
 status: unverified
 summary: "Not compatible. In Figure 7(b) each register sends from its MSB end and receives at its LSB end (shift left), which is MSB-first (DORD = 0). For LSB first (DORD = 1), MOSI must come from the master's LSB end into the slave's MSB end, and MISO from the slave's LSB end into the master's MSB end (shift right)."
 sources: ["EHP Serial Communication slides 82-85, 93 (SPI master-slave interconnection, byte exchange, DORD)"]
+changes:
+  - "2026-10-12: replaced the ASCII drawing by a TikZ figure (answer unchanged)"
 ---
 **Not compatible.**
 
@@ -16,17 +18,7 @@ With **DORD = 1 (LSB first)** the LSB must leave first, so the registers must sh
 
 **Correct connection for LSB first**
 
-```text
-          MASTER                                 SLAVE
-   MSB   8-bit shift reg   LSB           MSB   8-bit shift reg   LSB
-   +-->[ b7 ... ... b0 ]---+             +-->[ b7 ... ... b0 ]---+
-   |                       |  MOSI       |                       |
-   |                       +-------------+                       |
-   |              MISO                                           |
-   +-------------------------------------------------------------+
-   SPI clock generator --> SCK (shift enable of both registers)
-   SS' (master output) --> SS' (slave)
-```
+![LSB-first SPI: both registers shift right; master LSB to slave MSB on MOSI, slave LSB to master MSB on MISO](figures/lsbfirst.png)
 
 - **MOSI:** master **LSB** out $\to$ slave **MSB** in.
 - **MISO:** slave **LSB** out $\to$ master **MSB** in.

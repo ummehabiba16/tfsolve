@@ -1,0 +1,49 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,positioning}
+\begin{document}
+\begin{tikzpicture}[>=Stealth,font=\small,
+ chip/.style={draw,thick,fill=gray!8,minimum width=1.5cm,minimum height=0.8cm,font=\footnotesize,align=center},
+ newc/.style={chip,fill=green!15,draw=green!40!black},
+ ctl/.style={font=\scriptsize,anchor=north,inner sep=1pt},
+ bus/.style={very thick}]
+% 8086
+\draw[thick,fill=blue!5] (0,0.6) rectangle (2.4,-7.9);
+\node[font=\bfseries] at (1.2,0.9) {8086};
+\node[font=\scriptsize,anchor=east,align=right] at (2.35,0) {M/$\overline{\mathrm{IO}}$, $\overline{\mathrm{RD}}$, $\overline{\mathrm{WR}}$};
+\node[font=\scriptsize,anchor=east,align=right] at (2.35,-1.6) {$\overline{\mathrm{BHE}}$/S7,\\A19/S6--A16/S3};
+\node[font=\scriptsize,anchor=east] at (2.35,-3.7) {AD15--AD8};
+\node[font=\scriptsize,anchor=east] at (2.35,-6.4) {AD7--AD0};
+\node[font=\scriptsize,anchor=north west,align=left] at (0,-8.0) {ALE, $\overline{\mathrm{DEN}}$, DT/$\overline{\mathrm{R}}$\\drive the chips' G and DIR};
+% chips
+\node[chip] (c244) at (5,0) {'244};
+\node[chip] (l1) at (5,-1.6) {'373};
+\node[newc] (l2) at (5,-3.1) {'373};
+\node[newc] (t2) at (5,-4.5) {'245};
+\node[chip] (l3) at (5,-5.8) {'373};
+\node[chip] (t3) at (5,-7.2) {'245};
+\node[ctl] at (l1.south) {G = ALE, $\overline{\mathrm{OE}}$ = GND};
+\node[ctl] at (l2.south) {G = ALE, $\overline{\mathrm{OE}}$ = GND};
+\node[ctl] at (l3.south) {G = ALE};
+\node[ctl] at (t2.south) {G = $\overline{\mathrm{DEN}}$, DIR = DT/$\overline{\mathrm{R}}$};
+\node[ctl] at (t3.south) {G = $\overline{\mathrm{DEN}}$, DIR = DT/$\overline{\mathrm{R}}$};
+% inputs
+\draw[bus,->] (2.4,0) -- (c244.west);
+\draw[bus,->] (2.4,-1.6) -- (l1.west);
+\draw[bus] (2.4,-3.7) -- (3.3,-3.7);
+\draw[bus,->] (3.3,-3.7) |- (l2.west);
+\draw[bus] (3.3,-3.7) |- (t2.west);
+\fill (3.3,-3.7) circle (2pt);
+\draw[bus] (2.4,-6.4) -- (3.3,-6.4);
+\draw[bus,->] (3.3,-6.4) |- (l3.west);
+\draw[bus] (3.3,-6.4) |- (t3.west);
+\fill (3.3,-6.4) circle (2pt);
+% outputs
+\draw[bus,->] (c244.east) -- ++(1.4,0) node[right,font=\footnotesize]{buffered control bus};
+\draw[bus,->] (l1.east) -- ++(1.4,0) node[right,font=\footnotesize]{$\overline{\mathrm{BHE}}$, A19--A16};
+\draw[bus,->] (l2.east) -- ++(1.4,0) node[right,font=\footnotesize,align=left]{A15--A8\\\textcolor{green!40!black}{'373 latch replaces the '244}};
+\draw[bus,<->] (t2.east) -- ++(1.4,0) node[right,font=\footnotesize,align=left]{D15--D8\\\textcolor{green!40!black}{new '245 transceiver}};
+\draw[bus,->] (l3.east) -- ++(1.4,0) node[right,font=\footnotesize]{A7--A0};
+\draw[bus,<->] (t3.east) -- ++(1.4,0) node[right,font=\footnotesize]{D7--D0};
+\end{tikzpicture}
+\end{document}

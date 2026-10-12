@@ -1,0 +1,30 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,decorations.pathreplacing,positioning}
+\begin{document}
+
+\begin{tikzpicture}[font=\small]
+\node[anchor=south west,font=\footnotesize\bfseries] at (0,0.75) {4 KB page (as 80386)};
+\draw[thick,fill=red!8] (0,-0.45) rectangle (3.8,0.45);
+\node[align=center,font=\footnotesize] at (1.9,0) {directory (10)};
+\node[anchor=south west,font=\scriptsize,inner sep=1pt] at (0,0.47) {31};
+\node[anchor=south east,font=\scriptsize,inner sep=1pt] at (3.8,0.47) {22};
+\draw[thick,fill=green!8] (3.8,-0.45) rectangle (7.6,0.45);
+\node[align=center,font=\footnotesize] at (5.7,0) {table (10)};
+\node[anchor=south west,font=\scriptsize,inner sep=1pt] at (3.8,0.47) {21};
+\node[anchor=south east,font=\scriptsize,inner sep=1pt] at (7.6,0.47) {12};
+\draw[thick,fill=blue!8] (7.6,-0.45) rectangle (12.16,0.45);
+\node[align=center,font=\footnotesize] at (9.88,0) {offset (12)};
+\node[anchor=south west,font=\scriptsize,inner sep=1pt] at (7.6,0.47) {11};
+\node[anchor=south east,font=\scriptsize,inner sep=1pt] at (12.16,0.47) {0};
+\node[anchor=south west,font=\footnotesize\bfseries] at (0,-0.95) {4 MB page (Pentium, CR4.PSE = 1 and PDE.PS = 1)};
+\draw[thick,fill=red!8] (0,-2.15) rectangle (3.8,-1.25);
+\node[align=center,font=\footnotesize] at (1.9,-1.7) {directory (10)};
+\node[anchor=south west,font=\scriptsize,inner sep=1pt] at (0,-1.23) {31};
+\node[anchor=south east,font=\scriptsize,inner sep=1pt] at (3.8,-1.23) {22};
+\draw[thick,fill=blue!8] (3.8,-2.15) rectangle (12.16,-1.25);
+\node[align=center,font=\footnotesize] at (7.98,-1.7) {offset (22)};
+\node[anchor=south west,font=\scriptsize,inner sep=1pt] at (3.8,-1.23) {21};
+\node[anchor=south east,font=\scriptsize,inner sep=1pt] at (12.16,-1.23) {0};
+\end{tikzpicture}
+\end{document}

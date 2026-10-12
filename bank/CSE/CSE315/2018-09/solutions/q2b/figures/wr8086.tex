@@ -1,0 +1,15 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[american]{circuitikz}
+\begin{document}
+\begin{circuitikz}[font=\small]
+\draw (-1.0,1.0) node[above]{$\overline{\mathrm{WR}}$} -- (-1.0,-2.28);
+\foreach \n/\s/\d/\y in {0/A0/{even bank (D0--D7)}/0,1/$\overline{\mathrm{BHE}}$/{odd bank (D8--D15)}/-2.0} {
+  \draw (1.2,\y) node[or port] (g\n) {};
+  \draw (g\n.in 1) -- ++(-1.6,0) node[left]{\s};
+  \draw (g\n.in 2) -| (-1.0,\y);
+  \fill (-1.0,\y-0.28) circle (1.5pt);
+  \draw[->] (g\n.out) -- ++(1.2,0) node[right]{$\overline{\mathrm{WR\n}}$ $\to$ \d};
+}
+\node[font=\scriptsize,anchor=north] at (1.6,-2.7) {$\overline{\mathrm{WR0}} = \overline{\mathrm{WR}} + \mathrm{A0}$,\quad $\overline{\mathrm{WR1}} = \overline{\mathrm{WR}} + \overline{\mathrm{BHE}}$};
+\end{circuitikz}
+\end{document}

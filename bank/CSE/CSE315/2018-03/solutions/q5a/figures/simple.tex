@@ -1,0 +1,15 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,decorations.pathreplacing,positioning}
+\begin{document}
+
+\begin{tikzpicture}[>=Stealth,font=\small,x=1.2cm,y=1cm]
+% row 0 y=0
+\node[anchor=east,font=\footnotesize,align=right] at (-0.15,0.275) {DATA};
+\draw[thick,gray] (0,0.275) -- (1,0.275);
+\draw[thick,fill=blue!8] (1,0.275) -- (1.12,0.55) -- (6.88,0.55) -- (7,0.275) -- (6.88,0) -- (1.12,0) -- cycle;
+\node[font=\scriptsize] at (4,0.275) {data valid: read or written at any time};
+\draw[thick,gray] (7,0.275) -- (8,0.275);
+
+\end{tikzpicture}
+\end{document}

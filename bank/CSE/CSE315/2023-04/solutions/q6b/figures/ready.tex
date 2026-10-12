@@ -1,0 +1,53 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[american]{circuitikz}
+\usetikzlibrary{calc,positioning,shapes.geometric}
+\begin{document}
+\begin{circuitikz}[font=\small,>=latex]
+% AND gates with the AEN input active low
+\draw (0,1) node[and port] (a1) {};
+\draw (0,-1) node[and port] (a2) {};
+\draw (a1.in 1) -- ++(-0.8,0) node[left]{RDY1};
+\draw ($(a1.in 2)+(-0.2,0)$) circle (0.1) ($(a1.in 2)+(-0.3,0)$) -- ++(-0.5,0) node[left]{$\overline{\mathrm{AEN1}}$};
+\draw (a2.in 1) -- ++(-0.8,0) node[left]{RDY2};
+\draw ($(a2.in 2)+(-0.2,0)$) circle (0.1) ($(a2.in 2)+(-0.3,0)$) -- ++(-0.5,0) node[left]{$\overline{\mathrm{AEN2}}$};
+\draw (2.2,0) node[or port] (o) {};
+\draw (a1.out) -| (o.in 1);
+\draw (a2.out) -| (o.in 2);
+% FF1 (rising edge)
+\node[draw,thick,minimum width=1.3cm,minimum height=1.5cm] (ff1) at (4.6,1.2) {};
+\node[font=\footnotesize,anchor=west] at (ff1.west) [yshift=0.4cm] {D};
+\node[font=\footnotesize,anchor=east] at (ff1.east) [yshift=0.4cm] {Q};
+\node[font=\scriptsize,anchor=south] at (ff1.north) {FF1};
+\draw ($(ff1.west)+(0,-0.55)$) -- ++(0.18,0.15) -- ++(-0.18,0.15);
+\draw (o.out) -- ++(0.5,0) coordinate (j) |- ($(ff1.west)+(0,0.4)$);
+\fill (j) circle (1.5pt);
+% 2:1 selector
+\node[draw,thick,trapezium,trapezium angle=70,shape border rotate=270,minimum height=0.8cm,minimum width=1.9cm,font=\scriptsize] (mux) at (7.0,0.3) {};
+\draw ($(ff1.east)+(0,0.4)$) -- ++(0.3,0) |- ($(mux.west)+(0,0.4)$) node[right,font=\scriptsize]{0};
+\draw (j) |- ($(mux.west)+(0,-0.4)$) node[right,font=\scriptsize]{1};
+\draw (mux.south) -- ++(0,-0.6) node[below,font=\footnotesize]{$\overline{\mathrm{ASYNC}}$};
+% FF2 (falling edge)
+\node[draw,thick,minimum width=1.3cm,minimum height=1.5cm] (ff2) at (9.4,0.3) {};
+\node[font=\footnotesize,anchor=west] at (ff2.west) [yshift=0.4cm] {D};
+\node[font=\footnotesize,anchor=east] at (ff2.east) [yshift=0.4cm] {Q};
+\node[font=\scriptsize,anchor=south] at (ff2.north) {FF2};
+\draw ($(ff2.west)+(0,-0.55)$) -- ++(0.18,0.15) -- ++(-0.18,0.15);
+\draw ($(ff2.west)+(-0.12,-0.4)$) circle (0.1);
+\draw (mux.east) -- ++(0.35,0) |- ($(ff2.west)+(0,0.4)$);
+\draw[->] ($(ff2.east)+(0,0.4)$) -- ++(1.2,0) node[right,align=left]{READY\\(8086 pin 22)};
+% clock section
+\node[draw,thick,fill=gray!8,minimum height=0.7cm,font=\footnotesize] (osc) at (0.5,-3.0) {crystal oscillator};
+\node[draw,thick,fill=gray!8,minimum height=0.7cm,font=\footnotesize,right=0.8cm of osc] (div) {$\div 3$};
+\draw (osc.west) -- ++(-0.7,0) node[left]{X1, X2};
+\draw[->] (osc) -- (div);
+\draw (div.east) -- (8.4,-3.0) coordinate (c);
+\draw[->] (c) -- ++(2.2,0) node[right,align=left]{CLK (33\% duty,\\8086 pin 19)};
+\fill (c) circle (1.5pt);
+\fill (3.85,-3.0) circle (1.5pt);
+\draw (3.85,-3.0) |- ($(ff1.west)+(-0.2,-0.4)$) -- ($(ff1.west)+(0,-0.4)$);
+\draw (c) |- ($(ff2.west)+(-0.22,-0.4)$);
+\node[font=\scriptsize,anchor=east] at (3.8,-0.6) {CLK $\uparrow$};
+\node[font=\scriptsize,anchor=west] at (8.45,-1.5) {CLK $\downarrow$};
+\node[font=\scriptsize,align=left,anchor=north west] at (4.1,-1.75) {$\overline{\mathrm{ASYNC}}$ = 0: FF1 + FF2 (2 stages)\\$\overline{\mathrm{ASYNC}}$ = 1: FF2 only (1 stage)};
+\end{circuitikz}
+\end{document}

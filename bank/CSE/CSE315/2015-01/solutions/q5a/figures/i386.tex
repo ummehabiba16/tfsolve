@@ -1,0 +1,41 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,calc}
+\begin{document}
+\begin{tikzpicture}[>=Stealth,font=\small,
+ u/.style={draw,thick,fill=white,align=center,font=\footnotesize,minimum height=0.8cm},
+ grp/.style={draw,thick,rounded corners=3pt,inner sep=6pt}]
+% instruction unit
+\node[u,minimum width=3.0cm] (pf) at (0,0) {prefetcher\\16-byte code queue};
+\node[u,minimum width=3.0cm] (dec) at (3.6,0) {decoder\\(3 decoded instr.)};
+\draw[->,thick] (pf) -- (dec);
+\node[grp,fill=blue!6,fit=(pf)(dec),label={[font=\footnotesize\bfseries]above:Instruction unit}] (iu) {};
+\node[u,minimum width=3.0cm] (pf) at (0,0) {prefetcher\\16-byte code queue};
+\node[u,minimum width=3.0cm] (dec) at (3.6,0) {decoder\\(3 decoded instr.)};
+\draw[->,thick] (pf) -- (dec);
+% execution unit
+\node[u,minimum width=2.2cm] (cu) at (8.0,0.9) {control unit\\(microcode)};
+\node[u,minimum width=2.2cm] (du) at (8.0,-0.3) {data unit: ALU,\\regs, shifter};
+\node[u,minimum width=2.2cm] (pt) at (8.0,-1.5) {protection\\test unit};
+\node[grp,fill=orange!10,fit=(cu)(du)(pt),label={[font=\footnotesize\bfseries]above:Execution unit}] (eu) {};
+\node[u,minimum width=2.2cm] (cu) at (8.0,0.9) {control unit\\(microcode)};
+\node[u,minimum width=2.2cm] (du) at (8.0,-0.3) {data unit: ALU,\\regs, shifter};
+\node[u,minimum width=2.2cm] (pt) at (8.0,-1.5) {protection\\test unit};
+\draw[->,thick] (dec.east) -- (eu.west |- dec.east);
+% MMU
+\node[u,minimum width=3.0cm] (seg) at (5.4,-3.6) {segmentation unit\\$\to$ linear address};
+\node[u,minimum width=3.0cm] (pag) at (9.0,-3.6) {paging unit (TLB)\\$\to$ physical address};
+\draw[->,thick] (seg) -- (pag);
+\node[grp,fill=green!8,fit=(seg)(pag),label={[font=\footnotesize\bfseries]below:Memory management unit}] (mmu) {};
+\node[u,minimum width=3.0cm] (seg) at (5.4,-3.6) {segmentation unit\\$\to$ linear address};
+\node[u,minimum width=3.0cm] (pag) at (9.0,-3.6) {paging unit (TLB)\\$\to$ physical address};
+\draw[->,thick] (seg) -- (pag);
+\draw[->,thick] (eu.south) -- ++(0,-0.35) -| (seg.north) node[pos=0.25,above,font=\scriptsize]{effective address};
+% BIU
+\node[u,fill=gray!12,minimum width=4.2cm,minimum height=1.6cm] (biu) at (0.8,-3.6) {Bus interface unit\\request prioritizer,\\address drivers, pipelined\\bus control, transceivers};
+\draw[->,thick] (mmu.west) -- (biu.east) node[midway,below,font=\scriptsize]{phys.};
+\draw[->,thick] (biu.north -| pf) -- (iu.south -| pf) node[midway,left,font=\scriptsize]{code};
+\draw[<->,thick] ($(biu.north east)+(-0.3,0)$) |- ($(eu.west)+(0,-1.0)$) node[pos=0.75,below,font=\scriptsize]{data};
+\draw[<->,very thick] (biu.south) -- ++(0,-0.8) node[below,font=\scriptsize,align=center]{A31--A2, $\overline{\mathrm{BE3}}$--$\overline{\mathrm{BE0}}$, D31--D0, control};
+\end{tikzpicture}
+\end{document}

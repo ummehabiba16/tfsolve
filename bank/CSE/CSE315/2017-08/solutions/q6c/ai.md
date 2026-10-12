@@ -7,6 +7,8 @@ created: 2026-10-05
 status: unverified
 summary: "8255 at 010000xxb: Port A = 40H, Port B = 41H, Port C = 42H, control = 43H. Control word 1 01 1 0 0 0 0 = B0H (Port A mode 1 strobed input, Port B mode 0 output, free port C lines output). Flowchart: write B0H to 43H; loop: read Port C, test IBF_A (PC5); when 1, IN AL from 40H (clears IBF), OUT AL to 41H; repeat."
 sources: ["Brey, The Intel Microprocessors, Sec. 11-3 (82C55 mode 1 strobed input: STB_A = PC4, IBF_A = PC5, INTR_A = PC3)", "Hall, Microprocessors and Interfacing, Ch. 9 (8255 with the 8088, polled strobed input)"]
+changes:
+  - "2026-10-12: replaced the ASCII flowchart by a TikZ flowchart (answer unchanged)"
 ---
 **Port addresses.** The 8255's A1 A0 select the port, and the chip is selected for 010000xx b:
 
@@ -29,33 +31,6 @@ In mode 1 input, PC4 = $\overline{STB_A}$ (from the tape recorder), **PC5 = IBF_
 
 **Flowchart (polled)**
 
-```text
-        +-----------------------------+
-        | START                       |
-        +--------------+--------------+
-                       v
-        +-----------------------------+
-        | AL <- B0H ; OUT 43H, AL      |   initialise 8255
-        +--------------+--------------+
-                       v
-        +-----------------------------+
-   +--->| IN AL, 42H  (read Port C)   |<----------+
-   |    +--------------+--------------+           |
-   |                   v                          |
-   |          /-----------------\    no           |
-   |          | IBF_A (PC5) = 1 ?|-----------------+
-   |          \--------+--------/   (no byte yet)
-   |                   | yes
-   |                   v
-   |    +-----------------------------+
-   |    | IN AL, 40H  (read byte from |   reading clears IBF_A,
-   |    | tape via Port A)            |   tape may strobe next byte
-   |    +--------------+--------------+
-   |                   v
-   |    +-----------------------------+
-   |    | OUT 41H, AL (Port B output) |
-   |    +--------------+--------------+
-   +-------------------+
-```
+![Flowchart: initialise the 8255, poll IBF_A, read Port A, write Port B, repeat](figures/flow.png)
 
 *Note:* port C lines not used by mode 1 are set as outputs (another choice of D3/D0 gives B8H, B1H or B9H).

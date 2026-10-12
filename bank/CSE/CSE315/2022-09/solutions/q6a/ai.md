@@ -7,20 +7,12 @@ created: 2026-10-04
 status: unverified
 summary: "F/C' is grounded, so the 8284A uses the 30 MHz crystal and ignores the 15 MHz on EFI. (i) Yes: 30 MHz / 3 = 10 MHz CLK (33% duty) reaches the processor. (ii) No: PCLK = CLK / 2 = 5 MHz, not 15 MHz; no 8284A output gives 15 MHz from these inputs (OSC = 30 MHz could be halved externally, or the 15 MHz source fed directly to the DAC)."
 sources: ["MHE 8086 Hardware Specifications slides 10-11 (clock, 8284A connected to CLK pin 19)", "Brey, The Intel Microprocessors, Sec. 9-3 (8284A: F/C', EFI, X1/X2, divide-by-3 CLK, PCLK = CLK/2, OSC)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ block diagram of the 8284A clock section with this circuit's frequencies (answer unchanged)"
 ---
 **How the 8284A makes its clocks**
 
-```text
- X1/X2 (crystal) --> [crystal oscillator] --+--> OSC (= crystal frequency)
-                                            |
- EFI (external) ----------------------------|--+
-                                            v  v
-                        F/C' = 0: crystal  [ MUX ]  F/C' = 1: EFI
-                                              |
-                                        [ divide by 3 ] --> CLK  (f/3, 33% duty)  -> 8086
-                                              |
-                                        [ divide by 2 ] --> PCLK (f/6, 50% duty)  -> periph.
-```
+![8284A clock section: F/C' = 0 selects the 30 MHz crystal; CLK = 10 MHz, PCLK = 5 MHz, OSC = 30 MHz](figures/clock.png)
 
 - **F/$\overline{C}$** (frequency/crystal select) chooses the clock source: **0 = crystal on X1/X2**, 1 = external frequency on EFI.
 - The chosen frequency $f$ is divided by **3** to give **CLK** ($f/3$, 33% duty cycle, as the 8086 needs).

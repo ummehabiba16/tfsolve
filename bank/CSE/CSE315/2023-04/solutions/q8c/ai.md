@@ -7,6 +7,8 @@ created: 2026-10-04
 status: unverified
 summary: "CPU A1, A0 -> 8255 A1, A0, so A004h = Port A (mouse), A005h = Port B (keyboard), A006h = Port C (none), A007h = control register. CS' = NAND of A15, A14', A13, A12', A11'-A3', A2 and IO (M/IO' = 0); RD'/WR' from IORC'/IOWC'; control word 92h (mode 0, ports A and B input)."
 sources: ["Brey, The Intel Microprocessors, Sec. 11-3 (82C55 interface, port addresses, control word)", "Rafiquzzaman, Microprocessors and Microcomputer-Based System Design, Ch. 5 (8255 control word, I/O decoding)"]
+changes:
+  - "2026-10-12: replaced the ASCII connection diagram by a TikZ circuit diagram (answer unchanged)"
 ---
 **Port assignment**
 
@@ -27,31 +29,7 @@ $$\overline{CS} = \overline{A_{15}\cdot \overline{A_{14}} \cdot A_{13} \cdot \ov
 
 **Completed connection diagram**
 
-```text
- 8086 side                                 8255
- D7-D0   <=========================>  D7-D0
- IORC' (RD' with M/IO' = 0) ------->  RD'
- IOWC' (WR' with M/IO' = 0) ------->  WR'
- RESET  --------------------------->  RESET
- A1 ------------------------------->  A1                Port A <==> Mouse
- A0 ------------------------------->  A0                Port B <==> Keyboard
-                                                        Port C      None
- A15 ------------------+
- A14 ---[>o]-----------+
- A13 ------------------+
- A12 ---[>o]-----------+
- A11 ---[>o]-----------+
- A10 ---[>o]-----------+
- A9  ---[>o]-----------+
- A8  ---[>o]-----------+  NAND
- A7  ---[>o]-----------+ (15 inputs) o------->  CS'
- A6  ---[>o]-----------+
- A5  ---[>o]-----------+
- A4  ---[>o]-----------+
- A3  ---[>o]-----------+
- A2  ------------------+
- M/IO' -[>o]-----------+     ([>o] = inverter)
-```
+![8086 to 8255 connections with the 15-input NAND decoder for A004h-A007h; mouse on Port A, keyboard on Port B](figures/ppi.png)
 
 **Programming.** The mouse and the keyboard both send data to the CPU, so ports A and B are **inputs** in mode 0:
 

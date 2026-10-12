@@ -7,6 +7,8 @@ created: 2026-10-05
 status: unverified
 summary: "Simple I/O (no timing signals), simple strobe I/O (data + strobe), single handshake (strobe + acknowledge), double handshake (request/ready, data, strobe/acknowledge). Keyboard: simple strobe I/O (data valid for a long time, one strobe per key). Dot-matrix printer: handshake I/O (single handshake; it is slow and must say when it has taken each byte)."
 sources: ["Hall, Microprocessors and Interfacing, Ch. 9 (parallel data transfer: simple, simple strobe, single handshake, double handshake)", "Brey, The Intel Microprocessors, Sec. 11-3 (8255 strobed I/O, printer interface)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketches by four TikZ timing diagrams (answer unchanged)"
 ---
 **1. Simple I/O.** No timing signals: the CPU just reads or writes the port whenever it wants; the data is assumed always valid.
 
@@ -16,32 +18,21 @@ sources: ["Hall, Microprocessors and Interfacing, Ch. 9 (parallel data transfer:
 
 **4. Double handshake I/O.** (1) The sender lowers $\overline{STB}$: "I want to send". (2) The receiver raises ACK: "I am ready". (3) The sender puts the data on the lines (then raises $\overline{STB}$, (4)). (5) The receiver, having read the data, lowers ACK: "data taken". Both sides check each other at every step.
 
-```text
-Simple I/O
-DATA   ......<================================>
-             data valid; read/written any time
+**Simple I/O**
 
-Simple strobe I/O
-DATA   ......<======================>
-STB'   ------------+       +-------------------------
-                   |_______|
+![Simple I/O: data valid at all times](figures/simple.png)
 
-Single handshake
-DATA   ......<======================>
-STB'   ----------+     +-----------------------------
-                 |_____|
-ACK                      +-------+
-       __________________|       |___________________
-                 (1)     (2)     (3)
+**Simple strobe I/O**
 
-Double handshake
-STB'   ----+                       +-----------------
-           |_______________________|
-ACK             +-----------------------+
-       _________|                       |____________
-DATA   ..............<=====================>
-           (1)  (2)  (3)           (4)  (5)
-```
+![Simple strobe I/O: data and a strobe pulse](figures/strobe.png)
+
+**Single handshake I/O**
+
+![Single handshake: STB' from the sender, ACK from the receiver](figures/single.png)
+
+**Double handshake I/O**
+
+![Double handshake: STB' and ACK each change twice, steps 1-5](figures/double.png)
 
 | Mode | Advantages | Disadvantages |
 |:--|:--|:--|

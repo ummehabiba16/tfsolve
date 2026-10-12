@@ -7,6 +7,8 @@ created: 2026-10-05
 status: unverified
 summary: "Taking 20 kHz (50 us between samples): run Timer0 in CTC mode and let its compare match auto-trigger the ADC (ADCSRA: ADEN, ADATE, ADIE, prescaler; SFIOR: ADTS2:0 = 011; ADMUX: reference/channel). OCR0 = 50 us / (8/16 MHz) - 1 = 99. Auto-triggered conversion = 13.5 ADC clocks <= 50 us, so ADC clock >= 270 kHz: largest prescaler is 32 (500 kHz, 27 us). Two ISRs: TIMER0_COMP_vect (clears OCF0 so the next match re-triggers) and ADC_vect (read and store the result)."
 sources: ["EHP 6. AVR ADC slides 45-55 (SFIOR, auto trigger logic and sources, Timer0 CTC for 20 kHz sampling, OCR0 = 99, ADC prescaler 32)"]
+changes:
+  - "2026-10-12: replaced the ASCII flowcharts by TikZ flowcharts (answer unchanged)"
 ---
 *Note:* the paper prints "20000 kHz"; 20 MHz sampling is far beyond the ATmega32 ADC (about 15 kSPS at full resolution), so **20 kHz** is assumed, as in the slide example with the same 16 MHz clock and Timer0 prescaler 8.
 
@@ -45,22 +47,4 @@ The available prescalers are 2, 4, 8, 16, 32, 64, 128. The **largest** that fits
 1. **TIMER0_COMP_vect.** The ADC is triggered by the **rising edge** of OCF0. If the flag is not cleared, it stays 1 and there is no new rising edge, so only one conversion would happen. Entering this ISR clears OCF0 in hardware, so the ISR can be empty.
 2. **ADC_vect.** Runs when a conversion is complete: reads the result (ADCL then ADCH, or ADCH only) and stores it in a buffer. ADIF is cleared on entry.
 
-```text
- TIMER0_COMP_vect               ADC_vect
- +------------------+           +---------------------------+
- | enter: hardware  |           | enter: ADIF cleared       |
- | clears OCF0      |           +-------------+-------------+
- +--------+---------+                         v
-          v                     +---------------------------+
- +------------------+           | result <- ADC (ADCL, ADCH)|
- | (nothing else)   |           +-------------+-------------+
- +--------+---------+                         v
-          v                     +---------------------------+
- +------------------+           | buffer[i++] <- result     |
- |      RETI        |           | (wrap i at buffer size)   |
- +------------------+           +-------------+-------------+
-                                              v
-                                +---------------------------+
-                                |          RETI             |
-                                +---------------------------+
-```
+![Flowcharts of the two ISRs: TIMER0_COMP_vect and ADC_vect](figures/isrs.png)

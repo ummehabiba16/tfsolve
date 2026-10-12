@@ -1,0 +1,29 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,decorations.pathreplacing,positioning}
+\begin{document}
+
+\begin{tikzpicture}[font=\small]
+\node[anchor=south west,font=\footnotesize\bfseries] at (0,0.75) {32-bit linear address};
+\draw[thick,fill=red!8] (0,-0.45) rectangle (2.1,0.45);
+\node[align=center,font=\footnotesize] at (1.05,0) {Level 1\\5 bits};
+\node[anchor=south west,font=\scriptsize,inner sep=1pt] at (0,0.47) {31};
+\node[anchor=south east,font=\scriptsize,inner sep=1pt] at (2.1,0.47) {27};
+\draw[thick,fill=orange!10] (2.1,-0.45) rectangle (4.62,0.45);
+\node[align=center,font=\footnotesize] at (3.36,0) {Level 2\\6 bits};
+\node[anchor=south west,font=\scriptsize,inner sep=1pt] at (2.1,0.47) {26};
+\node[anchor=south east,font=\scriptsize,inner sep=1pt] at (4.62,0.47) {21};
+\draw[thick,fill=green!8] (4.62,-0.45) rectangle (7.56,0.45);
+\node[align=center,font=\footnotesize] at (6.09,0) {Level 3\\7 bits};
+\node[anchor=south west,font=\scriptsize,inner sep=1pt] at (4.62,0.47) {20};
+\node[anchor=south east,font=\scriptsize,inner sep=1pt] at (7.56,0.47) {14};
+\draw[thick,fill=blue!8] (7.56,-0.45) rectangle (13.44,0.45);
+\node[align=center,font=\footnotesize] at (10.5,0) {Offset\\14 bits};
+\node[anchor=south west,font=\scriptsize,inner sep=1pt] at (7.56,0.47) {13};
+\node[anchor=south east,font=\scriptsize,inner sep=1pt] at (13.44,0.47) {0};
+\node[font=\scriptsize,align=center,anchor=north] at (1.05,-0.5) {index into\\level-1 table};
+\node[font=\scriptsize,align=center,anchor=north] at (3.36,-0.5) {index into\\level-2 table};
+\node[font=\scriptsize,align=center,anchor=north] at (5.88,-0.5) {index into level-3\\table ($\to$ page frame)};
+\node[font=\scriptsize,align=center,anchor=north] at (10.5,-0.5) {byte within the 16 KB page};
+\end{tikzpicture}
+\end{document}

@@ -7,6 +7,8 @@ created: 2026-10-04
 status: unverified
 summary: "Fast PWM with TOP = OCR1A = 1999, prescaler 8: f = 1 MHz / (8 x 2000) = 62.5 Hz (period 16 ms). Inverting OC1B (set on match, clear at BOTTOM) is low for counts 0-199 and high for 200-1999: duty = 1800/2000 = 90%."
 sources: ["EHP Timer_Part_2 slides 31-38 (fast PWM, frequency and duty cycle)", "ATmega32 datasheet, Timer/Counter1, Fast PWM Mode (f = fclk / (N (1 + TOP)))"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ timing diagram drawn to scale (answer unchanged)"
 ---
 **Mode.** WGM = 1111 is **fast PWM with TOP = OCR1A = 1999**: TCNT1 counts 0 $\to$ 1999 and restarts at 0 (single slope). Clock 1 MHz (paper default), prescaler 8: tick = $8\ \mu s$.
 
@@ -23,15 +25,4 @@ $$D = \frac{TOP - OCR1B}{TOP + 1} = \frac{1999 - 199}{2000} = \frac{1800}{2000} 
 
 High time = $1800 \times 8\ \mu s = 14.4$ ms, low time = 1.6 ms.
 
-```text
-  1999|              **              **              **
-      |            **              **              **
-      |         ***             ***             ***
-      |       **              **              **
-      |    ***             ***             ***
-   199|  **              **              **
-     0|**              **              **
-OC1B 1|  --------------  --------------  --------------
-     0|--              --              --
-      (1 column = 1 ms; OC1B low 1.6 ms, high 14.4 ms of every 16 ms)
-```
+![Fast PWM, TOP = OCR1A = 1999, OCR1B = 199, inverting OC1B: TCNT1 and OC1B](figures/pwm.png)

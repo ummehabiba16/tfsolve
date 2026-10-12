@@ -7,6 +7,8 @@ created: 2026-10-04
 status: unverified
 summary: "Separate write strobes: one decoder for all banks, every read reads all banks; cheap, but needs write-strobe logic. Separate decoders: each bank has its own decoder enabled by its bank select; any read/write selects only the needed banks, but needs one decoder per bank (more hardware). For the 80486: WRn' = BEn' OR MWTC' (four 2-input OR gates)."
 sources: ["Brey, The Intel Microprocessors, Sec. 10-4 and 10-6 (separate bank decoders vs separate bank write strobes; 80386/80486 memory interface with BE3'-BE0')", "MHE 80386-updated slides 4, 12 (four banks, BE0-BE3)"]
+changes:
+  - "2026-10-12: replaced the ASCII drawing by a logic diagram (answer unchanged)"
 ---
 **i. Separate write signal (write strobe) for each bank**
 
@@ -27,21 +29,7 @@ The 80486 has a 32-bit data bus organised as 4 banks with active-low bank enable
 
 $$\overline{WR_n} = \overline{BE_n} + \overline{MWTC}, \qquad n = 0, 1, 2, 3$$
 
-```text
- BE0' ---+
-         OR ---- WR0'  -> bank 0 (D7-D0)
- MWTC' --+
- BE1' ---+
-         OR ---- WR1'  -> bank 1 (D15-D8)
- MWTC' --+
- BE2' ---+
-         OR ---- WR2'  -> bank 2 (D23-D16)
- MWTC' --+
- BE3' ---+
-         OR ---- WR3'  -> bank 3 (D31-D24)
- MWTC' --+
-        (one 74ALS32 quad 2-input OR)
-```
+![Four OR gates make WR0'-WR3' from BE0'-BE3' and MWTC'](figures/strobes.png)
 
 | $\overline{BE_n}$ | $\overline{MWTC}$ | $\overline{WR_n}$ |
 |:-:|:-:|:-:|

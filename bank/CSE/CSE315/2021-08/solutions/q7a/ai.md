@@ -7,6 +7,8 @@ created: 2026-10-04
 status: unverified
 summary: "Frame (LSB first): start 0 | 1 0 1 0 0 0 0 0 1 | parity 0 (three 1s, already odd) | stop 1. Only a data overrun (DOR) occurs: Y's two-character receive buffer and its shift register are full when the new start bit arrives, so a frame is lost. No FE (stop bit = 1) and no PE (parity correct)."
 sources: ["EHP Serial Communication slides 17-19 (frame, parity), 56-58 (9-bit data), 62-63 (FE, DOR)"]
+changes:
+  - "2026-10-12: replaced the ASCII waveform by a TikZ frame diagram (answer unchanged)"
 ---
 **i. Data framing**
 
@@ -18,12 +20,7 @@ Character $1\,0000\,0101_2$: bit 8 = 1, bits 7-0 = 0000 0101. It is sent **LSB f
 
 Odd parity: the data contains **three** 1s (D0, D2, D8), already odd, so the parity bit is **0**.
 
-```text
-      St  D0  D1  D2  D3  D4  D5  D6  D7  D8  P   Sp
- ----+   +---+   +---+                   +---+   +-------
-     |___|   |___|   |___________________|   |___|
-       0   1   0   1   0   0   0   0   0   1   0   1
-```
+![UART frame: start, 9 data bits LSB first, odd parity 0, stop](figures/frame.png)
 
 **ii. Errors at the receiver Y**
 

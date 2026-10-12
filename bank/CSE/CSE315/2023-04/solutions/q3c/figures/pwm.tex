@@ -1,0 +1,41 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,positioning}
+\begin{document}
+\begin{tikzpicture}[>=Stealth,font=\small,x=0.19cm,y=1cm]
+% 1 unit = 1 ms; 1 tick = 8 us; TOP = 2000 at 16 ms, BOTTOM at 32 ms
+\def\H{3.0}% 2000
+\def\C{0.6}% 400 = 3.0*400/2000
+\foreach \t in {3.2,16,28.8,32,35.2,48,60.8,64} \draw[gray!45,densely dotted] (\t,-2.3) -- (\t,\H+0.2);
+\draw[->] (0,0) -- (0,\H+0.6) node[above,font=\footnotesize]{TCNT1};
+\draw[->] (0,0) -- (70,0) node[right,font=\footnotesize]{$t$ (ms)};
+\node[anchor=east,font=\scriptsize] at (0,\H) {2000 = ICR1 (TOP)};
+\node[anchor=east,font=\scriptsize] at (0,\C) {400 = OCR1A};
+\node[anchor=east,font=\scriptsize] at (0,0) {0};
+\draw[gray,dashed] (0,\H) -- (68,\H);
+\draw[red!60!black,dashed] (0,\C) -- (68,\C);
+\draw[thick] (0,0) -- (16,\H) -- (32,0) -- (48,\H) -- (64,0) -- (68,0.75);
+\foreach \t in {3.2,35.2} \fill[red!60!black] (\t,\C) circle (1.6pt);
+\foreach \t in {28.8,60.8} \fill[blue!60!black] (\t,\C) circle (1.6pt);
+\node[below,font=\scriptsize] at (0,0) {0};
+\node[below right=0pt and -3pt,font=\scriptsize] at (3.2,0) {3.2};
+\node[below,font=\scriptsize] at (16,0) {16};
+\node[below left=0pt and -5pt,font=\scriptsize] at (28.8,0) {28.8};
+\node[below,font=\scriptsize] at (32,0) {32};
+\node[below right=0pt and -3pt,font=\scriptsize] at (35.2,0) {35.2};
+\node[below,font=\scriptsize] at (48,0) {48};
+\node[below left=0pt and -5pt,font=\scriptsize] at (60.8,0) {60.8};
+\node[below right=0pt and -3pt,font=\scriptsize] at (64,0) {64};
+% OC1A
+\begin{scope}[yshift=-1.9cm]
+\node[anchor=east,font=\footnotesize] at (-1,0.35) {OC1A};
+\node[anchor=east,font=\scriptsize] at (0,0.7) {1};
+\node[anchor=east,font=\scriptsize] at (0,0) {0};
+\draw[very thick] (0,0) -- (28.8,0) -- (28.8,0.7) -- (35.2,0.7) -- (35.2,0) -- (60.8,0) -- (60.8,0.7) -- (68,0.7);
+\node[font=\scriptsize,blue!60!black,anchor=south] at (28.8,0.75) {set (down)};
+\node[font=\scriptsize,red!60!black,anchor=south] at (36.5,0.75) {clear (up)};
+\draw[<->] (28.8,-0.35) -- (35.2,-0.35) node[midway,below,font=\scriptsize]{6.4 ms};
+\draw[<->] (32,-1.0) -- (64,-1.0) node[midway,fill=white,font=\scriptsize,inner sep=1pt]{period = $2\times2000\times8\,\mu$s = 32 ms};
+\end{scope}
+\end{tikzpicture}
+\end{document}

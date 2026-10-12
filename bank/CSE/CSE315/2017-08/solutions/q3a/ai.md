@@ -7,20 +7,14 @@ created: 2026-10-05
 status: unverified
 summary: "Program-invisible registers are internal registers that programs cannot read or write directly with normal instructions. In the 80286/80386: the descriptor caches (base, limit, access rights) behind CS, DS, ES, SS, FS, GS; the hidden base/limit/attribute parts of LDTR and TR; and GDTR and IDTR (base + limit, loaded only by LGDT/LIDT)."
 sources: ["Brey, The Intel Microprocessors, Sec. 2-3 (program-invisible registers)", "MHE 80386-updated slide 8 (6 program invisible segment descriptor registers, 73 bits)", "MHE 80286 slides (shadow registers)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ figure that also shows GDTR, IDTR, LDTR and TR (answer unchanged)"
 ---
 **Program-invisible registers** are registers inside the processor that a program cannot access directly with ordinary instructions (`MOV`, `PUSH`, ...). They are loaded automatically by the processor, or only by special system instructions, and are used to speed up and control protected-mode memory management. They exist in the 80286 and later processors.
 
 **1. Segment descriptor caches (shadow registers).** Each segment register (CS, DS, ES, SS, and FS, GS on the 80386) has a visible 16-bit **selector** part and an invisible **cache**:
 
-```text
-        visible            program-invisible (descriptor cache)
-     +----------+   +-------------+-------------+------------+
- CS  | selector |   | base (32)   | limit (32)  | access (9) |
- DS  | selector |   |    ...      |    ...      |    ...     |
- ... |          |   |             |             |            |
-     +----------+   +-------------+-------------+------------+
-                    80386: 32 + 32 + 9 = 73 bits per register
-```
+![Segment registers: visible selectors and their invisible descriptor caches; GDTR, IDTR, LDTR and TR](figures/cache.png)
 
 When a selector is loaded, the processor reads the descriptor from the GDT/LDT once and stores its base, limit and access rights in the cache. Later memory accesses use the cache, so the descriptor table is not read on every access.
 

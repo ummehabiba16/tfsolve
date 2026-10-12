@@ -7,6 +7,8 @@ created: 2026-10-05
 status: unverified
 summary: "Connect 8255 D7-D0 to the 8086 low data bus D7-D0 (even addresses), CPU A2 -> 8255 A1 and CPU A1 -> 8255 A0, and decode CS' = NAND(A7, A6', A5, A4', A3, A0', M/IO' inverted) (A7-A3 = 10101, A0 = 0, I/O cycle). The 8255 then occupies A8H (Port A), AAH (Port B), ACH (Port C), AEH (control), so it responds at AAH."
 sources: ["Brey, The Intel Microprocessors, Sec. 11-2 and 11-3 (I/O port decoding, 8-bit I/O devices on the 8086 low bank, 82C55 interface)"]
+changes:
+  - "2026-10-12: replaced the ASCII connection diagram by a TikZ circuit diagram (answer unchanged)"
 ---
 **Design choices**
 
@@ -22,19 +24,7 @@ $$\overline{CS} = \overline{A7 \cdot \overline{A6} \cdot A5 \cdot \overline{A4} 
 
 **Connection diagram**
 
-```text
- 8086                                     8255
- D7-D0  <===============================> D7-D0
- A2 ------------------------------------> A1
- A1 ------------------------------------> A0
- A7 ----------------+
- A6 ---[>o]---------+
- A5 ----------------+
- A4 ---[>o]---------+  NAND o-----------> CS'
- A3 ----------------+
- A0 ---[>o]---------+
- M/IO' -[>o]--------+         ([>o] = inverter)
-```
+![8255 on the 8086 low data bus: A2, A1 to the 8255's A1, A0; a 7-input NAND decodes A7-A3, A0 and M/IO' for CS'](figures/ppi.png)
 
 **Resulting addresses**
 

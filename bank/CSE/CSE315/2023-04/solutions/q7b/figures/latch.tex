@@ -1,0 +1,31 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[american]{circuitikz}
+\usetikzlibrary{calc}
+\begin{document}
+\begin{circuitikz}[font=\small,>=latex]
+% D flip-flop
+\node[draw,thick,minimum width=2.0cm,minimum height=2.4cm] (ff) at (0,0) {};
+\node[font=\footnotesize\bfseries,anchor=north] at (ff.north) {74ALS74};
+\node[font=\footnotesize,anchor=west] at ($(ff.west)+(0,0.6)$) {D};
+\node[font=\footnotesize,anchor=west] at ($(ff.west)+(0.2,-0.5)$) {CLK};
+\draw ($(ff.west)+(0,-0.35)$) -- ++(0.18,-0.15) -- ++(-0.18,-0.15);
+\node[font=\footnotesize,anchor=east] at ($(ff.east)+(0,0.6)$) {Q};
+\node[font=\footnotesize,anchor=south] at ($(ff.south)+(0,0.18)$) {$\overline{\mathrm{CLR}}$};
+\draw ($(ff.south)+(0,-0.1)$) circle (0.1);
+% D tied high
+\draw ($(ff.west)+(0,0.6)$) -- ++(-0.8,0) -- ++(0,0.8) node[vcc]{+5 V};
+% clock from the alarm
+\draw[<-] ($(ff.west)+(0,-0.5)$) -- ++(-2.2,0) node[left,align=right]{alarm output\\(rising edge)};
+% Q to INTR
+\draw[->] ($(ff.east)+(0,0.6)$) -- ++(2.6,0) node[right]{INTR (8086)};
+% clear logic: CLR' = INTA' AND RESET'
+\draw (-2.0,-2.4) node[and port] (g) {};
+\draw (g.out) -| ($(ff.south)+(0,-0.2)$);
+\draw (g.in 1) -- ++(-0.6,0) node[left]{$\overline{\mathrm{INTA}}$};
+\draw (g.in 2) -- ++(-0.6,0) node[left]{$\overline{\mathrm{RESET}}$};
+\node[font=\scriptsize,align=left,anchor=north west] at (0.2,-2.1) {$\overline{\mathrm{CLR}}$ = 0 when $\overline{\mathrm{INTA}}$ = 0\\or $\overline{\mathrm{RESET}}$ = 0};
+% vector during INTA
+\node[draw,thick,fill=gray!8,align=center,font=\footnotesize] (v) at (5.6,-1.6) {pull-ups on D7--D0\\(or a 74ALS244)};
+\draw[->] (v.north) -- ++(0,0.7) node[above,font=\scriptsize,align=center]{type FFh on the data bus\\during $\overline{\mathrm{INTA}}$};
+\end{circuitikz}
+\end{document}

@@ -7,18 +7,12 @@ created: 2026-10-05
 status: unverified
 summary: "MCU0 = SPI master: every 2 s reads S1 (ADC0) and S2 (ADC1), left adjusted (8-bit ADCH); pulls PB4 (SS of MCU1) low and sends the S1 byte, then PB3 (SS of MCU2) low and sends the S2 byte. MCU1 and MCU2 = SPI slaves: wait for SPIF, read SPDR, format the number and call LCD_string()."
 sources: ["EHP Serial Communication slides 79-108 (SPI pins, SPCR/SPSR/SPDR, master/slave init, transmit/receive, multiple slaves)", "EHP 6. AVR ADC slides 20-33 (ADMUX, ADCSRA, polling)"]
+changes:
+  - "2026-10-12: replaced the ASCII connection sketch by a TikZ diagram (answer unchanged)"
 ---
 **Connections**
 
-```text
- MCU0 (master)                 MCU1 (slave)        MCU2 (slave)
- PB5 MOSI ------------------->  PB5 MOSI   +----->  PB5 MOSI
- PB7 SCK  ------------------->  PB7 SCK    +----->  PB7 SCK
- PB6 MISO <------------------   PB6 MISO   +-----   PB6 MISO  (not used)
- PB4 (SS1, output) ---------->  PB4 SS'
- PB3 (SS2, output) ------------------------------>  PB4 SS'
- PA0 (ADC0) <- S1, PA1 (ADC1) <- S2        LCD on MCU1 and MCU2 (LCD.h)
-```
+![MCU0 master with sensors on ADC0 and ADC1; MCU1 and MCU2 slaves with LCDs; PB4 and PB3 select the slaves](figures/spi.png)
 
 Assumptions: 1 MHz clock, AVCC = 5 V reference, 8-bit results (ADLAR = 1, read ADCH), SPI clock = fosc/16, mode 0, MSB first.
 

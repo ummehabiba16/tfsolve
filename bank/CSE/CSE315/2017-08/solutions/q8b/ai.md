@@ -7,20 +7,12 @@ created: 2026-10-05
 status: unverified
 summary: "Mode 1: CPOL = 0 (SCK idles low), CPHA = 1: MOSI/MISO change on each rising (leading) edge and both devices sample on each falling (trailing) edge; 8 pulses per byte while SS' is low."
 sources: ["EHP Serial Communication slides 94-95, 110-115 (CPOL, CPHA, Table 59 and Figure 68)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ timing diagram (answer unchanged)"
 ---
 **SPI mode 1** (CPOL = 0, CPHA = 1): SCK is **low when idle**; the **leading (rising) edge is the setup edge** and the **trailing (falling) edge is the sample edge**.
 
-```text
-SS'    --+                                                  +--
-         |__________________________________________________|
-SCK        +--+  +--+  +--+  +--+  +--+  +--+  +--+  +--+  +
-       ____|  |__|  |__|  |__|  |__|  |__|  |__|  |__|  |__|___
-MOSI   ----Xb7===Xb6===Xb5===Xb4===Xb3===Xb2===Xb1===Xb0===X---
-MISO   ----Xb7===Xb6===Xb5===Xb4===Xb3===Xb2===Xb1===Xb0===X---
-           s  v  s  v  s  v  s  v  s  v  s  v  s  v  s  v
-       s = setup (rising, leading edge): MOSI/MISO change
-       v = sample (falling, trailing edge): bits are read
-```
+![SPI mode 1: SCK idles low; data changes on rising edges and is sampled on falling edges](figures/spi.png)
 
 **Sequence**
 

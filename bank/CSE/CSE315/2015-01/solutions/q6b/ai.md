@@ -7,16 +7,12 @@ created: 2026-10-05
 status: unverified
 summary: "8 bytes: bytes 0-1 limit (16 bits, max 64 KB), bytes 2-4 base (24 bits, 16 MB), byte 5 access rights (P, DPL, S, E, ED/C, W/R, A), bytes 6-7 reserved (0). Example 0000 92 10 0000 FFFF = present DPL 0 writable data segment at 100000H, 64 KB."
 sources: ["MHE 80286 slides (descriptor format, access right byte bits)", "Brey, The Intel Microprocessors, Sec. 2-3"]
+changes:
+  - "2026-10-12: replaced the ASCII layout by a TikZ figure of the descriptor bytes and the access rights byte (answer unchanged)"
 ---
 A segment descriptor is an **8-byte** entry in the GDT or LDT that describes one segment.
 
-```text
- byte   7    6      5              4             3    2         1    0
-      +---------+---------------+-------------+-------------+-------------+
-      | reserved| access rights | base 23-16  | base 15-0   | limit 15-0  |
-      |  (0)    | P DPL S E ... |             |             |             |
-      +---------+---------------+-------------+-------------+-------------+
-```
+![80286 segment descriptor: limit, 24-bit base, access rights, reserved bytes; access rights bits](figures/descriptor.png)
 
 - **Limit (bytes 0-1):** 16 bits, highest valid offset: segments of 1 byte to **64 KB**.
 - **Base (bytes 2-4):** 24 bits, starting physical address anywhere in the **16 MB** space (no paragraph restriction).

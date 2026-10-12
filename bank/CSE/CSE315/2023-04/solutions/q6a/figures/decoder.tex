@@ -1,0 +1,14 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[american]{circuitikz}
+\usetikzlibrary{calc}
+\begin{document}
+\begin{circuitikz}[font=\small]
+\draw (0,0) node[nand port,number inputs=9,scale=2.2] (g) {};
+\foreach \i/\a in {1/19,2/18,3/17,4/16,5/15,6/14,7/13,8/12,9/11} \draw (g.in \i) -- ++(-0.9,0) node[left,font=\scriptsize]{A\a};
+\node[draw,thick,fill=blue!5,minimum width=2.4cm,minimum height=2.6cm,align=center] (rom) at (5.0,-0.3) {EPROM\\2K $\times$ 8};
+\draw (g.out) -- (rom.west |- g.out) node[pos=0.5,above,font=\footnotesize]{$\overline{\mathrm{CE}}$};
+\draw[<-] ($(rom.west)+(0,-0.8)$) -- ++(-1.4,0) node[left,font=\footnotesize]{A10--A0};
+\draw[<->] (rom.east) -- ++(1.0,0) node[right,font=\footnotesize]{D7--D0};
+\node[font=\scriptsize,align=center,anchor=north] at (2.4,-2.0) {$\overline{\mathrm{CE}}$ = 0 only when A19--A11 are all 1, i.e. for FF800H--FFFFFH};
+\end{circuitikz}
+\end{document}

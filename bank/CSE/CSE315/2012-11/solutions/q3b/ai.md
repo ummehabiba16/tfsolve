@@ -7,29 +7,12 @@ created: 2026-10-05
 status: unverified
 summary: "AVR core: Flash program memory -> instruction register -> decoder -> control lines; PC; 32 x 8 register file feeding the ALU (with status register), SRAM data memory, I/O modules and interrupt unit on the 8-bit data bus. One instruction per clock comes from the Harvard buses plus single-level pipelining (fetch the next while executing the current) and the register file, which delivers two operands to the single-cycle ALU and stores the result in the same clock."
 sources: ["EHP ATMega32_Core slides 8, 10-15 (block diagram, Harvard, single-level pipelining, general purpose register file, single cycle ALU operation)"]
+changes:
+  - "2026-10-12: replaced the ASCII block diagram by a TikZ block diagram (answer unchanged)"
 ---
 **Block diagram of the AVR CPU and memories**
 
-```text
- +----------------+        +----------------------+
- | Flash program  |------->| instruction register |
- | memory         |        +----------+-----------+
- +-------+--------+                   v
-         ^                 +----------------------+      control lines
-         |                 | instruction decoder  |-------------------------+
- +-------+--------+        +----------------------+                         |
- | program counter|                                                         v
- +----------------+    +-------------------------+     +-----+    +----------------+
-                       | 32 x 8 general purpose  |====>| ALU |--->| status register|
-                       | register file (R0-R31)  |<====|     |    | (SREG)         |
-                       +------------+------------+     +-----+    +----------------+
-                                    | 8-bit data bus
-       +----------------+-----------+------+----------------+------------------+
-       | data SRAM      | EEPROM           | I/O modules     | interrupt unit,  |
-       | (2 KB)         | (1 KB)           | (ports, timers, | watchdog         |
-       |                |                  | USART, ADC ...) |                  |
-       +----------------+------------------+-----------------+------------------+
-```
+![AVR CPU and memories: Flash, program counter, instruction register and decoder, register file, ALU, SREG, data bus with SRAM, EEPROM, I/O and interrupt unit](figures/avr.png)
 
 **How it executes an instruction in (almost) every clock cycle**
 

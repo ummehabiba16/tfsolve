@@ -7,6 +7,8 @@ created: 2026-10-05
 status: unverified
 summary: "In the flat model all segment descriptors (code, data, stack) have base 0 and limit 4 GB (FFFFF with G = 1), so segmentation is effectively turned off: the 32-bit offset is the linear address and memory is one linear 4 GB space. Protection and virtual memory are then done with paging. Used by modern OSs (Windows, Linux)."
 sources: ["Brey, The Intel Microprocessors, Sec. 2-5 (flat mode memory)", "MHE 80386-updated slides 16-19 (descriptor base, limit, granularity)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ figure (answer unchanged)"
 ---
 **Flat mode memory system.** The 80386 cannot switch segmentation off, but it can make it transparent:
 
@@ -17,13 +19,7 @@ $$\text{linear address} = 0 + \text{offset} = \text{offset}$$
 
 - The program sees **one linear, unsegmented address space** of 4 GB, addressed by 32-bit offsets (pointers). Segment registers are loaded once by the OS and never changed by programs.
 
-```text
- CS, DS, SS, ES --> descriptors with base 0, limit 4 GB
- 0000 0000h  +--------------------------------+
-             |  code, data, stack all in one   |
-             |  linear 4 GB address space      |
- FFFF FFFFh  +--------------------------------+
-```
+![Flat model: all segment descriptors have base 0 and a 4 GB limit](figures/flat.png)
 
 **Advantages:** simple programming (no segment arithmetic, near 32-bit pointers everywhere), compilers and OSs are portable to other flat-memory CPUs, and no segment-register loads (faster).
 

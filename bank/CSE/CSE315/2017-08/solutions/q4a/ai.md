@@ -7,34 +7,14 @@ created: 2026-10-05
 status: unverified
 summary: "The 80386 TSS (at least 104 bytes, described by a TSS descriptor in the GDT and selected by TR) stores a task's state: back link, SS0:ESP0, SS1:ESP1, SS2:ESP2, CR3, EIP, EFLAGS, the 8 general registers, the 6 segment selectors, the LDT selector, the T bit and the I/O map base (plus the I/O permission bitmap). Three stack sets give each privilege level 0-2 its own protected stack for calls/interrupts from less privileged code."
 sources: ["Brey, The Intel Microprocessors, Sec. 17-6 (task state segment, task switching)", "Intel 80386 Programmer's Reference Manual, Sec. 7.1 (TSS format), Sec. 6.3.4.1 (stack switching)"]
+changes:
+  - "2026-10-12: replaced the ASCII layout by a TikZ figure of the 80386 TSS (answer unchanged)"
 ---
 **Task State Segment (TSS).** A TSS is a special segment that holds **everything needed to suspend and resume a task**. Each task has one. It is described by a **TSS descriptor** in the GDT, and the **task register (TR)** selects the TSS of the current task. On a task switch the processor saves the current state into the old TSS and loads the new state from the new TSS.
 
 **80386 TSS layout** (32-bit words, offsets in hex)
 
-```text
- offset  31                    16 15                     0
-  64    | I/O map base            | 0 ...               |T |
-  60    | 0                       | LDT selector           |
-  5C    | 0                       | GS                     |
-  58    | 0                       | FS                     |
-  54    | 0                       | DS                     |
-  50    | 0                       | SS                     |
-  4C    | 0                       | CS                     |
-  48    | 0                       | ES                     |
-  44-28 | EDI, ESI, EBP, ESP, EBX, EDX, ECX, EAX           |
-  24    | EFLAGS                                           |
-  20    | EIP                                              |
-  1C    | CR3 (PDBR: the task's page directory)            |
-  18    | 0                       | SS2                    |
-  14    | ESP2                                             |
-  10    | 0                       | SS1                    |
-  0C    | ESP1                                             |
-  08    | 0                       | SS0                    |
-  04    | ESP0                                             |
-  00    | 0                       | back link (previous TSS)|
-         + I/O permission bitmap (optional, after offset 68h)
-```
+![80386 TSS layout, offsets 00H-64H](figures/tss.png)
 
 - **Back link:** selector of the TSS of the task that called this one (used by IRET when NT = 1).
 - **SS0:ESP0 ... SS2:ESP2:** stacks for privilege levels 0, 1, 2.

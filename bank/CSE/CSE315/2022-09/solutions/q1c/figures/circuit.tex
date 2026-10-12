@@ -1,0 +1,30 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[american]{circuitikz}
+\begin{document}
+\begin{circuitikz}[font=\small]
+\ctikzset{resistors/scale=0.7,diodes/scale=0.6,capacitors/scale=0.7}
+% MCU
+\draw[thick,fill=blue!5] (0,0) rectangle (3.4,-5.0);
+\node[font=\bfseries] at (1.7,0.35) {ATmega32};
+\node[anchor=west,font=\footnotesize] at (0.05,-1.0) {PD2 (INT0)};
+\node[anchor=west,font=\footnotesize] at (0.05,-2.6) {PA0 (ADC0)};
+\node[anchor=west,font=\footnotesize] at (0.05,-4.2) {AREF};
+\node[anchor=east,font=\footnotesize] at (3.35,-1.0) {PB0};
+\node[anchor=east,font=\footnotesize] at (3.35,-3.2) {AVCC, VCC};
+\node[anchor=east,font=\footnotesize] at (3.35,-4.4) {GND};
+% smoke sensor
+\node[draw,thick,fill=orange!12,minimum width=1.9cm,minimum height=1.0cm,align=center,font=\footnotesize] (S) at (-3.6,-1.0) {smoke\\sensor S};
+\draw (S.east) -- (0,-1.0) node[pos=0.45,above,font=\scriptsize]{0 V / 5 V};
+% temperature sensor
+\node[draw,thick,fill=orange!12,minimum width=1.9cm,minimum height=1.0cm,align=center,font=\footnotesize] (T) at (-3.6,-2.6) {temperature\\sensor T};
+\draw (T.east) -- (0,-2.6) node[pos=0.45,above,font=\scriptsize]{0--5 V};
+% AREF decoupling
+\draw (0,-4.2) -- (-1.2,-4.2) to[C,l_=100 nF] (-1.2,-5.4) node[ground]{};
+% LED
+\draw (3.4,-1.0) to[R,l=330 $\Omega$] (5.4,-1.0) to[leDo,l=LED] (5.4,-2.8) node[ground]{};
+% supply
+\draw (3.4,-3.2) -- (4.4,-3.2) -- (4.4,-2.9) node[vcc]{+5 V};
+\draw (3.4,-4.4) -- (4.0,-4.4) node[ground]{};
+\node[font=\scriptsize,align=left,anchor=north west] at (-4.6,-6.0) {both sensors are powered from +5 V and GND; $V_{ref}$ = AVCC = 5 V, so 70 $^\circ$C = 3.5 V $\to$ ADC 716};
+\end{circuitikz}
+\end{document}

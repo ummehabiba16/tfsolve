@@ -7,6 +7,8 @@ created: 2026-10-05
 status: unverified
 summary: "Fast PWM is single slope (0 to TOP, then restart): f = fclk/(N(1+TOP)), up to twice the phase-correct frequency, but the pulse is aligned to BOTTOM so its centre (phase) moves with the duty cycle. Phase correct is dual slope (0 to TOP to 0): f = fclk/(2 N TOP), half the frequency, but pulses are symmetric about BOTTOM/TOP so the phase stays fixed; preferred for motor control."
 sources: ["EHP Timer_Part_2 slides 31-48 (fast PWM, phase correct PWM, comparison)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by TikZ timing diagrams of the example drawn to scale (answer unchanged)"
 ---
 | | Fast PWM | Phase Correct PWM |
 |:--|:--|:--|
@@ -21,24 +23,4 @@ sources: ["EHP Timer_Part_2 slides 31-48 (fast PWM, phase correct PWM, compariso
 - Fast PWM: period = 1000 µs (f = 1 kHz), high 250 µs, duty 25%.
 - Phase correct (TOP = 999): period = $2 \times 999$ µs $\approx$ 2 ms (f $\approx$ 500 Hz), high time $2 \times 249$ µs, duty $\approx$ 25%.
 
-```text
-Fast PWM (single slope)
-   TOP|              **              **              **
-      |           ***             ***             ***
-      |        ***             ***             ***
-      |     ***             ***             ***
-   OCR|  ***             ***             ***
-     0|**              **              **
-OC1x 1|----            ----            ----
-     0|    ------------    ------------    ------------
-
-Phase correct PWM (dual slope, same TOP: half the frequency)
-   TOP|               ***                             **
-      |            ***   ***                       ***
-      |         ***         ***                 ***
-      |     ****               ****         ****
-   OCR|  ***                       ***   ***
-     0|**                             ***
-OC1x 1|-----                       ---------
-     0|     -----------------------         ------------
-```
+![Fast PWM and phase correct PWM with TOP = 999 and OCR1A = 249 at 1 MHz: TCNT1 and OC1A](figures/pwm.png)

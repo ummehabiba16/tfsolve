@@ -7,24 +7,14 @@ created: 2026-10-05
 status: unverified
 summary: "Earlier x86 chips (up to the Pentium) execute instructions in program order in fixed pipelines (Pentium: two in-order U/V pipes). The Pentium Pro (P6) uses dynamic execution: three decoders turn x86 instructions into RISC-like micro-ops, a reservation station and 40-entry reorder buffer with register renaming execute them out of order and speculatively (deep branch prediction) on 5 execution ports, retiring 3 per clock in order; 12-14 stage superpipeline; L2 cache in the same package on a full-speed backside bus; 36-bit address bus (64 GB)."
 sources: ["Brey, The Intel Microprocessors, Ch. 18 (Pentium Pro: internal structure, dynamic execution)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ block diagram (answer unchanged)"
 ---
 **Earlier processors.** The 8086-80486 execute instructions strictly **in program order**, one after another through a pipeline. The Pentium added a second integer pipeline (**U and V**, superscalar), but both pipelines are still **in-order**: if one instruction waits for memory, everything behind it waits.
 
 **Pentium Pro (P6 microarchitecture): dynamic execution**
 
-```text
- L2 cache (same package, full-speed backside bus)
-        |
- L1 I-cache --> fetch/decode unit: 3 decoders --> micro-ops (uops)
-                                                     |
-                                    register alias table (renaming)
-                                                     |
-                               reorder buffer (40 uops) + reservation station
-                                                     |
-                     5 ports: 2 integer, FPU, load, store address/data
-                                                     |
-                               retirement unit (3 uops/clock, in order)
-```
+![Pentium Pro dynamic execution: decode into micro-ops, renaming, reorder buffer and reservation station, 5 execution ports, in-order retirement](figures/p6.png)
 
 Differences from earlier processors:
 

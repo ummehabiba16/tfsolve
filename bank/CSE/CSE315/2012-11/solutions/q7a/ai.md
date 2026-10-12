@@ -7,19 +7,14 @@ created: 2026-10-05
 status: unverified
 summary: "When PG = 1 the 80386 splits the 4 GB linear space into 1M pages of 4 KB. The linear address is split 10 + 10 + 12: CR3 holds the page directory (1024 entries), each PDE points to a page table (1024 entries), each PTE gives a 4 KB frame; physical = frame + offset. Entries hold the 20-bit frame address plus P, R/W, U/S, A, D, AVL bits; a 32-entry TLB caches translations; missing pages cause page faults (CR2)."
 sources: ["MHE 80386-updated slides 21-26 (paging, page directory, page tables, CR3, TLB, worked example)", "Brey, The Intel Microprocessors, Sec. 2-4 (paging)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ figure of the two-level translation (answer unchanged)"
 ---
 **Purpose.** Paging lets the operating system map the linear address space onto physical memory in fixed **4 KB pages**, so programs can be placed in scattered physical memory and pages can be swapped to disk (virtual memory) efficiently. It is enabled by **PG = 1 (bit 31 of CR0)** and works on the linear address produced by segmentation.
 
 **Two-level translation**
 
-```text
- linear: | directory (10) | table (10) | offset (12) |
-                |               |              |
- CR3 --> page directory         |              |
-         (1024 PDEs) --PDE--> page table       |
-                              (1024 PTEs) --PTE--> 4 KB page frame
-                                                        + offset = physical
-```
+![80386 paging: directory, table and offset fields; CR3, page directory, page table and 4 KB frame](figures/paging.png)
 
 - **CR3 (PDBR)** holds the physical address of the single **page directory** (4 KB, 1024 entries).
 - The top 10 bits select a **page directory entry**, which gives the physical address of a **page table** (4 KB, 1024 entries).

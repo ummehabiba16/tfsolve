@@ -7,6 +7,8 @@ created: 2026-10-05
 status: unverified
 summary: "RxD is sampled 16 times per bit (normal) or 8 times (double speed). After a high-to-low edge, the start bit is accepted if the majority of samples 8, 9, 10 (4, 5, 6 in double speed) are low, otherwise rejected as a spike; each data, parity and stop bit is the majority of its three centre samples. Double speed uses half the samples, so it tolerates less baud-rate error and noise."
 sources: ["EHP Serial Communication slides 69, 71-77 (clock recovery, start-bit detection, data recovery, double speed disadvantage)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ figure of the sample positions in normal and double-speed mode (answer unchanged)"
 ---
 **Start bit (clock recovery)**
 
@@ -18,10 +20,6 @@ sources: ["EHP Serial Communication slides 69, 71-77 (clock recovery, start-bit 
 
 Each following bit (data, parity, stop) is also sampled 16 (or 8) times, and its value is the **majority vote of the three centre samples** (8, 9, 10 in normal, 4, 5, 6 in double speed). A 0 stop bit sets FE.
 
-```text
-          | start bit                    | D0 ...
- normal:  1 2 3 4 5 6 7 [8 9 10] ... 16  | 1 ... [8 9 10] ... 16
- 2x:      1 2 3 [4 5 6] 7 8              | 1 2 3 [4 5 6] 7 8
-```
+![Start bit and D0 sampled 16 times per bit (normal, samples 8-10) or 8 times (double speed, samples 4-6)](figures/sampling.png)
 
 **Key difference.** Double-speed mode takes **half as many samples per bit (8 instead of 16)**. Each sample covers twice as much of the bit, so the start edge is located less precisely and the majority vote is taken over a wider part of the bit; the receiver therefore tolerates **less baud-rate mismatch and noise**: a more accurate baud rate and clock are needed. (For the transmitter there is no disadvantage.)

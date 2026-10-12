@@ -7,23 +7,12 @@ created: 2026-10-04
 status: unverified
 summary: "S (digital 0/5 V) on INT0 (PD2), T (analog) on ADC0 (PA0), LED on PB0. INT0 on any change starts an ADC conversion only when smoke appears; the ADC interrupt turns the LED on if ADC > 716 (70 C = 3.5 V with AVCC = 5 V) and repeats while smoke lasts; the CPU sleeps (idle) otherwise."
 sources: ["EHP 6. AVR ADC slides 16, 20-36 (single-ended ADC, ADMUX, ADCSRA, ADC interrupt example)", "EHP ATmega32 Interrupt slides 13-23 (INT0, MCUCR, GICR)", "ATmega32 datasheet, Power Management and Sleep Modes (idle mode)"]
+changes:
+  - "2026-10-12: replaced the ASCII drawing by a circuit diagram (answer unchanged)"
 ---
 **i. Circuit**
 
-```text
-                         ATmega32
-                  +----------------------+
- Smoke sensor S   |                      |
-  out (0 / 5 V) ->| PD2 (INT0)           |
-                  |                      |
- Temp sensor T    |                 PB0  |---[330R]---|>|--- GND
-  out (0-5 V) --->| PA0 (ADC0)           |              LED
-                  |                      |
-         +5 V --->| AVCC, AREF via 100nF |
-                  | VCC, GND             |
-                  +----------------------+
- (both sensors also connected to +5 V and GND for power)
-```
+![Fire alarm circuit: smoke sensor on PD2 (INT0), temperature sensor on PA0 (ADC0), LED with 330 ohm on PB0](figures/circuit.png)
 
 - S is a **digital** signal (0 V or 5 V), so it goes to an external interrupt pin, **INT0 (PD2)**, instead of being polled.
 - T is **analog**, so it goes to an ADC channel, **ADC0 (PA0)**.

@@ -7,6 +7,8 @@ created: 2026-10-04
 status: unverified
 summary: "CTC with TOP = OCR1A = 32768, tick = 64 us: one timer cycle = 32769 x 64 us = 2.097 s; both pins toggle once per cycle, so both have period 4.194 s, f = 0.2384 Hz and 50% duty; OC1B (toggles at 15625, t = 1.0 s) leads OC1A (toggles at 32768, t = 2.097 s) by 1.097 s."
 sources: ["EHP Timer_Part_2 slides 27-30 (CTC mode, OCR1A = 15625 / OCR1B = 7812 toggle example)", "ATmega32 datasheet, Timer/Counter1, CTC Mode (f = fclk / (2 N (1 + OCR1A)))"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ timing diagram drawn to scale (answer unchanged)"
 ---
 **Setup.** WGM = 0100 is **CTC mode with TOP = OCR1A = 32768**: TCNT1 counts 0, 1, ..., 32768 and is cleared to 0 on the match with OCR1A. Both OC1A and OC1B **toggle** on their compare match.
 
@@ -23,21 +25,7 @@ $$T_{cycle} = 32769 \times 64\ \mu s = 2\,097\,216\ \mu s \approx 2.097\ \text{s
 - OC1B toggles every time TCNT1 = 15625: at $t = 15625 \times 64\ \mu s = 1.000$ s, then every 2.097 s (3.097 s, 5.195 s, ...).
 - OC1A toggles every time TCNT1 = 32768 (TOP): at $t = 32768 \times 64\ \mu s = 2.097$ s, then every 2.097 s (4.194 s, 6.292 s, ...).
 
-```text
-TCNT1                                   (1 column = 0.15 s)
-32768 |             *             *             *             *
-      |           **            **            **            **
-      |         **            **            **            **
-15625 |      ***           ***           ***           ***
-      |    **            **            **            **
-      |  **            **            **            **
-    0 |**            **            **            **            **
-OC1B 1|       --------------              --------------
-     0|-------              --------------              ---------
-OC1A 1|              --------------              --------------
-     0|--------------              --------------              --
-       0      1.0    2.097  3.1    4.194  5.2    6.29   7.3      t (s)
-```
+![CTC mode, TOP = OCR1A = 32768, OCR1B = 15625: TCNT1 sawtooth, OC1B and OC1A](figures/ctc.png)
 
 **Frequency and duty cycle**
 

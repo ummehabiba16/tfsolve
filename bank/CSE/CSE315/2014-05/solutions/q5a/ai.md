@@ -7,25 +7,12 @@ created: 2026-10-05
 status: unverified
 summary: "ATmega16: S (0/5 V) to INT0 (PD2, rising-edge interrupt); T (0-5 V analog) to ADC0 (PA0), conversion started in the INT0 ISR and read in the ADC interrupt (alarm if ADC > 614, i.e. 60 C = 3 V); buzzer on PB0 through a transistor driver; alarm-stop switch to INT1 (PD3); Timer1 interrupt counts 1 minute; start signal to the fire-fighting system on PB1. No polling."
 sources: ["EHP ATmega32 Interrupt slides 16-23 (external interrupts INT0, INT1)", "EHP 6. AVR ADC slides 16-36 (ADC0, AVCC reference, ADC interrupt)", "EHP Timer_Part_1 slides 25-27 (timer overflow interrupt for long delays)"]
+changes:
+  - "2026-10-12: replaced the ASCII block diagram by a TikZ block diagram (answer unchanged)"
 ---
 **Block diagram**
 
-```text
-                             ATmega16
-                     +---------------------------+
- Smoke sensor S ---->| PD2 / INT0                |
- (0 V / 5 V)         |                           |
-                     |                    PB0    |---> transistor driver ---> Buzzer
- Temp sensor T ----->| PA0 / ADC0                |
- (0-5 V = 0-100 C)   |                    PB1    |---> START signal to automated
-                     |                           |     fire-fighting system
- Stop-alarm switch ->| PD3 / INT1  (pull-up,     |
- (to GND)            |              active low)  |
-                     | AVCC, AREF (+5 V, 100 nF) |
- +5 V, GND --------->| VCC, GND                  |
-                     | (Timer1 internal: 1 min)  |
-                     +---------------------------+
-```
+![Fire control system: S on INT0, T on ADC0, stop switch on INT1, buzzer on PB0, start signal on PB1](figures/block.png)
 
 **How it works without polling**
 

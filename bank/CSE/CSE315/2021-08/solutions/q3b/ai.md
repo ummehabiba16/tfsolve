@@ -7,30 +7,14 @@ created: 2026-10-04
 status: unverified
 summary: "Latch the edge in a D flip-flop: D = 1, CLK = device's INTR edge; the inverted output Q' drives the processor's active-low level INTR' and holds it low until the request is acknowledged; INTA (active high) is inverted and, together with RESET, drives the flip-flop's CLR', so INTR' returns high after acknowledgement."
 sources: ["Brey, The Intel Microprocessors, Sec. 12-2 (converting an edge-triggered request into a level request with a D flip-flop cleared by INTA)"]
+changes:
+  - "2026-10-12: replaced the ASCII drawing by a circuit diagram (answer unchanged)"
 ---
 **Problem.** The device gives a short **edge** (assume a rising edge) on its INTR output. The processor's $\overline{INTR}$ is **level-sensitive and active low**: it must see a steady **low** level until it acknowledges the request with **INTA** (active high). A short pulse may be gone before the processor samples it, and must not cause a second interrupt afterwards.
 
 **Circuit: D flip-flop (e.g. 74ALS74) as an edge-to-level converter**
 
-```text
-                Vcc
-                 |
-            +----+---------+
-            |    D     Q   |---- (not used)
- Device ----|> CLK         |
- INTR       |         Q'   |--------------------> INTR' (processor, active-low level)
- (edge)     |   CLR'  PRE' |
-            +----+-----+---+
-                 |     |
-                 |    Vcc
-      +----------+
-      |
-     AND (active-low OR of the two clear sources)
-     |  |
-     |  +---- RESET' (system reset, active low)
-     |
-     +---[>o]---- INTA (processor, active high)
-```
+![Edge-to-level converter: the device edge clocks a D flip-flop whose Q' drives the active-low INTR'; INTA or RESET' clears it](figures/latch.png)
 
 **Operation**
 

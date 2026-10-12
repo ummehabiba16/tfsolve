@@ -1,0 +1,16 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[american]{circuitikz}
+\begin{document}
+\begin{circuitikz}[font=\small]
+\draw (-1.0,1.0) node[above]{$\overline{\mathrm{MWTC}}$} -- (-1.0,-6.28);
+\foreach \n/\d in {0/D7--D0,1/D15--D8,2/D23--D16,3/D31--D24} {
+  \pgfmathsetmacro{\y}{-\n*2.0}
+  \draw (1.2,\y) node[or port] (g\n) {};
+  \draw (g\n.in 1) -- ++(-1.6,0) node[left]{$\overline{\mathrm{BE\n}}$};
+  \draw (g\n.in 2) -| (-1.0,\y);
+  \fill (-1.0,\y-0.28) circle (1.5pt);
+  \draw[->] (g\n.out) -- ++(1.2,0) node[right]{$\overline{\mathrm{WR\n}}$ $\to$ bank \n\ (\d)};
+}
+\node[font=\scriptsize,anchor=north] at (1.6,-6.7) {one 74ALS32 (quad 2-input OR): $\overline{\mathrm{WR}n} = \overline{\mathrm{BE}n} + \overline{\mathrm{MWTC}}$};
+\end{circuitikz}
+\end{document}

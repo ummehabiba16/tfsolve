@@ -1,0 +1,12 @@
+\documentclass[border=6pt]{standalone}
+\usepackage[american]{circuitikz}
+\begin{document}
+\begin{circuitikz}[font=\small]
+\ctikzset{resistors/scale=0.7}
+\draw (0,0) node[left]{to microcontroller pin} -- (1.5,0);
+\fill (1.5,0) circle (1.5pt);
+\draw (1.5,0) to[R,l_={$R \approx 10$ k$\Omega$}] (1.5,1.8) node[vcc]{$V_{CC}$};
+\draw (1.5,0) -- (2.2,0) to[push button,l={button}] (4.2,0) -- (4.2,-0.3) node[ground]{};
+\node[font=\scriptsize,align=center] at (2.8,-1.2) {released: pin = 1 (pulled up);\enspace pressed: pin = 0};
+\end{circuitikz}
+\end{document}

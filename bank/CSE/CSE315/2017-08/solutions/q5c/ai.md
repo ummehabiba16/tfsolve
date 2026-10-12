@@ -7,18 +7,12 @@ created: 2026-10-05
 status: unverified
 summary: "Connect MOSI, MISO and SCK of the ATmega32 (master) to all three slaves in parallel and give each slave its own SS' line from a master output pin (e.g. PB4, PB3, PB2). To send to A: SS_A low, write SPDR, wait for SPIF, SS_A high; then the same with SS_B and SS_C. Only the selected slave listens; the others ignore SCK and keep MISO tri-stated."
 sources: ["EHP Serial Communication slides 84-92, 108 (master-slave connection, slave select, transmission steps, multiple slaves)"]
+changes:
+  - "2026-10-12: replaced the ASCII sketch by a TikZ connection diagram (answer unchanged)"
 ---
 **Connection (independent slaves)**
 
-```text
- ATmega32 (master)      Device A      Device B      Device C
- MOSI (PB5)  ---------> MOSI          MOSI          MOSI     <- one shared line
- MISO (PB6)  <--------- MISO          MISO          MISO     <- one shared line
- SCK  (PB7)  ---------> SCK           SCK           SCK      <- one shared line
- PB4  (SS_A) ---------> SS'
- PB3  (SS_B) ---------------------->  SS'
- PB2  (SS_C) ------------------------------------>  SS'
-```
+![ATmega32 master with three slaves: shared MOSI, MISO, SCK and one select line each (PB4, PB3, PB2)](figures/spi.png)
 
 - **MOSI, MISO, SCK** are shared by all three devices.
 - Each device has its **own slave-select** line, driven by a separate output pin of the master (PB4 = SS, plus any two free port pins).
