@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: 'Disks moved $2^t$ times: $\binom{t+5}{5}$ for $t<K_{max}$; $\binom{10}{6}=210\le378<462$ gives $K_{max}=5$, $N_a(K_{max})=168$; total $M(378,8)=7937$ moves; root split (378,8) $\to$ 2 x (126,8) + (252,7) (any $k\in[126,210]$ is optimal).'
 sources: ['Graham, Knuth & Patashnik, Concrete Mathematics, Ch. 1 (Tower of Hanoi)', 'Frame-Stewart algorithm for the multi-peg Tower of Hanoi (presumed optimal solution)']
+changes:
+  - "2026-10-12: replaced the ASCII level-2 tree by a TikZ figure (answer unchanged)"
 ---
 **Properties of the presumed optimal solution** (used below):
 
@@ -56,13 +58,7 @@ $$0\le x\le\binom{K_{max}+p-4}{p-4}=126,\qquad0\le N_a(K_{max})-x\le\binom{K_{ma
 
 and then $k=\binom{K_{max}+p-4}{p-2}+N_a(K_{max})-x=84+168-x$. So every $k$ with $126\le k\le210$ is optimal (a full search of $\min_k[2M(k,8)+M(378-k,7)]$ confirms exactly this range). Taking $k=126$:
 
-```text
-Level 0:  (378, 8)   [7937 moves]
-Level 1:  left  2 x (126, 8)   [2 x 1217 moves]
-          right (252, 7)   [5503 moves]
-Level 2:  under (126, 8):  left 2 x (28, 8) [2 x 97],  right (98, 7) [1023]
-          under (252, 7):  left 2 x (126, 7) [2 x 1471],  right (126, 6) [2561]
-```
+![Binary tree of the presumed optimal solution to level 2; each node shows (disks, pegs) and its number of moves](figures/tree.png)
 
 The same rule is applied inside every node until the leaves are 3-peg towers ($2^m-1$ moves) or single disks. Check at the root: $2\times1217+5503=7937$.
 

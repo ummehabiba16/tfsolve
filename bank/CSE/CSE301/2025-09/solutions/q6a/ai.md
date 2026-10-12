@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: 'A birth-death process is a CTMC on $\{0,1,2,\dots\}$ that moves only $n\to n+1$ (rate $\lambda_n$) or $n\to n-1$ (rate $\mu_n$). Immigration: immigrants arrive as a Poisson stream at rate $\theta$ regardless of $n$, and each individual leaves/dies at rate $\mu$ (and may give birth at rate $\lambda$): $\lambda_n=n\lambda+\theta$, $\mu_n=n\mu$.'
 sources: ['Ross, Introduction to Probability Models, Ch. 6 (birth and death processes, linear growth model with immigration)']
+changes:
+  - "2026-10-12: added a TikZ rate diagram (answer unchanged)"
 ---
 **Birth-death process.** A continuous-time Markov chain $\{X(t)\}$ on the states $\{0,1,2,\dots\}$ (the population size) in which, from state $n$, the only possible transitions are
 
@@ -22,6 +24,8 @@ The time spent in state $n$ is exponential with rate $\lambda_n+\mu_n$, after wh
 - **Departures/deaths:** each individual independently leaves (emigrates or dies) after an exponential time with rate $\mu$, so the down-rate is $n\mu$.
 
 $$\lambda_n=n\lambda+\theta,\qquad\mu_n=n\mu$$
+
+![Birth-death chain: up from n at rate n lambda + theta, down at rate n mu](figures/chain.png)
 
 **Justification.** Using exponential (memoryless) times makes the future depend only on the current size $n$, so the process is Markov. Independent individuals make the birth and death rates proportional to $n$, while immigration is an external stream and does not grow with $n$. Without immigration ($\theta=0$) state 0 would be absorbing (an extinct population stays extinct); with $\theta>0$ the population can always be restarted, which is the essential feature of immigration.
 

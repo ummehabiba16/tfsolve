@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: 'States $(o,0),(o,1),(p,0),(p,1)$ (non-pandemic/pandemic period, server idle/busy) with four balance equations plus normalisation. Empty fraction $=P_{o0}+P_{p0}$; entering rate $=\lambda_1P_{o0}+\lambda_2P_{p0}$ (closed forms in the solution).'
 sources: ['CSE301 Queueing_Theory slides 26-31 (choosing a state space, balance equations)', 'Ross, Introduction to Probability Models, Ch. 6 (limiting probabilities of continuous-time Markov chains)']
+changes:
+  - "2026-10-12: added a TikZ state diagram (answer unchanged)"
 ---
 Here period type $o$ is non-pandemic (arrival rate $\lambda_1$, lasts $\text{Expo}(\alpha_1)$) and type $p$ is pandemic (arrival rate $\lambda_2$, lasts $\text{Expo}(\alpha_2)$).
 
@@ -33,6 +35,8 @@ All holding times are exponential, so this is a continuous-time Markov chain wit
 | $(p,1)$ | $(o,1)$ | $\alpha_2$ | pandemic period ends |
 
 (Arrivals in states $(o,1)$ and $(p,1)$ leave, so they cause no transition.)
+
+![State diagram: (o,0), (o,1), (p,0), (p,1); lambda1 or lambda2 and mu between idle and busy, alpha1 and alpha2 between the periods](figures/states.png)
 
 **(ii) Balance equations** (rate out of a state = rate into it):
 

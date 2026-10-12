@@ -7,8 +7,12 @@ created: 2026-10-02
 status: unverified
 summary: 'State $(n,m)$ = numbers at servers 1 and 2; the product form $P_{n,m}=\left(\frac{\lambda}{\mu_1}\right)^n\left(1-\frac{\lambda}{\mu_1}\right)\left(\frac{\lambda}{\mu_2}\right)^m\left(1-\frac{\lambda}{\mu_2}\right)$ satisfies the balance equations. (i) $L=\frac{\lambda}{\mu_1-\lambda}+\frac{\lambda}{\mu_2-\lambda}$; (ii) $W=\frac{L}{\lambda}=\frac{1}{\mu_1-\lambda}+\frac{1}{\mu_2-\lambda}$ (for $\lambda<\mu_1,\mu_2$).'
 sources: ['CSE301 Queueing_Theory slides 32-36 (tandem queues)', 'Ross, Introduction to Probability Models, Ch. 8 (a tandem or sequential system)']
+changes:
+  - "2026-10-12: added a TikZ diagram of the system (answer unchanged)"
 ---
 Assume $\lambda<\mu_1$ and $\lambda<\mu_2$, so both queues are stable.
+
+![Tandem system: Poisson arrivals at rate lambda to server 1 (rate mu1), then to server 2 (rate mu2), then leave](figures/network.png)
 
 **States and balance equations.** Let $(n,m)$ be the numbers of customers at server 1 and at server 2. Transitions: an arrival $(n,m)\to(n+1,m)$ at rate $\lambda$; a server-1 completion $(n,m)\to(n-1,m+1)$ at rate $\mu_1$ ($n\ge1$); a server-2 completion $(n,m)\to(n,m-1)$ at rate $\mu_2$ ($m\ge1$). For $n,m\ge1$ the balance equation is
 

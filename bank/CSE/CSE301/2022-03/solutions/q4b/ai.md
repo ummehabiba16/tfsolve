@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: 'States $(0,0),(1,0),(0,1),(1,1),(b,1)$ with 5 balance equations. Enter: $P_{00}+P_{01}$; $L=P_{10}+P_{01}+2(P_{11}+P_{b1})$; $W=L/(\lambda(P_{00}+P_{01}))$; blockers: $\frac{\mu_1P_{11}}{\lambda(P_{00}+P_{01})}=\frac{\lambda\mu_1}{(\lambda+\mu_2)(\mu_1+\mu_2)}$.'
 sources: ['CSE301 Queueing_Theory slides 26-31 (shoe shine shop)', 'Ross, Introduction to Probability Models, Ch. 6 (limiting probabilities: the shoeshine shop)']
+changes:
+  - "2026-10-12: added a TikZ state diagram (answer unchanged)"
 ---
 **(i) States.** Counting customers is not enough: we must know which chair each customer occupies and whether a customer who has finished at chair 1 is stuck there. Use five states:
 
@@ -21,6 +23,8 @@ sources: ['CSE301 Queueing_Theory slides 26-31 (shoe shine shop)', 'Ross, Introd
 A potential customer enters only when chair 1 is empty, i.e. in states $(0,0)$ and $(0,1)$.
 
 **(i) State diagram (transition rates).**
+
+![State diagram of the shoe shine shop: (0,0) to (1,0) at lambda, (1,0) to (0,1) at mu1, (0,1) to (0,0) at mu2, (0,1) to (1,1) at lambda, (1,1) to (1,0) at mu2, (1,1) to (b,1) at mu1, (b,1) to (0,1) at mu2](figures/states.png)
 
 | From | To | Rate | Event |
 |:-:|:-:|:-:|:--|

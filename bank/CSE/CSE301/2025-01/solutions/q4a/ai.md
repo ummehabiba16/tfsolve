@@ -7,8 +7,12 @@ created: 2026-10-02
 status: unverified
 summary: 'Balance equations give $P_n=(\lambda/\mu)^n(1-\lambda/\mu)$; then $L=\frac{\lambda}{\mu-\lambda}$, $W=\frac{1}{\mu-\lambda}$, $L_Q=\frac{\lambda^2}{\mu(\mu-\lambda)}$, $W_Q=\frac{\lambda}{\mu(\mu-\lambda)}$ (for $\lambda<\mu$).'
 sources: ['CSE301 Queueing_Theory slides 12-21 (M/M/1: balance equations, L, W, L_Q, W_Q)', 'Ross, Introduction to Probability Models, Ch. 8 (the M/M/1 queue)']
+changes:
+  - "2026-10-12: added a TikZ rate diagram (answer unchanged)"
 ---
 Let $P_n$ be the long-run proportion of time with $n$ customers in the system. The number in the system is a birth-death process with birth rate $\lambda$ and death rate $\mu$ (for $n\ge1$); we need $\lambda<\mu$ for a steady state.
+
+![Birth-death chain 0, 1, 2, ...: up at rate lambda, down at rate mu](figures/chain.png)
 
 **Balance equations** (rate out = rate in):
 

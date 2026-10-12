@@ -7,8 +7,12 @@ created: 2026-10-02
 status: unverified
 summary: 'Traffic equations $\lambda_1=4+\frac14\lambda_2$, $\lambda_2=5+\frac12\lambda_1$ give $\lambda_1=6$, $\lambda_2=8$; (i) $P(n,m)=(\frac34)^n\frac14(\frac45)^m\frac15$; (ii) $L=\frac{6}{8-6}+\frac{8}{10-8}=7$; (iii) $W=L/(4+5)=7/9$.'
 sources: ['CSE301 Queueing_Theory slides 37-39 (open Jackson networks)', 'Ross, Introduction to Probability Models, Ch. 8 (network of queues: open systems)']
+changes:
+  - "2026-10-12: added a TikZ diagram of the network (answer unchanged)"
 ---
 This is an open (Jackson) network: Poisson external arrivals, exponential service, probabilistic routing.
+
+![Network: 4 arrive at server 1 and 5 at server 2; server 1 sends 1/2 to server 2, server 2 sends 1/4 to server 1](figures/network.png)
 
 **Traffic equations.** Let $\lambda_j$ be the total arrival rate to server $j$ (external plus internal):
 

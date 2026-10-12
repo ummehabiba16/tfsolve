@@ -7,8 +7,12 @@ created: 2026-10-02
 status: unverified
 summary: 'Traffic: $\lambda_1=6$, $\lambda_2=30$, $\lambda_3=40$ ($\rho=\frac12,\frac12,\frac13$). (i) $P=(1-\frac12)\cdot(\frac12)^2(\frac12)\cdot\frac13\cdot\frac23=\frac1{72}\approx0.0139$. (ii) $L=1+1+\frac12=2.5$. (iii) $W=2.5/22=5/44\approx0.114$.'
 sources: ['CSE301 Queueing_Theory slides 37-39 (open Jackson networks)', 'Ross, Introduction to Probability Models, Ch. 8 (open network of queues)']
+changes:
+  - "2026-10-12: added a TikZ diagram of the network (answer unchanged)"
 ---
 This is an open (Jackson) network: Poisson external arrivals, exponential single servers, probabilistic routing.
+
+![Network of three stations: station 1 sends 1/3 to each of stations 2 and 3, station 2 sends all to station 3, station 3 sends 1/2 to station 2](figures/network.png)
 
 **Traffic equations.** Let $\lambda_j$ be the total arrival rate to station $j$ (external plus internal):
 

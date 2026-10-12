@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: 'Disks moved $2^t$ times: $\binom{t+4}{4}$ for $t<K_{max}$; $\binom{11}{5}=462\le489<792$ gives $K_{max}=7$, $N_a(K_{max})=27$; total $M(489,7)=22399$ moves; root split (489,7) $\to$ 2 x (252,7) + (237,6) (any $k\in[252,279]$ is optimal).'
 sources: ['Graham, Knuth & Patashnik, Concrete Mathematics, Ch. 1 (Tower of Hanoi)', 'Frame-Stewart algorithm for the multi-peg Tower of Hanoi (presumed optimal solution)']
+changes:
+  - "2026-10-12: replaced the ASCII level-2 tree by a TikZ figure (answer unchanged)"
 ---
 **Presumed optimal (Frame-Stewart) solution.** To move $n$ disks with $p$ pegs:
 
@@ -51,13 +53,7 @@ $$0\le x\le\binom{K_{max}+p-4}{p-4}=120,\qquad0\le N_a(K_{max})-x\le\binom{K_{ma
 
 and then $k=\binom{K_{max}+p-4}{p-2}+N_a(K_{max})-x=252+27-x$. So every $k$ with $252\le k\le279$ is optimal (a full search of $\min_k[2M(k,7)+M(489-k,6)]$ confirms exactly this range). Taking $k=252$:
 
-```text
-Level 0:  (489, 7)   [22399 moves]
-Level 1:  left  2 x (252, 7)   [2 x 5503 moves]
-          right (237, 6)   [11393 moves]
-Level 2:  under (252, 7):  left 2 x (126, 7) [2 x 1471],  right (126, 6) [2561]
-          under (237, 6):  left 2 x (126, 6) [2 x 2561],  right (111, 5) [6271]
-```
+![Binary tree of the presumed optimal solution to level 2; each node shows (disks, pegs) and its number of moves](figures/tree.png)
 
 The same rule is applied inside every node until the leaves are 3-peg towers ($2^m-1$ moves) or single disks. Check at the root: $2\times5503+11393=22399$.
 

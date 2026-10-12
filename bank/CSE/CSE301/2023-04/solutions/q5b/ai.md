@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: 'Exams 2 to 10 must all be type 2 or 3: from type 3 that happens w.p. $0.6$, and afterwards (type 2 or 3, equally likely) w.p. $\frac{0.4+0.6}{2}=0.5$ each step, so $P=0.6\times0.5^8=0.00234$.'
 sources: ['CSE301 Markov_Chain slides 7-10 (n-step transition probabilities)', 'Ross, Introduction to Probability Models, Ch. 4 (Chapman-Kolmogorov equations)']
+changes:
+  - "2026-10-12: added a TikZ state diagram (answer unchanged)"
 ---
 **Markov chain.** Let $X_n$ be the type of the $n$-th exam. From a type-$i$ exam, the class does well with probability $p_i$ and then the next type is uniform on $\{1,2,3\}$; it does badly with probability $1-p_i$ and then the next exam is type 1:
 
@@ -19,6 +21,8 @@ With $p_1=0.3$, $p_2=0.6$, $p_3=0.9$:
 | 1 | 0.8 | 0.1 | 0.1 |
 | 2 | 0.6 | 0.2 | 0.2 |
 | 3 | 0.4 | 0.3 | 0.3 |
+
+![State diagram of the exam-type chain 1, 2, 3 with the transition probabilities of the matrix](figures/chain.png)
 
 **No type-1 exam among the first 10.** Exam 1 is type 3, so exams $2,3,\dots,10$ (nine transitions) must all avoid type 1. Restrict the transition matrix to the states $\{2,3\}$:
 

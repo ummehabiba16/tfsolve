@@ -7,12 +7,16 @@ created: 2026-10-02
 status: unverified
 summary: 'Linear growth with immigration: $\lambda_n=n\lambda+\theta$, $\mu_n=n\mu$; rates $q_{n,n+1}=n\lambda+\theta$, $q_{n,n-1}=n\mu$, total rate out $\nu_n=n(\lambda+\mu)+\theta$.'
 sources: ['Ross, Introduction to Probability Models, Ch. 6 (birth and death processes: linear growth model with immigration)']
+changes:
+  - "2026-10-12: added a TikZ rate diagram (answer unchanged)"
 ---
 In a linear growth process with immigration, the state $n$ is the population size. Each individual independently gives birth at exponential rate $\lambda$ and dies at exponential rate $\mu$, and in addition new individuals immigrate at rate $\theta$ (a Poisson stream, independent of the population).
 
 It is a birth-death process with
 
 $$\lambda_n=n\lambda+\theta\quad(n\ge0),\qquad\mu_n=n\mu\quad(n\ge1),\quad\mu_0=0$$
+
+![Birth-death chain: up from n at rate n lambda + theta, down at rate n mu](figures/chain.png)
 
 **Instantaneous transition rates.**
 

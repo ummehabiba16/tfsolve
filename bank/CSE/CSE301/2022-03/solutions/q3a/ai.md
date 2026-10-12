@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: 'Chain on "who is drawing" with $P_{11}=\frac{12}{13},P_{12}=\frac1{13}$; $P_{22}=\frac34,P_{23}=\frac14$; $P_{33}=\frac{10}{13},P_{31}=\frac3{13}$. Stationary: $\pi\propto(13,4,\frac{13}{3})$, i.e. Players I, II, III draw $\frac{39}{64},\frac{12}{64},\frac{13}{64}$ of the cards.'
 sources: ['CSE301 Markov_Chain slides 3-6 (modelling) and 19-22 (limiting probabilities)', 'Ross, Introduction to Probability Models, Ch. 4 (limiting probabilities)']
+changes:
+  - "2026-10-12: added a TikZ state diagram (answer unchanged)"
 ---
 **(i) States and state diagram.** Let $X_n$ be the player who draws the $n$-th card ($1$ = Player I, $2$ = Player II, $3$ = Player III). Draws are with replacement, so each card drawn by Player $i$ is his "target" with a fixed probability, independent of the past:
 
@@ -21,6 +23,8 @@ Player $i$ keeps drawing until he gets his target, so after each card the turn s
 | III | 3/13 | 0 | 10/13 |
 
 State diagram: each state has a self-loop (I: $\frac{12}{13}$, II: $\frac34$, III: $\frac{10}{13}$) and a single arrow to the next player in the cycle $\text{I}\xrightarrow{1/13}\text{II}\xrightarrow{1/4}\text{III}\xrightarrow{3/13}\text{I}$.
+
+![State diagram: self-loops 12/13 (I), 3/4 (II), 10/13 (III); I to II 1/13, II to III 1/4, III to I 3/13](figures/chain.png)
 
 **(ii) Long-run proportions of cards.** The proportion of cards drawn by player $i$ is the limiting probability $\pi_i$. The chain is irreducible and aperiodic. Balance between consecutive players (the flow around the cycle):
 

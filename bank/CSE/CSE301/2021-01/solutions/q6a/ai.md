@@ -7,8 +7,12 @@ created: 2026-10-02
 status: unverified
 summary: '(i) The walk is symmetric, so the stationary distribution is uniform, $\pi_i=\frac1N$, and the expected return time is $\frac{1}{\pi_i}=N$. (ii) After the first step (to a neighbour), all other states are visited before returning iff the walk reaches the other neighbour of the start before the start itself: gambler''s ruin with $p=\frac12$ from 1 to $N-1$, probability $\frac{1}{N-1}$.'
 sources: ['CSE301 Markov_Chain slides 19-22 (limiting probabilities) and 30-36 (gambler''s ruin)', 'Ross, Introduction to Probability Models, Ch. 4 (mean return times, gambler''s ruin)']
+changes:
+  - "2026-10-12: added a TikZ diagram of the walk (answer unchanged)"
 ---
 Label the states $0,1,\dots,N-1$ around the ring (so $1,\dots,N$ relabelled), start at 0, and let the walk move to each neighbour with probability $\frac12$.
+
+![States 0 to N-1 on a ring; each step to either neighbour with probability 1/2](figures/ring.png)
 
 **(i) Expected return time.** Every column of the transition matrix also sums to 1 (each state is entered from its two neighbours with probability $\frac12$ each), so the matrix is doubly stochastic and the uniform distribution $\pi_i=\frac1N$ satisfies $\pi_j=\sum_i\pi_iP_{ij}$. The chain is irreducible (and positive recurrent, being finite), so the mean time to return to a state is the reciprocal of its stationary probability:
 

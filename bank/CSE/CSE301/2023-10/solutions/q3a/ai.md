@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: 'State = results of the last two shots (HH, HM, MH, MM); stationary probabilities $\pi_{HH}=\frac12$, $\pi_{HM}=\pi_{MH}=\frac{3}{16}$, $\pi_{MM}=\frac18$; limiting fraction of hits $=\pi_{HH}+\pi_{MH}=\frac{11}{16}$.'
 sources: ['CSE301 Markov_Chain slides 3-6 (Markov chain modelling) and 19-22 (limiting probabilities)', 'Ross, Introduction to Probability Models, Ch. 4 (transforming a process into a Markov chain)']
+changes:
+  - "2026-10-12: added a TikZ state diagram (answer unchanged)"
 ---
 **Markov chain.** The probability of a hit depends on the last **two** shots, so the result of the last shot alone is not a Markov chain. Use the pair (second-to-last shot, last shot) as the state, with H = hit and M = miss:
 
@@ -20,6 +22,8 @@ After the next shot, the state $(a,b)$ becomes $(b,c)$, where $c$ is the new res
 | $HM$ | 0 | 0 | 2/3 | 1/3 |
 | $MH$ | 2/3 | 1/3 | 0 | 0 |
 | $MM$ | 0 | 0 | 1/2 | 1/2 |
+
+![State diagram of the chain on HH, HM, MH, MM with the transition probabilities of the matrix](figures/chain.png)
 
 The chain is irreducible and aperiodic.
 

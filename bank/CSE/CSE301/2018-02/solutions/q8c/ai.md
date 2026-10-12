@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: 'States $(s_1,s_2)$ (servers busy/idle): balance equations give $P_{00}=\frac12$, $P_{10}=\frac14$, $P_{01}=\frac16$, $P_{11}=\frac1{12}$. (i) $\frac1{12}$ of customers are lost. (ii) $L=\frac7{12}$, $\lambda_a=2\cdot\frac{11}{12}=\frac{11}{6}$, $W=\frac{L}{\lambda_a}=\frac{7}{22}$ h ($\approx19.1$ min). (iii) $\frac{P_{00}+P_{01}}{1-P_{11}}=\frac{8}{11}$ of entering customers are served by server 1.'
 sources: ['CSE301 Queueing_Theory slides 26-31 (choosing a state space, balance equations) and 3-11 (Little''s law, PASTA)', 'Ross, Introduction to Probability Models, Ch. 6 (limiting probabilities)']
+changes:
+  - "2026-10-12: added a TikZ state diagram (answer unchanged)"
 ---
 Rates per hour: arrivals $\lambda=2$, server 1 $\mu_1=4$, server 2 $\mu_2=6$.
 
@@ -21,6 +23,8 @@ Rates per hour: arrivals $\lambda=2$, server 1 $\mu_1=4$, server 2 $\mu_2=6$.
 | $(1,1)$ | $(0,1)$ | 4 | server 1 done, 2 busy: customer departs |
 | $(0,1)$ | $(0,0)$ | 6 | server 2 done |
 | $(1,1)$ | $(1,0)$ | 6 | server 2 done |
+
+![State diagram of (s1, s2) with rates per hour: arrivals 2, server 1 completions 4, server 2 completions 6](figures/states.png)
 
 **Balance equations.**
 

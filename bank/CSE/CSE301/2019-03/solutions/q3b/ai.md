@@ -7,8 +7,12 @@ created: 2026-10-02
 status: unverified
 summary: 'Condition on the first step and use gambler''s ruin: $P=p\frac{1-q/p}{1-(q/p)^n}+q\frac{1-p/q}{1-(p/q)^n}=\frac{(p-q)(p^n+q^n)}{p^n-q^n}$ for $p\ne q$, and $1/n$ for $p=q=\frac12$.'
 sources: ['CSE301 Markov_Chain slides 30-36 (gambler''s ruin)', 'Ross, Introduction to Probability Models, Ch. 4 (gambler''s ruin problem)']
+changes:
+  - "2026-10-12: added a TikZ diagram of the walk (answer unchanged)"
 ---
 Number the vertices $0,1,\dots,n$ clockwise around the circle; vertices $1$ and $n$ are the neighbours of $0$. Condition on the first step.
+
+![Vertices 0 to n on a circle; each step clockwise with probability p, counterclockwise with q](figures/ring.png)
 
 **First step clockwise (probability $p$), to vertex 1.** The particle visits every vertex before returning to 0 exactly when, starting from 1, it reaches vertex $n$ before vertex $0$. (Moving one step at a time between 0 and $n$ along the arc $1,2,\dots,n$, it must pass through all of them.) This is the gambler's ruin problem: fortune 1, target $n$, each step $+1$ with probability $p$ and $-1$ with probability $q$. With $r=q/p$,
 

@@ -7,10 +7,14 @@ created: 2026-10-02
 status: unverified
 summary: 'State $n$ = number of machines down ($0..M$), a birth-death process with $\lambda_n=(M-n)\lambda$, $\mu_n=\mu$: $P_n=\frac{M!}{(M-n)!}(\frac\lambda\mu)^nP_0$, $P_0=\big[\sum_{n=0}^{M}\frac{M!}{(M-n)!}(\frac\lambda\mu)^n\big]^{-1}$; $L=\sum_nnP_n=M-\frac{\mu(1-P_0)}{\lambda}$; a given machine works a fraction $\frac{M-L}{M}=\frac{\mu(1-P_0)}{M\lambda}$ of the time.'
 sources: ['Ross, Introduction to Probability Models, Ch. 6 (birth and death processes: a machine repair model)', 'CSE301 Queueing_Theory slides 6-11 (balance equations)']
+changes:
+  - "2026-10-12: added a TikZ rate diagram (answer unchanged)"
 ---
 **(i) State space.** Let $X(t)$ be the number of machines out of service (broken, waiting or being repaired), with states $\{0,1,\dots,M\}$. When $n$ machines are down, $M-n$ are working, each failing at rate $\lambda$, so the next failure comes at rate $(M-n)\lambda$; if $n\ge1$ the technician is repairing one machine, which finishes at rate $\mu$. So $X(t)$ is a birth-death process with
 
 $$\lambda_n=(M-n)\lambda\quad(0\le n<M),\qquad\mu_n=\mu\quad(1\le n\le M)$$
+
+![Birth-death chain 0 to M: up from n at rate (M-n) lambda, down at rate mu](figures/chain.png)
 
 **(ii) Steady-state probabilities.** Balancing the flow between $n$ and $n+1$ (rate up = rate down):
 

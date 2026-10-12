@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: 'Markov chain on $\{S,C,R\}$ (from $S$: $C$ or $R$ w.p. $\frac12$; from $C$ or $R$: same again w.p. $\frac12$, each other state w.p. $\frac14$). Balance equations: $\pi_S=1/5$, $\pi_C=\pi_R=2/5$. Sunny $1/5$ of days, cloudy $2/5$.'
 sources: ['CSE301 Markov_Chain slides 19-22 (limiting probabilities, long-run weather proportions)', 'Ross, Introduction to Probability Models, Ch. 4 (limiting probabilities)']
+changes:
+  - "2026-10-12: added a TikZ state diagram (answer unchanged)"
 ---
 **Model.** Let $X_n$ be the weather on day $n$, with states $S$ (sunny), $C$ (cloudy) and $R$ (rainy). Tomorrow's weather depends only on today's, so $\{X_n\}$ is a Markov chain:
 
@@ -19,6 +21,8 @@ sources: ['CSE301 Markov_Chain slides 19-22 (limiting probabilities, long-run we
 | $S$ | 0 | 1/2 | 1/2 |
 | $C$ | 1/4 | 1/2 | 1/4 |
 | $R$ | 1/4 | 1/4 | 1/2 |
+
+![State diagram of the weather chain S, C, R with the transition probabilities of the matrix](figures/chain.png)
 
 The chain is irreducible (every state can reach every other) and aperiodic ($P_{CC}>0$), so limiting probabilities exist and are the unique solution of $\pi_j=\sum_i\pi_iP_{ij}$, $\sum_j\pi_j=1$.
 

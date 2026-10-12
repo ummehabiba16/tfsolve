@@ -7,12 +7,16 @@ created: 2026-10-02
 status: unverified
 summary: '(i) $P=\begin{pmatrix}0&\frac12&\frac12\\\frac14&0&\frac34\\\frac14&\frac34&0\end{pmatrix}$ (order A, B, C). (ii) Time 2: $(P_A,P_B,P_C)=(0,\frac12,\frac12)$; time 3: $P(A)=\frac12\cdot\frac14+\frac12\cdot\frac14=\frac14$.'
 sources: ['CSE301 Markov_Chain slides 3-10 (transition matrix, n-step probabilities)', 'Ross, Introduction to Probability Models, Ch. 4 (Chapman-Kolmogorov equations)']
+changes:
+  - "2026-10-12: added a TikZ state diagram (answer unchanged)"
 ---
 **(i) Transition matrix** (states in the order A = airport, B, C = hotels):
 
 $$P=\begin{pmatrix}0&\frac12&\frac12\\\frac14&0&\frac34\\\frac14&\frac34&0\end{pmatrix}$$
 
 From the airport the cab goes to either hotel with probability $\frac12$; from a hotel it goes to the airport with probability $\frac14$ and to the **other** hotel with probability $\frac34$. Each row sums to 1.
+
+![State diagram: A to B and A to C with 1/2; B or C to A with 1/4; B to C and C to B with 3/4](figures/chain.png)
 
 **(ii) Distribution at times 2 and 3.** At time 1 the cab is at the airport: $\mathbf p(1)=(1,0,0)$.
 

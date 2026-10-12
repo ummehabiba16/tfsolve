@@ -1,0 +1,24 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\begin{document}
+\begin{tikzpicture}[>=Stealth,font=\small,
+ s/.style={draw,thick,circle,minimum size=1.1cm,inner sep=0pt,fill=blue!8},
+ e/.style={->,thick},
+ lab/.style={font=\small,fill=white,inner sep=1.5pt},
+ every loop/.style={->,thick,looseness=6}]
+\node[s] (0) at (0,0) {$0$};
+\node[s] (1) at (2.4,0) {$1$};
+\node (d) at (4.6,0) {$\cdots$};
+\node[s] (n) at (6.8,0) {$n$};
+\node (d2) at (9.0,0) {$\cdots$};
+\node[s] (N1) at (11.2,0) {$N\!-\!1$};
+\node[s] (N) at (13.6,0) {$N$};
+\foreach \a/\b in {0/1,1/d,d/n,n/d2,d2/N1,N1/N} {
+  \draw[e] (\a) to[bend left=30] node[lab]{$\lambda$} (\b);
+  \draw[e] (\b) to[bend left=30] node[lab]{$\mu$} (\a);
+}
+\node[font=\scriptsize,align=center] at (6.8,-1.4) {state = number of customers in the system (capacity $N$)\\an arrival that finds $N$ customers is lost, so state $N$ is left only by a service completion};
+\end{tikzpicture}
+\end{document}

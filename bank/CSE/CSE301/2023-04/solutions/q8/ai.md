@@ -7,8 +7,12 @@ created: 2026-10-02
 status: unverified
 summary: 'Balance: $\lambda P_0=\mu P_1$, $(\lambda+\mu)P_n=\lambda P_{n-1}+\mu P_{n+1}$, $\mu P_N=\lambda P_{N-1}$; so $P_n=\frac{\rho^n(1-\rho)}{1-\rho^{N+1}}$ ($\rho=\lambda/\mu\ne1$) and $L=\frac{\rho[1-(N+1)\rho^N+N\rho^{N+1}]}{(1-\rho)(1-\rho^{N+1})}$ (for $\rho=1$: $P_n=\frac{1}{N+1}$, $L=N/2$).'
 sources: ['CSE301 Queueing_Theory slides 22-25 (M/M/1 with finite capacity N)', 'Ross, Introduction to Probability Models, Ch. 8 (a single-server exponential system having finite capacity)']
+changes:
+  - "2026-10-12: added a TikZ rate diagram (answer unchanged)"
 ---
 Customers arrive as a Poisson process with rate $\lambda$, service is exponential with rate $\mu$, and at most $N$ customers can be in the system (an arrival finding $N$ present is lost). Let $P_n$, $n=0,\dots,N$, be the long-run proportion of time with $n$ customers, and $\rho=\lambda/\mu$.
+
+![Birth-death chain 0 to N: up at rate lambda, down at rate mu](figures/chain.png)
 
 **Balance equations** (rate out = rate in):
 

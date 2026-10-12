@@ -7,12 +7,16 @@ created: 2026-10-02
 status: unverified
 summary: 'Birth-death with $\mu_1=\mu$, $\mu_n=2\mu$ ($n\ge2$): $P_0=\frac{2\mu-\lambda}{2\mu+\lambda}$, $P_n=2(\frac{\lambda}{2\mu})^nP_0$. Rate $0\to1=\lambda P_0$, rate $2\to1=2\mu P_2=\frac{\lambda^2(2\mu-\lambda)}{\mu(2\mu+\lambda)}$. Clerk checking: $P(n\ge2)+P_{1C}=\frac{\lambda^2(\lambda+4\mu)}{2\mu(\lambda+\mu)(\lambda+2\mu)}$.'
 sources: ['CSE301 Queueing_Theory slides 6-11 (balance equations) and 26-31 (choosing the state space)', 'Ross, Introduction to Probability Models, Ch. 6 (birth and death processes, limiting probabilities)']
+changes:
+  - "2026-10-12: added a TikZ rate diagram and a diagram of the split chain (answer unchanged)"
 ---
 Assume $\lambda<2\mu$ so that a steady state exists.
 
 **(i) The proportions $P_n$.** With $n$ customers in the system, the total service rate is $0$ for $n=0$, $\mu$ for $n=1$ (one customer is being served, by one of the two counters) and $2\mu$ for $n\ge2$ (the clerk has joined, so both counters work). Arrivals occur at rate $\lambda$ in every state. So the number in the system is a birth-death process with
 
 $$\lambda_n=\lambda,\qquad\mu_1=\mu,\qquad\mu_n=2\mu\ (n\ge2)$$
+
+![Birth-death chain: up at rate lambda, down at mu from state 1 and 2 mu from states 2, 3, ...](figures/chain.png)
 
 Balance across the cut between $n$ and $n+1$ (rate up = rate down):
 
@@ -35,6 +39,8 @@ $$\text{rate}(2\to1)=2\mu P_2=2\mu\cdot\frac{\lambda^2}{2\mu^2}P_0=\frac{\lambda
 **(iii) Proportion of time the stock clerk is checking.** The clerk checks whenever $n\ge2$. With $n=1$ we must be careful: if the permanent checker finishes first when $n=2$, the clerk keeps serving the remaining customer until he completes his service. So split state 1 into $1_P$ (the permanent checker serves the one customer) and $1_C$ (the clerk serves it). State $1_C$ is entered only from state 2 when the permanent checker completes (rate $\mu$), and is left by an arrival (to state 2, rate $\lambda$) or by the clerk completing (to state 0, rate $\mu$):
 
 $$(\lambda+\mu)P_{1C}=\mu P_2\ \Rightarrow\ P_{1C}=\frac{\mu P_2}{\lambda+\mu}$$
+
+![Chain with state 1 split into 1P (permanent checker serving) and 1C (clerk serving)](figures/split.png)
 
 Hence
 

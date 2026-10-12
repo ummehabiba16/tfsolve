@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: 'Node matrix $M=\begin{pmatrix}n&n''\\m&m''\end{pmatrix}$ (ancestors $\frac mn$, $\frac{m''}{n''}$), root $=I$; going left/right multiplies by $L=\begin{pmatrix}1&1\\0&1\end{pmatrix}$, $R=\begin{pmatrix}1&0\\1&1\end{pmatrix}$. Algorithm: while $m\ne n$: if $m<n$ output L, $n:=n-m$; else output R, $m:=m-n$ (e.g. $\frac37=LLRR$).'
 sources: ['Graham, Knuth & Patashnik, Concrete Mathematics, Ch. 4 (the Stern-Brocot tree: matrix representation (4.33)-(4.39))']
+changes:
+  - "2026-10-12: added a TikZ figure of the path in the tree (answer unchanged)"
 ---
 **Matrix representation.** Every fraction in the Stern-Brocot tree is the mediant $\frac{m+m'}{n+n'}$ of its nearest left ancestor $\frac mn$ and nearest right ancestor $\frac{m'}{n'}$. Describe the node by the matrix of its two ancestors,
 
@@ -48,3 +50,5 @@ while m != n:
 *Why the short version works:* $\frac mn<1$ exactly when the fraction is in the left subtree of the root, and the left subtree is the whole tree transformed by $\frac mn\mapsto\frac{m}{n+m}$ (that is what $L$ does), so after an L we continue with $\frac{m}{n-m}$; similarly after an R we continue with $\frac{m-n}{n}$.
 
 **Example.** $\frac37$: $(3,7)\to L\to(3,4)\to L\to(3,1)\to R\to(2,1)\to R\to(1,1)$, so $\frac37=LLRR$. (Check: $\frac11\to\frac12\to\frac13\to\frac25\to\frac37$.)
+
+![Stern-Brocot tree to level 3 with the path L, L, R, R from 1/1 to 3/7 highlighted](figures/tree.png)

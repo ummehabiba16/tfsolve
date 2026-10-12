@@ -7,10 +7,14 @@ created: 2026-10-02
 status: unverified
 summary: 'Pickup zone is a Markov chain with $P=\begin{pmatrix}0.6&0.4\\0.3&0.7\end{pmatrix}$, $\pi_A=3/7$, $\pi_B=4/7$. Average profit per trip $=\frac{3}{7}(0.6\cdot6+0.4\cdot12)+\frac47(0.3\cdot12+0.7\cdot8)=62/7\approx8.86$.'
 sources: ['CSE301 Markov_Chain slides 19-22 (limiting probabilities)', 'Ross, Introduction to Probability Models, Ch. 4 (limiting probabilities, long-run averages)']
+changes:
+  - "2026-10-12: added a TikZ state diagram (answer unchanged)"
 ---
 **Model.** A fare's destination is where the driver picks up the next fare. Let $X_n$ be the zone where the $n$-th fare is picked up. Then $\{X_n\}$ is a Markov chain on $\{A,B\}$ with
 
 $$P=\begin{pmatrix}P_{AA}&P_{AB}\\P_{BA}&P_{BB}\end{pmatrix}=\begin{pmatrix}0.6&0.4\\0.3&0.7\end{pmatrix}$$
+
+![State diagram: A stays 0.6, A to B 0.4, B to A 0.3, B stays 0.7](figures/chain.png)
 
 **Limiting probabilities.** The chain is irreducible and aperiodic.
 

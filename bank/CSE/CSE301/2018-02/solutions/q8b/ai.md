@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: '(i) States 0 (free), $w_1$ (washing a type-1), $w_3$ (washing a type-3), $c$ (cutting a type-2 or type-3; identical from then on). (ii) $\lambda P_0=\mu_1P_{w_1}+\mu_2P_c$, $\mu_1P_{w_1}=\lambda p_1P_0$, $\mu_1P_{w_3}=\lambda p_3P_0$, $\mu_2P_c=\lambda p_2P_0+\mu_1P_{w_3}$. With $D=1+\frac{\lambda(p_1+p_3)}{\mu_1}+\frac{\lambda(p_2+p_3)}{\mu_2}$: (iii) $P_c=\frac{\lambda(p_2+p_3)/\mu_2}{D}$; (iv) entering rate $\lambda P_0=\frac{\lambda}{D}$.'
 sources: ['Ross, Introduction to Probability Models, Ch. 6 (limiting probabilities)', 'CSE301 Queueing_Theory slides 26-31 (choosing a state space)']
+changes:
+  - "2026-10-12: added a TikZ state diagram (answer unchanged)"
 ---
 **(i) Four states.** The server holds at most one customer (a potential customer who finds the server busy leaves). What matters for the future is what the server is doing:
 
@@ -20,6 +22,8 @@ sources: ['Ross, Introduction to Probability Models, Ch. 6 (limiting probabiliti
 A type-2 customer being cut and a type-3 customer being cut behave identically (cut at rate $\mu_2$, then leave), so they can share the state $c$. All times are exponential, so this is a continuous-time Markov chain with transitions
 
 $$0\xrightarrow{\lambda p_1}w_1,\qquad0\xrightarrow{\lambda p_2}c,\qquad0\xrightarrow{\lambda p_3}w_3,\qquad w_1\xrightarrow{\mu_1}0,\qquad w_3\xrightarrow{\mu_1}c,\qquad c\xrightarrow{\mu_2}0$$
+
+![State diagram: 0 to w1 at lambda p1, to w3 at lambda p3, to c at lambda p2; w1 to 0 at mu1, w3 to c at mu1, c to 0 at mu2](figures/states.png)
 
 **(ii) Balance equations** (rate out = rate in):
 

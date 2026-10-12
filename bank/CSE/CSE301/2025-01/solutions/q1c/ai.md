@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: 'States $(g,0),(g,1),(b,0),(b,1)$ (economy good/bad, server idle/busy) with four balance equations and normalisation. Empty fraction $=P_{g0}+P_{b0}$; entering rate $=\lambda_1P_{g0}+\lambda_2P_{b0}$ (closed forms in the solution).'
 sources: ['CSE301 Queueing_Theory slides 26-31 (choosing a state space, balance equations)', 'Ross, Introduction to Probability Models, Ch. 6 (limiting probabilities of continuous-time Markov chains)']
+changes:
+  - "2026-10-12: added a TikZ state diagram (answer unchanged)"
 ---
 **(i) States.** The number in the system (0 or 1, since arrivals finding the server busy are lost) is not enough on its own, because the arrival rate depends on the state of the economy. Use
 
@@ -31,6 +33,8 @@ All holding times are exponential, so this is a continuous-time Markov chain wit
 | $(b,1)$ | $(g,1)$ | $\alpha_2$ | bad period ends |
 
 (Arrivals in states $(g,1)$ and $(b,1)$ leave, so they cause no transition.)
+
+![State diagram: (g,0), (g,1), (b,0), (b,1); lambda1 or lambda2 and mu between idle and busy, alpha1 and alpha2 between good and bad times](figures/states.png)
 
 **(ii) Balance equations** (rate out of a state = rate into it):
 

@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: '$P_{i1}=\frac{p_i}{3}+1-p_i$, $P_{i2}=P_{i3}=\frac{p_i}{3}$, i.e. rows $(0.8,0.1,0.1)$, $(0.6,0.2,0.2)$, $(0.4,0.3,0.3)$; balance equations give $\pi_1=5/7$, $\pi_2=\pi_3=1/7$.'
 sources: ['CSE301 Markov_Chain slides 3-6 and 19-22 (modelling, limiting probabilities)', 'Ross, Introduction to Probability Models, Ch. 4 (limiting probabilities)']
+changes:
+  - "2026-10-12: added a TikZ state diagram (answer unchanged)"
 ---
 **Markov chain.** Let $X_n$ be the type of the $n$-th exam. From a type-$i$ exam, the class does well with probability $p_i$ and then the next type is uniform on $\{1,2,3\}$; it does badly with probability $1-p_i$ and then the next exam is type 1:
 
@@ -19,6 +21,8 @@ With $p_1=0.3$, $p_2=0.6$, $p_3=0.9$:
 | 1 | 0.8 | 0.1 | 0.1 |
 | 2 | 0.6 | 0.2 | 0.2 |
 | 3 | 0.4 | 0.3 | 0.3 |
+
+![State diagram of the exam-type chain 1, 2, 3 with the transition probabilities of the matrix](figures/chain.png)
 
 **Limiting probabilities.** The chain is irreducible and aperiodic, so the long-run proportions solve
 

@@ -7,8 +7,12 @@ created: 2026-10-02
 status: unverified
 summary: 'Traffic equations: $\lambda_1=5$, $\lambda_2=40$, $\lambda_3=170/3$; $L=\frac{5}{5}+\frac{40}{10}+\frac{170/3}{130/3}=1+4+\frac{17}{13}=\frac{82}{13}\approx6.31$; $W=L/30=\frac{41}{195}\approx0.210$.'
 sources: ['CSE301 Queueing_Theory slides 37-39 (open Jackson networks)', 'Ross, Introduction to Probability Models, Ch. 8 (open network of queues)']
+changes:
+  - "2026-10-12: added a TikZ diagram of the network (answer unchanged)"
 ---
 This is an open (Jackson) network: Poisson external arrivals, exponential single servers, probabilistic routing.
+
+![Network of three stations: station 1 sends 1/3 to each of stations 2 and 3, station 2 sends all to station 3, station 3 sends 1/2 to station 2](figures/network.png)
 
 **Traffic equations.** Let $\lambda_j$ be the total arrival rate to station $j$ (external plus internal):
 

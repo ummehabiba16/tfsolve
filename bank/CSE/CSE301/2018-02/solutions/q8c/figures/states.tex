@@ -1,0 +1,24 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\begin{document}
+\begin{tikzpicture}[>=Stealth,font=\small,
+ s/.style={draw,thick,circle,minimum size=1.1cm,inner sep=0pt,fill=blue!8},
+ e/.style={->,thick},
+ lab/.style={font=\small,fill=white,inner sep=1.5pt},
+ every loop/.style={->,thick,looseness=6}]
+\node[s] (00) at (0,0) {$(0,0)$};
+\node[s] (10) at (4,0) {$(1,0)$};
+\node[s] (01) at (0,-3.4) {$(0,1)$};
+\node[s] (11) at (4,-3.4) {$(1,1)$};
+\draw[e] (00) -- node[lab]{2} (10);
+\draw[e] (01) -- node[lab]{6} (00);
+\draw[e] (10) -- node[lab]{4} (01);
+\draw[e] (10) to[bend left=22] node[lab]{2} (11);
+\draw[e] (11) to[bend left=22] node[lab]{6} (10);
+\draw[e] (01) to[bend right=22] node[lab]{2} (11);
+\draw[e] (11) to[bend right=22] node[lab]{4} (01);
+\node[font=\scriptsize,align=center] at (2,-5.0) {state $(s_1,s_2)$: server 1 / server 2 busy (1) or idle (0); rates per hour\\arrivals in $(1,1)$ are lost};
+\end{tikzpicture}
+\end{document}

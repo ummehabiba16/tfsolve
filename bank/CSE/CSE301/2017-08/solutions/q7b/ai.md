@@ -7,8 +7,12 @@ created: 2026-10-02
 status: unverified
 summary: 'First-step analysis: $P_i=pP_{i+1}+qP_{i-1}$, $P_0=0$, $P_N=1$, so the differences $P_{i+1}-P_i=(q/p)^iP_1$ and $P_i=\frac{1-(q/p)^i}{1-(q/p)^N}$ for $p\ne\frac12$, $P_i=\frac iN$ for $p=\frac12$.'
 sources: ['CSE301 Markov_Chain slides 30-36 (gambler''s ruin)', 'Ross, Introduction to Probability Models, Ch. 4 (the gambler''s ruin problem)']
+changes:
+  - "2026-10-12: added a TikZ diagram of the chain (answer unchanged)"
 ---
 Let $P_i$ be the probability that, starting with $i$ units, the gambler's fortune reaches $N$ before 0. Write $q=1-p$.
+
+![Gambler's ruin chain 0, 1, ..., N: up with probability p, down with q, 0 and N absorbing](figures/chain.png)
 
 **First-step analysis.** Conditioning on the outcome of the first play,
 

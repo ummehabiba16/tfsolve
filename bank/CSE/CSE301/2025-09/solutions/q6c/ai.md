@@ -7,6 +7,8 @@ created: 2026-10-02
 status: unverified
 summary: 'States $(a,b)$ = (station A busy?, station B busy?). Balance equations give $P_{00}=\frac13$, $P_{10}=\frac29$, $P_{01}=\frac13$, $P_{11}=\frac19$. Consultation completed by $\frac{4P_{10}}{2(P_{00}+P_{01})}=\frac23$ of admitted patients; $L=P_{10}+P_{01}+2P_{11}=\frac79$; $W=L/\lambda_a=\frac{7/9}{4/3}=\frac{7}{12}$ hour (35 minutes).'
 sources: ['CSE301 Queueing_Theory slides 26-31 (choosing a state space; balance equations) and 3-11 (Little''s law)', 'Ross, Introduction to Probability Models, Ch. 6 (limiting probabilities)']
+changes:
+  - "2026-10-12: added a TikZ state diagram (answer unchanged)"
 ---
 Rates: arrivals $\lambda=2$ per hour, screening $\mu_A=4$ per hour, consultation $\mu_B=2$ per hour.
 
@@ -20,6 +22,8 @@ Rates: arrivals $\lambda=2$ per hour, screening $\mu_A=4$ per hour, consultation
 | $(0,1)$ | $(1,1)$ | 2 | patient admitted to A |
 | $(1,1)$ | $(0,1)$ | 4 | screening done, B busy: patient leaves |
 | $(1,1)$ | $(1,0)$ | 2 | consultation done |
+
+![State diagram of (a,b) with rates per hour: (0,0) to (1,0) 2, (1,0) to (0,1) 4, (0,1) to (0,0) 2, (0,1) to (1,1) 2, (1,1) to (0,1) 4, (1,1) to (1,0) 2](figures/states.png)
 
 **(ii) Steady-state probabilities.** Balance equations (rate out = rate in):
 
